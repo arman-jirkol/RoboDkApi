@@ -281,7 +281,7 @@ namespace SamplePanelRoboDK
             {
                 //bool jnts_valid = ROBOT.setJoints(joints, RoboDK.SETJOINTS_SATURATE_APPLY);
                 //Console.WriteLine("Robot joints are valid: " + jnts_valid.ToString());
-                _robot.MoveL(joints, MoveBlocking);
+                _robot.MoveJ(joints, MoveBlocking);
             }
             catch (RdkException rdkException)
             {
