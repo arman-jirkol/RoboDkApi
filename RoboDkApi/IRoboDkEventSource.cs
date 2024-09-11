@@ -66,7 +66,7 @@ namespace RoboDk.API
             IItem item,
             ObjectSelectionType objectSelection,
             int shapeId,
-            Mat clickedOffset) : base(EventType.Selection3DChanged, item)
+            Matrix clickedOffset) : base(EventType.Selection3DChanged, item)
         {
             ObjectSelectionType = objectSelection;
             ShapeId = shapeId;
@@ -81,7 +81,7 @@ namespace RoboDk.API
 
         public int ShapeId { get; }
 
-        public Mat ClickedOffset { get; }
+        public Matrix ClickedOffset { get; }
 
         #endregion
     }
@@ -97,7 +97,7 @@ namespace RoboDk.API
         /// <param name="relativePose">Relative pose (pose with respect to parent)</param>
         public ItemMovedEventResult(
             IItem item,
-            Mat relativePose) : base(EventType.ItemMovedPose, item)
+            Matrix relativePose) : base(EventType.ItemMovedPose, item)
         {
             RelativePose = relativePose;
         }
@@ -106,7 +106,7 @@ namespace RoboDk.API
 
         #region Properties
 
-        public Mat RelativePose { get; }
+        public Matrix RelativePose { get; }
 
         #endregion
     }

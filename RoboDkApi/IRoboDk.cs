@@ -378,7 +378,7 @@ namespace RoboDk.API
         /// <param name="shapeOverride">Set to true to replace any other existing geometry</param>
         /// <param name="color">Color of the added shape</param>
         /// <returns>added object/shape (use item.Valid() to check if item is valid.)</returns>
-        IItem AddShape(Mat trianglePoints, IItem addTo = null, bool shapeOverride = false, Color? color = null);
+        IItem AddShape(Matrix trianglePoints, IItem addTo = null, bool shapeOverride = false, Color? color = null);
 
         /// <summary>
         /// Adds a shape provided triangle coordinates. Triangles must be provided as a list of vertices. A vertex normal can be provided optionally.
@@ -388,7 +388,7 @@ namespace RoboDk.API
         /// <param name="shapeOverride">Set to true to replace any other existing geometry</param>
         /// <param name="listColor">Optionally specify the color as RGBA [0-1] (list of same length as triangle_points_list)</param>
         /// <returns></returns>
-        IItem AddShape(List<Mat> listTrianglePoints, IItem addTo = null, bool shapeOverride = false, List<Color> listColor = null);
+        IItem AddShape(List<Matrix> listTrianglePoints, IItem addTo = null, bool shapeOverride = false, List<Color> listColor = null);
 
         /// <summary>
         /// Adds a curve provided point coordinates.
@@ -406,7 +406,7 @@ namespace RoboDk.API
         ///     point normal and recalculate the normal vector on the surface projected.
         /// </param>
         /// <returns>added object/curve (use item.Valid() to check if item is valid.)</returns>
-        IItem AddCurve(Mat curvePoints, IItem referenceObject = null, bool addToRef = false,
+        IItem AddCurve(Matrix curvePoints, IItem referenceObject = null, bool addToRef = false,
             ProjectionType projectionType = ProjectionType.AlongNormalRecalc);
 
         /// <summary>
@@ -417,7 +417,7 @@ namespace RoboDk.API
         /// <param name="addToRef">If True, the points will be added as part of the object in the RoboDK item tree (a reference object must be provided)</param>
         /// <param name="projectionType">Type of projection.Use the PROJECTION_* flags.</param>
         /// <returns>added object/shape (0 if failed)</returns>
-        IItem AddPoints(Mat points, IItem referenceObject = null, bool addToRef = false, ProjectionType projectionType = ProjectionType.AlongNormalRecalc);
+        IItem AddPoints(Matrix points, IItem referenceObject = null, bool addToRef = false, ProjectionType projectionType = ProjectionType.AlongNormalRecalc);
 
         /// <summary>
         /// Projects a point given its coordinates.
@@ -433,7 +433,7 @@ namespace RoboDk.API
         /// <returns>
         ///     It returns the projected points as a list of points (empty matrix if failed).
         /// </returns>
-        Mat ProjectPoints(Mat points, IItem objectProject, ProjectionType projectionType = ProjectionType.AlongNormalRecalc);
+        Matrix ProjectPoints(Matrix points, IItem objectProject, ProjectionType projectionType = ProjectionType.AlongNormalRecalc);
 
         /// <summary>
         /// Closes the current station without suggesting to save
@@ -697,7 +697,7 @@ namespace RoboDk.API
         /// <param name="npoints2">number of visible targets for the tool pose</param>
         /// <param name="time">time stamp in milliseconds</param>
         /// <param name="status">Status is 0 if measurement succeeded</param>
-        void StereoCameraMeasure(out Mat pose1, out Mat pose2, out int npoints1, out int npoints2, out int time,
+        void StereoCameraMeasure(out Matrix pose1, out Matrix pose2, out int npoints1, out int npoints2, out int time,
             out int status);
 
         /// <summary>
@@ -715,7 +715,7 @@ namespace RoboDk.API
         /// <param name="p2">End point [x,y,z] of the line</param>
         /// <param name="reference">Reference of the two points with respect to the absolute station reference</param>
         /// <returns>Return CollisionLineResult with collision object and point of collision</returns>
-        CollisionLineResult CollisionLine(double[] p1, double[] p2, Mat reference = null);
+        CollisionLineResult CollisionLine(double[] p1, double[] p2, Matrix reference = null);
 
         /// <summary>
         /// Calculate the forward kinematics solution for multiple robots at the same time (faster)
@@ -723,14 +723,14 @@ namespace RoboDk.API
         /// <param name="robotList">list of items</param>
         /// <param name="jointsList">list of joint</param>
         /// <param name="solutionOkList">optional list of bool flags to notify about failed/invalid result</param>
-        List<Mat> SolveFK(List<IItem> robotList, List<double[]> jointsList, List<bool> solutionOkList = null);
+        List<Matrix> SolveFK(List<IItem> robotList, List<double[]> jointsList, List<bool> solutionOkList = null);
 
         /// <summary>
         /// Calculate the inverse kinematics solution for multiple robots at the same time (faster)
         /// </summary>
         /// <param name="robotList">list of items</param>
         /// <param name="poseList">list of poses</param>
-        List<double[]> SolveIK(List<IItem> robotList, List<Mat> poseList);
+        List<double[]> SolveIK(List<IItem> robotList, List<Matrix> poseList);
 
         /// <summary>
         /// Calculate the inverse kinematics solution for multiple robots at the same time (faster)
@@ -738,7 +738,7 @@ namespace RoboDk.API
         /// <param name="robotList">list of items</param>
         /// <param name="poseList">list of poses</param>
         /// <param name="japroxList"></param>
-        List<double[]> SolveIK(List<IItem> robotList, List<Mat> poseList, List<double[]> japroxList);
+        List<double[]> SolveIK(List<IItem> robotList, List<Matrix> poseList, List<double[]> japroxList);
 
         /// <summary>
         /// Calculate the inverse kinematics solution for multiple robots at the same time. This call allows you to have a bulk calculation for faster performance.
@@ -746,7 +746,7 @@ namespace RoboDk.API
         /// <param name="robotList">list of items</param>
         /// <param name="poseList">list of poses</param>
         /// <param name="solution_ok_list">optional list of bool flags to notify about failed/invalid result</param>
-        List<Mat> SolveIK_All(List<IItem> robotList, List<Mat> poseList);
+        List<Matrix> SolveIK_All(List<IItem> robotList, List<Matrix> poseList);
 
         /// <summary>
         /// Returns the robot configuration state for a set of robot joints.
@@ -811,7 +811,7 @@ namespace RoboDk.API
         /// <param name="algorithm">type of algorithm (by point, plane, ...)</param>
         /// <param name="robot">Robot used for calibration (if using joint values)</param>
         /// <returns>TCP as [x, y, z] - calculated TCP</returns>
-        double[] CalibrateTool(Mat posesJoints, out double[] errorStats,
+        double[] CalibrateTool(Matrix posesJoints, out double[] errorStats,
             EulerType format = EulerType.EulerRxRyRz,
             TcpCalibrationType algorithm = TcpCalibrationType.CalibrateTcpByPoint,
             IItem robot = null);
@@ -825,7 +825,7 @@ namespace RoboDk.API
         /// <param name="useJoints">use points or joint values. The robot item must be provided if joint values is used.</param>
         /// <param name="robot"></param>
         /// <returns>TODO: Document return value.</returns>
-        Mat CalibrateReference(Mat joints,
+        Matrix CalibrateReference(Matrix joints,
             ReferenceCalibrationType method = ReferenceCalibrationType.Frame3P_P1OnX,
             bool useJoints = false, IItem robot = null);
 
@@ -849,14 +849,14 @@ namespace RoboDk.API
         /// Set the pose of the wold reference frame with respect to the view (camera/screen).
         /// </summary>
         /// <param name="pose">view pose frame.</param>
-        void SetViewPose(Mat pose);
+        void SetViewPose(Matrix pose);
 
         /// <summary>
         /// Get the pose of the wold reference frame with respect to the view (camera/screen)
         /// </summary>
         /// <param name="preset">Optionally specify a ViewPoseType to retrieve the pose for a specific view</param>
         /// <returns>Returns the current view pose.</returns>
-        Mat GetViewPose(ViewPoseType preset = ViewPoseType.ActiveView);
+        Matrix GetViewPose(ViewPoseType preset = ViewPoseType.ActiveView);
 
         /// <summary>
         /// Gets the nominal robot parameters.
@@ -866,7 +866,7 @@ namespace RoboDk.API
         /// <param name="poseBase"></param>
         /// <param name="poseTool"></param>
         /// <returns></returns>
-        bool SetRobotParams(IItem robot, double[][] dhm, Mat poseBase, Mat poseTool);
+        bool SetRobotParams(IItem robot, double[][] dhm, Matrix poseBase, Matrix poseTool);
 
         /// <summary>
         /// Create a new robot or mechanism.
@@ -884,7 +884,7 @@ namespace RoboDk.API
         /// <param name="name">robot name (you can also use setName()</param>
         /// <param name="robot">existing robot in the station to replace it (optional)</param>
         /// <returns></returns>
-        IItem BuildMechanism(int type, List<IItem> listObj, List<double> param, List<double> jointsBuild, List<double> jointsHome, List<double> jointsSenses, List<double> jointsLimLow, List<double> jointsLimHigh, Mat baseFrame = null, Mat tool = null, string name = "New robot", IItem robot = null);
+        IItem BuildMechanism(int type, List<IItem> listObj, List<double> param, List<double> jointsBuild, List<double> jointsHome, List<double> jointsSenses, List<double> jointsLimLow, List<double> jointsLimHigh, Matrix baseFrame = null, Matrix tool = null, string name = "New robot", IItem robot = null);
 
         /// <summary>
         /// Open a simulated 2D camera view. 
@@ -1056,7 +1056,7 @@ namespace RoboDk.API
         /// <param name="points">Provide the volume as a list of points as described in the sample macro SprayOn.py</param>
         /// <param name="geometry">Provide a list of points describing triangles to define a specific particle geometry</param>
         /// <returns>Returns ID of the spray gun.</returns>
-        int SprayAdd(IItem tool = null, IItem referenceObject = null, string parameters = "", Mat points = null, Mat geometry = null);
+        int SprayAdd(IItem tool = null, IItem referenceObject = null, string parameters = "", Matrix points = null, Matrix geometry = null);
 
         /// <summary>
         /// Stops simulating a spray gun. This will clear the simulated particles
@@ -1071,7 +1071,7 @@ namespace RoboDk.API
         /// <param name="data">Extra data output</param>
         /// <param name="sprayId">Spray ID (value returned by SprayAdd). Leave the default -1 to apply to all simulated sprays</param>
         /// <returns>Returns statistics string.</returns>
-        string SprayGetStats(out Mat data, int sprayId = -1);
+        string SprayGetStats(out Matrix data, int sprayId = -1);
 
         /// <summary>
         /// Sets the state of a simulated spray gun (ON or OFF)
@@ -1088,7 +1088,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="items">List of items</param>
         /// <param name="poses">List of poses for each item</param>
-        void SetPoses(List<IItem> items, List<Mat> poses);
+        void SetPoses(List<IItem> items, List<Matrix> poses);
 
         /// <summary>
         ///     Set the absolute positions (poses) of a list of items with respect to the station reference.
@@ -1097,13 +1097,13 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="items">List of items</param>
         /// <param name="poses">List of poses for each item</param>        
-        void SetPosesAbs(List<IItem> items, List<Mat> poses);
+        void SetPosesAbs(List<IItem> items, List<Matrix> poses);
 
         /// <summary>
         ///     Displays a sequence of joints
         /// </summary>
         /// <param name="sequence">joint sequence as a 6xN matrix or instruction sequence as a 7xN matrix</param>
-        void ShowSequence(Mat sequence);
+        void ShowSequence(Matrix sequence);
 
         /// <summary>
         ///     Displays a sequence of joints or poses
@@ -1112,7 +1112,7 @@ namespace RoboDk.API
         /// <param name="poses">List of poses</param>
         /// <param name="flags">Display options</param>
         /// <param name="timeout">Display timeout, in milliseconds (default: -1)</param>        
-        void ShowSequence(List<double[]> joints = null, List<Mat> poses = null, SequenceDisplayFlags flags = SequenceDisplayFlags.Default, int timeout = -1);
+        void ShowSequence(List<double[]> joints = null, List<Matrix> poses = null, SequenceDisplayFlags flags = SequenceDisplayFlags.Default, int timeout = -1);
 
         #endregion
     }

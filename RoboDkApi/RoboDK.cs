@@ -994,7 +994,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public IItem AddShape(Mat trianglePoints, IItem addTo = null, bool shapeOverride = false, Color? color = null)
+        public IItem AddShape(Matrix trianglePoints, IItem addTo = null, bool shapeOverride = false, Color? color = null)
         {
             RequireBuild(5449);
             var clr = color ?? Color.FromArgb(255, 127, 127, 127);
@@ -1013,7 +1013,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public IItem AddShape(List<Mat> listTrianglePoints, IItem add_to = null, bool shape_override = false, List<Color> listColor = null)
+        public IItem AddShape(List<Matrix> listTrianglePoints, IItem add_to = null, bool shape_override = false, List<Color> listColor = null)
         {
             RequireBuild(16532);
             int nsubobjs = listTrianglePoints.Count;
@@ -1046,7 +1046,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public IItem AddCurve(Mat curvePoints, IItem referenceObject = null, bool addToRef = false,
+        public IItem AddCurve(Matrix curvePoints, IItem referenceObject = null, bool addToRef = false,
             ProjectionType projectionType = ProjectionType.AlongNormalRecalc)
         {
             check_connection();
@@ -1064,7 +1064,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public IItem AddPoints(Mat points, IItem referenceObject = null, bool addToRef = false, ProjectionType projectionType = ProjectionType.AlongNormalRecalc)
+        public IItem AddPoints(Matrix points, IItem referenceObject = null, bool addToRef = false, ProjectionType projectionType = ProjectionType.AlongNormalRecalc)
         {
             check_connection();
             send_line("AddPoints");
@@ -1080,7 +1080,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public Mat ProjectPoints(Mat points, IItem objectProject,
+        public Matrix ProjectPoints(Matrix points, IItem objectProject,
             ProjectionType projectionType = ProjectionType.AlongNormalRecalc)
         {
             check_connection();
@@ -1515,7 +1515,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void StereoCameraMeasure(out Mat pose1, out Mat pose2, out int npoints1, out int npoints2, out int time,
+        public void StereoCameraMeasure(out Matrix pose1, out Matrix pose2, out int npoints1, out int npoints2, out int time,
             out int status)
         {
             check_connection();
@@ -1547,11 +1547,11 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public CollisionLineResult CollisionLine(double[] p1, double[] p2, Mat reference = null)
+        public CollisionLineResult CollisionLine(double[] p1, double[] p2, Matrix reference = null)
         {
             if (reference == null)
             {
-                reference = Mat.Identity4x4();
+                reference = Matrix.Identity4x4();
             }
 
             check_connection();
@@ -1566,7 +1566,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public List<Mat> SolveFK(List<IItem> robotList, List<double[]> jointsList, List<bool> solutionOkList = null)
+        public List<Matrix> SolveFK(List<IItem> robotList, List<double[]> jointsList, List<bool> solutionOkList = null)
         {
             RequireBuild(6535);
             var numberOfItems = Math.Min(robotList.Count, jointsList.Count);
@@ -1574,7 +1574,7 @@ namespace RoboDk.API
             check_connection();
             send_line("G_LFK");
             send_int(numberOfItems);
-            var listPoses = new List<Mat>();
+            var listPoses = new List<Matrix>();
             for (var i = 0; i < numberOfItems; i++)
             {
                 send_array(jointsList[i]);
@@ -1590,7 +1590,7 @@ namespace RoboDk.API
 
 
         /// <inheritdoc />
-        public List<double[]> SolveIK(List<IItem> robotList, List<Mat> poseList)
+        public List<double[]> SolveIK(List<IItem> robotList, List<Matrix> poseList)
         {
             RequireBuild(6535);
             var numberOfItems = Math.Min(robotList.Count, poseList.Count);
@@ -1611,7 +1611,7 @@ namespace RoboDk.API
 
 
         /// <inheritdoc />
-        public List<double[]> SolveIK(List<IItem> robotList, List<Mat> poseList, List<double[]> japroxList)
+        public List<double[]> SolveIK(List<IItem> robotList, List<Matrix> poseList, List<double[]> japroxList)
         {
             RequireBuild(7399);
             var numberOfItems = Math.Min(Math.Min(robotList.Count, poseList.Count), japroxList.Count);
@@ -1633,14 +1633,14 @@ namespace RoboDk.API
 
 
         /// <inheritdoc />
-        public List<Mat> SolveIK_All(List<IItem> robotList, List<Mat> poseList)
+        public List<Matrix> SolveIK_All(List<IItem> robotList, List<Matrix> poseList)
         {
             RequireBuild(7399);
             var numberOfItems = Math.Min(robotList.Count, poseList.Count);
             check_connection();
             send_line("G_LIK_cmpl");
             send_int(numberOfItems);
-            var listJoints2d = new List<Mat>();
+            var listJoints2d = new List<Matrix>();
             for (int i = 0; i < numberOfItems; i++)
             {
                 send_pose(poseList[i]);
@@ -1808,7 +1808,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public double[] CalibrateTool(Mat posesJoints, out double[] errorStats,
+        public double[] CalibrateTool(Matrix posesJoints, out double[] errorStats,
             EulerType format = EulerType.EulerRxRyRz,
             TcpCalibrationType algorithm = TcpCalibrationType.CalibrateTcpByPoint,
             IItem robot = null)
@@ -1828,7 +1828,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public Mat CalibrateReference(Mat joints,
+        public Matrix CalibrateReference(Matrix joints,
             ReferenceCalibrationType method = ReferenceCalibrationType.Frame3P_P1OnX,
             bool useJoints = false, IItem robot = null)
         {
@@ -1864,7 +1864,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void SetViewPose(Mat pose)
+        public void SetViewPose(Matrix pose)
         {
             check_connection();
             var command = "S_ViewPose";
@@ -1874,7 +1874,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public Mat GetViewPose(ViewPoseType preset = ViewPoseType.ActiveView)
+        public Matrix GetViewPose(ViewPoseType preset = ViewPoseType.ActiveView)
         {
             RequireBuild(6700);
             check_connection();
@@ -1887,12 +1887,12 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public bool SetRobotParams(IItem robot, double[][] dhm, Mat poseBase, Mat poseTool)
+        public bool SetRobotParams(IItem robot, double[][] dhm, Matrix poseBase, Matrix poseTool)
         {
             check_connection();
             send_line("S_AbsAccParam");
             send_item(robot);
-            var r2b = Mat.Identity4x4();
+            var r2b = Matrix.Identity4x4();
             send_pose(r2b);
             send_pose(poseBase);
             send_pose(poseTool);
@@ -1920,15 +1920,15 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public IItem BuildMechanism(int type, List<IItem> listObj, List<double> param, List<double> jointsBuild, List<double> jointsHome, List<double> jointsSenses, List<double> jointsLimLow, List<double> jointsLimHigh, Mat baseFrame = null, Mat tool = null, string name = "New robot", IItem robot = null)
+        public IItem BuildMechanism(int type, List<IItem> listObj, List<double> param, List<double> jointsBuild, List<double> jointsHome, List<double> jointsSenses, List<double> jointsLimLow, List<double> jointsLimHigh, Matrix baseFrame = null, Matrix tool = null, string name = "New robot", IItem robot = null)
         {
             if (tool == null)
             {
-                tool = Mat.Identity4x4();
+                tool = Matrix.Identity4x4();
             }
             if (baseFrame == null)
             {
-                baseFrame = Mat.Identity4x4();
+                baseFrame = Matrix.Identity4x4();
             }
             int ndofs = listObj.Count - 1;
             check_connection();
@@ -1944,7 +1944,7 @@ namespace RoboDk.API
             send_pose(baseFrame);
             send_pose(tool);
             send_array(param.ToArray());
-            Mat jointsData = new Mat(12, 5);
+            Matrix jointsData = new Matrix(12, 5);
             for (int i = 0; i < ndofs; i++)
             {
                 jointsData[i, 0] = jointsBuild[i];
@@ -2206,7 +2206,7 @@ namespace RoboDk.API
             int featureId = 0;
             send_int(0);
             
-            Mat points = null;
+            Matrix points = null;
             if (featureType == ObjectSelectionType.HoverObjectMesh)
             {
                 points = rec_matrix();
@@ -2236,7 +2236,7 @@ namespace RoboDk.API
             check_connection();
             send_line("MeasPose4");
             send_array(array);
-            Mat pose = rec_pose();
+            Matrix pose = rec_pose();
             array = rec_array();
             check_status();
 
@@ -2283,7 +2283,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public int SprayAdd(IItem tool = null, IItem referenceObject = null, string parameters = "", Mat points = null, Mat geometry = null)
+        public int SprayAdd(IItem tool = null, IItem referenceObject = null, string parameters = "", Matrix points = null, Matrix geometry = null)
         {
             check_connection();
             send_line("Gun_Add");
@@ -2309,7 +2309,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public string SprayGetStats(out Mat data, int sprayId = -1)
+        public string SprayGetStats(out Matrix data, int sprayId = -1)
         {
             check_connection();
             send_line("Gun_Stats");
@@ -2333,7 +2333,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void SetPoses(List<IItem> items, List<Mat> poses)
+        public void SetPoses(List<IItem> items, List<Matrix> poses)
         {
             if (items.Count != poses.Count)
             {
@@ -2357,7 +2357,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void SetPosesAbs(List<IItem> items, List<Mat> poses)
+        public void SetPosesAbs(List<IItem> items, List<Matrix> poses)
         {
             if (items.Count != poses.Count)
             {
@@ -2381,13 +2381,13 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void ShowSequence(Mat sequence)
+        public void ShowSequence(Matrix sequence)
         {
             new Item(this).ShowSequence(sequence);
         }
 
         /// <inheritdoc />
-        public void ShowSequence(List<double[]> joints = null, List<Mat> poses = null, SequenceDisplayFlags flags = SequenceDisplayFlags.Default, int timeout = -1)
+        public void ShowSequence(List<double[]> joints = null, List<Matrix> poses = null, SequenceDisplayFlags flags = SequenceDisplayFlags.Default, int timeout = -1)
         {
             new Item(this).ShowSequence(joints, poses, flags, timeout);
         }
@@ -2755,7 +2755,7 @@ namespace RoboDk.API
             return ptrH;
         }
 
-        internal void send_pose(Mat pose)
+        internal void send_pose(Matrix pose)
         {
             if (!pose.IsHomogeneous())
             {
@@ -2772,9 +2772,9 @@ namespace RoboDk.API
             }
         }
 
-        internal Mat rec_pose()
+        internal Matrix rec_pose()
         {
-            var pose = new Mat(4, 4);
+            var pose = new Matrix(4, 4);
             var numberOfDoubles = pose.Cols * pose.Rows;
             var bytes = new byte[numberOfDoubles * sizeof(double)];
             _bufferedSocket.ReceiveData(bytes, bytes.Length);
@@ -2889,7 +2889,7 @@ namespace RoboDk.API
         }
 
         // sends a 2 dimensional matrix
-        internal void send_matrix(Mat mat)
+        internal void send_matrix(Matrix mat)
         {
             send_int(mat.Rows);
             send_int(mat.Cols);
@@ -2904,13 +2904,13 @@ namespace RoboDk.API
         }
 
         // receives a 2 dimensional matrix (nxm)
-        internal Mat rec_matrix()
+        internal Matrix rec_matrix()
         {
             var size1 = rec_int();
             var size2 = rec_int();
             var recvsize = size1 * size2 * sizeof(double);
             var bytes = new byte[recvsize];
-            var mat = new Mat(size1, size2);
+            var mat = new Matrix(size1, size2);
             if (recvsize > 0)
             {
                 _bufferedSocket.ReceiveData(bytes, 0, recvsize);
@@ -2930,7 +2930,7 @@ namespace RoboDk.API
         }
 
         // private move type, to be used by public methods (MoveJ  and MoveL)
-        internal void MoveX(IItem target, double[] joints, Mat matTarget, IItem itemrobot, int movetype,
+        internal void MoveX(IItem target, double[] joints, Matrix matTarget, IItem itemrobot, int movetype,
             bool blocking = true)
         {
             RequireBuild(12939);
@@ -2976,8 +2976,8 @@ namespace RoboDk.API
         }
 
         // private move type, to be used by public methods (MoveJ  and MoveL)
-        internal void moveC_private(IItem target1, double[] joints1, Mat matTarget1, IItem target2, double[] joints2,
-            Mat matTarget2, IItem itemrobot, bool blocking = true)
+        internal void moveC_private(IItem target1, double[] joints1, Matrix matTarget1, IItem target2, double[] joints2,
+            Matrix matTarget2, IItem itemrobot, bool blocking = true)
         {
             RequireBuild(12939);
             itemrobot.WaitMove();
@@ -3131,7 +3131,7 @@ namespace RoboDk.API
             void CheckConnection();
             void SendLine(string line);
             void SendItem(IItem item);
-            Mat ReceivePose();
+            Matrix ReceivePose();
             int ReceiveInt();
             double[] ReceiveArray();
             void CheckStatus();
@@ -3168,7 +3168,7 @@ namespace RoboDk.API
                 Rdk.send_item(item);
             }
 
-            public Mat ReceivePose()
+            public Matrix ReceivePose()
             {
                 return Rdk.rec_pose();
             }

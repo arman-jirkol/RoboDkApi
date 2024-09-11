@@ -78,9 +78,9 @@ namespace RoboDk.API
 
                     case EventType.Selection3DChanged:
                         var data = _roboDkEventConnection.rec_array();
-                        var poseAbs = new Mat(data, true);
+                        var poseAbs = new Matrix(data, true);
                         var xyzijk = data.Skip(16).Take(6).ToArray(); // { data[16], data[17], data[18], data[19], data[20], data[21] };
-                        var clickedOffset = new Mat(xyzijk);
+                        var clickedOffset = new Matrix(xyzijk);
                         var featureType = (ObjectSelectionType)Convert.ToInt32(data[22]);
                         var featureId = Convert.ToInt32(data[23]);
 

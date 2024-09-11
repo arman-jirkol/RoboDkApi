@@ -42,7 +42,7 @@ namespace RoboDk.API.Model
 {
     public class GetPointsResult
     {
-        public GetPointsResult(IItem item, ObjectSelectionType featureType, int featureId, string featureName, Mat points)
+        public GetPointsResult(IItem item, ObjectSelectionType featureType, int featureId, string featureName, Matrix points)
         {
             Object = item;
             FeatureType = featureType;
@@ -70,6 +70,6 @@ namespace RoboDk.API.Model
         /// <summary>
         /// Points
         /// </summary>
-        public Mat Points { get; private set; }
+        public Matrix Points { get; private set; }
     }
 }

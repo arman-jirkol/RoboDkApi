@@ -433,7 +433,7 @@ namespace RoboDk.API
 
 
         /// <inheritdoc />
-        public void SetPose(Mat pose)
+        public void SetPose(Matrix pose)
         {
             Link.check_connection();
             var command = "S_Hlocal";
@@ -444,7 +444,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public Mat Pose()
+        public Matrix Pose()
         {
             Link.check_connection();
             var command = "G_Hlocal";
@@ -456,7 +456,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void SetGeometryPose(Mat pose)
+        public void SetGeometryPose(Matrix pose)
         {
             Link.check_connection();
             var command = "S_Hgeom";
@@ -467,7 +467,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public Mat GeometryPose()
+        public Matrix GeometryPose()
         {
             Link.check_connection();
             var command = "G_Hgeom";
@@ -479,7 +479,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void SetHtool(Mat pose)
+        public void SetHtool(Matrix pose)
         {
             Link.check_connection();
             var command = "S_Htool";
@@ -490,7 +490,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public Mat Htool()
+        public Matrix Htool()
         {
             Link.check_connection();
             var command = "G_Htool";
@@ -502,7 +502,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public Mat PoseTool()
+        public Matrix PoseTool()
         {
             Link.check_connection();
             var command = "G_Tool";
@@ -514,7 +514,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public Mat PoseFrame()
+        public Matrix PoseFrame()
         {
             Link.check_connection();
             var command = "G_Frame";
@@ -526,7 +526,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void SetPoseFrame(Mat framePose)
+        public void SetPoseFrame(Matrix framePose)
         {
             Link.check_connection();
             var command = "S_Frame";
@@ -548,7 +548,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void SetPoseTool(Mat toolPose)
+        public void SetPoseTool(Matrix toolPose)
         {
             Link.check_connection();
             var command = "S_Tool";
@@ -570,7 +570,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void SetPoseAbs(Mat pose)
+        public void SetPoseAbs(Matrix pose)
         {
             Link.check_connection();
             var command = "S_Hlocal_Abs";
@@ -581,7 +581,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public Mat PoseAbs()
+        public Matrix PoseAbs()
         {
             Link.check_connection();
             var command = "G_Hlocal_Abs";
@@ -722,26 +722,26 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public IItem AddShape(Mat trianglePoints)
+        public IItem AddShape(Matrix trianglePoints)
         {
             return Link.AddShape(trianglePoints, this);
         }
 
         /// <inheritdoc />
-        public IItem AddShape(List<Mat> listTrianglePoints)
+        public IItem AddShape(List<Matrix> listTrianglePoints)
         {
             return Link.AddShape(listTrianglePoints, this);
         }
 
         /// <inheritdoc />
-        public IItem AddCurve(Mat curvePoints, bool addToRef = false,
+        public IItem AddCurve(Matrix curvePoints, bool addToRef = false,
             ProjectionType projectionType = ProjectionType.AlongNormalRecalc)
         {
             return Link.AddCurve(curvePoints, this, addToRef, projectionType);
         }
 
         /// <inheritdoc />
-        public Mat ProjectPoints(Mat points, ProjectionType projectionType = ProjectionType.AlongNormalRecalc)
+        public Matrix ProjectPoints(Matrix points, ProjectionType projectionType = ProjectionType.AlongNormalRecalc)
         {
             return Link.ProjectPoints(points, this, projectionType);
         }
@@ -761,7 +761,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public string GetPoints(ObjectSelectionType featureType, int featureId, out Mat pointList)
+        public string GetPoints(ObjectSelectionType featureType, int featureId, out Matrix pointList)
         {
             Link.check_connection();
             Link.send_line("G_ObjPoint");
@@ -981,7 +981,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void SetFrame(Mat frame)
+        public void SetFrame(Matrix frame)
         {
             SetPoseFrame(frame);
         }
@@ -993,13 +993,13 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void SetTool(Mat tool)
+        public void SetTool(Matrix tool)
         {
             SetPoseTool(tool);
         }
 
         /// <inheritdoc />
-        public IItem AddTool(Mat toolPose, string toolName = "New TCP")
+        public IItem AddTool(Matrix toolPose, string toolName = "New TCP")
         {
             Link.check_connection();
             var command = "AddToolEmpty";
@@ -1013,7 +1013,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public Mat SolveFK(double[] joints)
+        public Matrix SolveFK(double[] joints)
         {
             Link.check_connection();
             var command = "G_FK";
@@ -1040,7 +1040,7 @@ namespace RoboDk.API
 
         /// <inheritdoc />
         /// <returns>array of joints</returns>
-        public double[] SolveIK(Mat pose, double[] jointsApprox = null, Mat tool = null, Mat reference = null)
+        public double[] SolveIK(Matrix pose, double[] jointsApprox = null, Matrix tool = null, Matrix reference = null)
         {
             if (tool != null)
             {
@@ -1069,7 +1069,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public Mat SolveIK_All(Mat pose, Mat tool = null, Mat reference = null)
+        public Matrix SolveIK_All(Matrix pose, Matrix tool = null, Matrix reference = null)
         {
             if (tool != null)
             {
@@ -1223,7 +1223,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void MoveJ(Mat target, bool blocking = true)
+        public void MoveJ(Matrix target, bool blocking = true)
         {
             Link.MoveX(null, null, target, this, 1, blocking);
         }
@@ -1248,7 +1248,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void MoveL(Mat target, bool blocking = true)
+        public void MoveL(Matrix target, bool blocking = true)
         {
             Link.MoveX(null, null, target, this, 2, blocking);
         }
@@ -1280,7 +1280,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public double[] SearchL(Mat target, bool blocking = true)
+        public double[] SearchL(Matrix target, bool blocking = true)
         {
             if (this.GetItemType() == ItemType.Program)
             {
@@ -1305,7 +1305,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void MoveC(Mat target1, Mat target2, bool blocking = true)
+        public void MoveC(Matrix target1, Matrix target2, bool blocking = true)
         {
             Link.moveC_private(null, null, target1, null, null, target2, this, blocking);
         }
@@ -1346,7 +1346,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public int MoveL_Test(double[] j1, Mat t2, double minstepDeg = -1)
+        public int MoveL_Test(double[] j1, Matrix t2, double minstepDeg = -1)
         {
             Link.check_connection();
             var command = "CollisionMoveL";
@@ -1403,7 +1403,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void ShowSequence(Mat sequence)
+        public void ShowSequence(Matrix sequence)
         {
             Link.check_connection();
             var command = "Show_Seq";
@@ -1414,7 +1414,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void ShowSequence(List<double[]> joints = null, List<Mat> poses = null, SequenceDisplayFlags flags = SequenceDisplayFlags.Default, int timeout = -1)
+        public void ShowSequence(List<double[]> joints = null, List<Matrix> poses = null, SequenceDisplayFlags flags = SequenceDisplayFlags.Default, int timeout = -1)
         {
             if (joints == null && poses == null)
             {
@@ -1807,7 +1807,7 @@ namespace RoboDk.API
 
 
         //// <inheritdoc />
-        public int InstructionList(out Mat instructions)
+        public int InstructionList(out Matrix instructions)
         {
             Link.check_connection();
             var command = "G_ProgInsList";
@@ -1898,7 +1898,7 @@ namespace RoboDk.API
 
         /// <inheritdoc />
         public int InstructionListJoints(out string errorMsg,
-            out Mat jointList,
+            out Matrix jointList,
             double mmStep = 10.0,
             double degStep = 5.0,
             string saveToFile = "",
@@ -1969,7 +1969,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void AddGeometry(IItem source, Mat pose)
+        public void AddGeometry(IItem source, Matrix pose)
         {
             Link.check_connection();
             Link.send_line("CopyFaces");
@@ -1980,7 +1980,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public IItem AddPoints(Mat points, bool addToRef = false, ProjectionType projectionType = ProjectionType.AlongNormalRecalc)
+        public IItem AddPoints(Matrix points, bool addToRef = false, ProjectionType projectionType = ProjectionType.AlongNormalRecalc)
         {
             return Link.AddPoints(points, this, addToRef, projectionType);
         }
@@ -2170,15 +2170,15 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public Mat SetValue(string variableName, Mat value = null)
+        public Matrix SetValue(string variableName, Matrix value = null)
         {
             Link.RequireBuild(22340);
             Link.check_connection();
             Link.send_line("S_ValueMat");
             Link.send_item(this);
             Link.send_line(variableName);
-            Link.send_matrix(value != null ? value : new Mat(0, 0));
-            Mat result = Link.rec_matrix();
+            Link.send_matrix(value != null ? value : new Matrix(0, 0));
+            Matrix result = Link.rec_matrix();
             Link.check_status();
             return result;
         }
@@ -2201,7 +2201,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public FilterTargetResult FilterTarget(Mat pose, double[] approximatedJoints = null)
+        public FilterTargetResult FilterTarget(Matrix pose, double[] approximatedJoints = null)
         {
             Link.check_connection();
             Link.send_line("FilterTarget");
@@ -2219,13 +2219,13 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public List<Mat> GetJointPoses(double[] joints = null)
+        public List<Matrix> GetJointPoses(double[] joints = null)
         {
             Link.check_connection();
             Link.send_line("G_LinkPoses");
             Link.send_item(this);
             Link.send_array(joints);
-            List<Mat> result = new List<Mat>();
+            List<Matrix> result = new List<Matrix>();
             int count = Link.rec_int();
             for (int i = 0; i < count; i++)
             {

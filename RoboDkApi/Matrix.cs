@@ -54,7 +54,7 @@ namespace RoboDk.API
     /// Matrix class for robotics.
     /// Simple matrix class for homogeneous operations.
     /// </summary>
-    public class Mat 
+    public class Matrix 
     {
         #region Fields
 
@@ -62,8 +62,8 @@ namespace RoboDk.API
         private int _cols;
         private readonly double[,] _mat;
 
-        public Mat L;
-        public Mat U;
+        public Matrix L;
+        public Matrix U;
 
         #endregion
 
@@ -74,7 +74,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="rows">dimension 1 size (rows)</param>
         /// <param name="cols">dimension 2 size (columns)</param>
-        public Mat(int rows, int cols) // Matrix Class constructor
+        public Matrix(int rows, int cols) // Matrix Class constructor
         {
             _rows = rows;
             _cols = cols;
@@ -89,7 +89,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="point">Column array</param>
         /// <param name="isPose">if isPose is True then convert vector into a 4x4 Pose Matrix.</param>
-        public Mat(double[] point, bool isPose = false)
+        public Matrix(double[] point, bool isPose = false)
         {
             if (isPose)
             {
@@ -140,7 +140,7 @@ namespace RoboDk.API
         /// <param name="oz">Position [2,1]</param>
         /// <param name="az">Position [2,2]</param>
         /// <param name="tz">Position [2,3]</param>
-        public Mat(double nx, double ox, double ax, double tx, double ny, double oy, double ay, double ty, double nz,
+        public Matrix(double nx, double ox, double ax, double tx, double ny, double oy, double ay, double ty, double nz,
             double oz, double az, double tz) // Matrix Class constructor
         {
             _rows = 4;
@@ -167,7 +167,7 @@ namespace RoboDk.API
         /// <summary>
         ///     Matrix class constructor for a 4x4 homogeneous matrix as a copy from another matrix
         /// </summary>
-        public Mat(Mat pose)
+        public Matrix(Matrix pose)
         {
             _rows = pose._rows;
             _cols = pose._cols;
@@ -183,7 +183,7 @@ namespace RoboDk.API
         /// <param name="x">x coordinate</param>
         /// <param name="y">y coordinate</param>
         /// <param name="z">z coordinate</param>
-        public Mat(double x, double y, double z)
+        public Matrix(double x, double y, double z)
         {
             _rows = 4;
             _cols = 1;
@@ -201,7 +201,7 @@ namespace RoboDk.API
         ///     RDK.AddPoints(new Mat(new double[6] {{0,0,0, 0,0,1}}));
         /// </summary>
         /// <param name="point_list">List of points (array of array of doubles)</param>
-        public Mat(double[,] point_list)
+        public Matrix(double[,] point_list)
         {
             if (point_list.Rank == 2)
             {
@@ -265,7 +265,7 @@ namespace RoboDk.API
         /// <param name="y">translation along Y (mm)</param>
         /// <param name="z">translation along Z (mm)</param>
         /// <returns></returns>
-        public static Mat transl(double x, double y, double z)
+        public static Matrix transl(double x, double y, double z)
         {
             var mat = IdentityMatrix(4, 4);
             mat.setPos(x, y, z);
@@ -281,11 +281,11 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="rx">rotation around X axis (in radians)</param>
         /// <returns></returns>
-        public static Mat rotx(double rx)
+        public static Matrix rotx(double rx)
         {
             var cx = Math.Cos(rx);
             var sx = Math.Sin(rx);
-            return new Mat(1, 0, 0, 0, 0, cx, -sx, 0, 0, sx, cx, 0);
+            return new Matrix(1, 0, 0, 0, 0, cx, -sx, 0, 0, sx, cx, 0);
         }
 
         /// <summary>
@@ -297,11 +297,11 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="ry">rotation around Y axis (in radians)</param>
         /// <returns></returns>
-        public static Mat roty(double ry)
+        public static Matrix roty(double ry)
         {
             var cy = Math.Cos(ry);
             var sy = Math.Sin(ry);
-            return new Mat(cy, 0, sy, 0, 0, 1, 0, 0, -sy, 0, cy, 0);
+            return new Matrix(cy, 0, sy, 0, 0, 1, 0, 0, -sy, 0, cy, 0);
         }
 
         /// <summary>
@@ -313,11 +313,11 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="rz">rotation around Z axis (in radians)</param>
         /// <returns></returns>
-        public static Mat rotz(double rz)
+        public static Matrix rotz(double rz)
         {
             var cz = Math.Cos(rz);
             var sz = Math.Sin(rz);
-            return new Mat(cz, -sz, 0, 0, sz, cz, 0, 0, 0, 0, 1, 0);
+            return new Matrix(cz, -sz, 0, 0, sz, cz, 0, 0, 0, 0, 1, 0);
         }
 
         /// <summary>
@@ -332,7 +332,7 @@ namespace RoboDk.API
         /// <param name="nz"></param>
         /// <param name="oz"></param>
         /// <param name="az"></param>
-        public Mat(double nx, double ox, double ax, double ny, double oy, double ay, double nz, double oz, double az)
+        public Matrix(double nx, double ox, double ax, double ny, double oy, double ay, double nz, double oz, double az)
         {
             _rows = 3;
             _cols = 3;
@@ -346,14 +346,14 @@ namespace RoboDk.API
         /// Returns the sub 3x3 matrix that represents the pose rotation
         /// </summary>
         /// <returns></returns>
-        public Mat Rot3x3()
+        public Matrix Rot3x3()
         {
             if (!IsHomogeneous())
             {
                 throw new MatException("It is not possible to retrieve a sub 3x3 rotation mat"); //raise Exception('Problems running function');
             }
 
-            return new Mat(_mat[0, 0], _mat[0, 1], _mat[0, 2], 
+            return new Matrix(_mat[0, 0], _mat[0, 1], _mat[0, 2], 
                            _mat[1, 0], _mat[1, 1], _mat[1, 2], 
                            _mat[2, 0], _mat[2, 1], _mat[2, 2]);
         }
@@ -433,7 +433,7 @@ namespace RoboDk.API
         /// <param name="p"></param>
         /// <param name="w"></param>
         /// <returns>Homogeneous matrix (4x4)</returns>
-        public static Mat FromXYZRPW(double x, double y, double z, double r, double p, double w)
+        public static Matrix FromXYZRPW(double x, double y, double z, double r, double p, double w)
         {
             var a = r * Math.PI / 180.0;
             var b = p * Math.PI / 180.0;
@@ -444,7 +444,7 @@ namespace RoboDk.API
             var sb = Math.Sin(b);
             var cc = Math.Cos(c);
             var sc = Math.Sin(c);
-            return new Mat(cb * cc, cc * sa * sb - ca * sc, sa * sc + ca * cc * sb, x, cb * sc, ca * cc + sa * sb * sc,
+            return new Matrix(cb * cc, cc * sa * sb - ca * sc, sa * sc + ca * cc * sb, x, cb * sc, ca * cc + sa * sb * sc,
                 ca * sb * sc - cc * sa, y, -sb, cb * sa, ca * cb, z);
         }
 
@@ -453,7 +453,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="xyzwpr"></param>
         /// <returns>Homogeneous matrix (4x4)</returns>
-        public static Mat FromXYZRPW(double[] xyzwpr)
+        public static Matrix FromXYZRPW(double[] xyzwpr)
         {
             if (xyzwpr.Length < 6)
                 return null;
@@ -471,7 +471,7 @@ namespace RoboDk.API
         /// <param name="ry"></param>
         /// <param name="rz"></param>
         /// <returns>Homogeneous matrix (4x4)</returns>
-        public static Mat FromTxyzRxyz(double x, double y, double z, double rx, double ry, double rz)
+        public static Matrix FromTxyzRxyz(double x, double y, double z, double rx, double ry, double rz)
         {
             var a = rx * Math.PI / 180.0;
             var b = ry * Math.PI / 180.0;
@@ -482,7 +482,7 @@ namespace RoboDk.API
             var sry = Math.Sin(b);
             var crz = Math.Cos(c);
             var srz = Math.Sin(c);
-            return new Mat(cry * crz, -cry * srz, sry, x, crx * srz + crz * srx * sry, crx * crz - srx * sry * srz,
+            return new Matrix(cry * crz, -cry * srz, sry, x, crx * srz + crz * srx * sry, crx * crz - srx * sry * srz,
                 -cry * srx, y, srx * srz - crx * crz * sry, crz * srx + crx * sry * srz, crx * cry, z);
         }
 
@@ -491,7 +491,7 @@ namespace RoboDk.API
         ///     The result is the same as calling: H = transl(x,y,z)*rotx(rx*pi/180)*roty(ry*pi/180)*rotz(rz*pi/180)
         /// </summary>
         /// <returns>Homogeneous matrix (4x4)</returns>
-        public static Mat FromTxyzRxyz(double[] xyzwpr)
+        public static Matrix FromTxyzRxyz(double[] xyzwpr)
         {
             if (xyzwpr.Length < 6)
                 return null;
@@ -620,7 +620,7 @@ namespace RoboDk.API
 		/// </summary>
 		/// <param name="xyzwpr">The position and euler angles array</param>
 		/// <returns>Homogeneous matrix (4x4)</returns>
-        public static Mat FromUR(double[] xyzwpr)
+        public static Matrix FromUR(double[] xyzwpr)
         {
 			double x = xyzwpr[0];
 			double y = xyzwpr[1];
@@ -629,7 +629,7 @@ namespace RoboDk.API
 			double p = xyzwpr[4];
 			double r = xyzwpr[5];
 			double angle = Math.Sqrt(w * w + p * p + r * r);
-			Mat pose = Mat.Identity4x4(); // Mat.IdentityMatrix(4, 4);
+			Matrix pose = Matrix.Identity4x4(); // Mat.IdentityMatrix(4, 4);
 			if (angle < 1e-6) {
 				// no rotation
 			} else {
@@ -639,7 +639,7 @@ namespace RoboDk.API
 				double q3 = p * ratio;
 				double q4 = r * ratio;
 				double[] q1234 = new double[] { cosang, q2, q3, q4 };
-				pose = Mat.FromQuaternion(q1234);
+				pose = Matrix.FromQuaternion(q1234);
 			}
 			pose.setPos(x, y, z);
 			return pose;
@@ -705,12 +705,12 @@ namespace RoboDk.API
         ///     Returns the inverse of a homogeneous matrix (4x4 matrix)
         /// </summary>
         /// <returns>Homogeneous matrix (4x4)</returns>
-        public Mat inv()
+        public Matrix inv()
         {
             if (!IsHomogeneous())
                 throw new MatException("Can't invert a non-homogeneous matrix");
             var xyz = Pos();
-            var mat_xyz = new Mat(xyz[0], xyz[1], xyz[2]);
+            var mat_xyz = new Matrix(xyz[0], xyz[1], xyz[2]);
             var hinv = Duplicate();
             hinv.setPos(0, 0, 0);
             hinv = hinv.Transpose();
@@ -727,7 +727,7 @@ namespace RoboDk.API
         /// <param name="pose">4x4 homogeneous matrix or 3x3 rotation matrix</param>
         /// <param name="vector">4x1 or 3x1 vector</param>
         /// <returns></returns>
-        public static Mat rotate(Mat pose, Mat vector)
+        public static Matrix rotate(Matrix pose, Matrix vector)
         {
             if (pose._cols < 3 || pose._rows < 3 || vector._rows < 3)
                 throw new MatException("Invalid matrix size");
@@ -865,39 +865,39 @@ namespace RoboDk.API
         }
 
 
-        public Mat GetCol(int k)
+        public Matrix GetCol(int k)
         {
-            var m = new Mat(_rows, 1);
+            var m = new Matrix(_rows, 1);
             for (var i = 0; i < _rows; i++)
                 m[i, 0] = _mat[i, k];
             return m;
         }
 
-        public void SetCol(Mat v, int k)
+        public void SetCol(Matrix v, int k)
         {
             for (var i = 0; i < _rows; i++)
                 _mat[i, k] = v[i, 0];
         }
 
-        public Mat Duplicate() // Function returns the copy of this matrix
+        public Matrix Duplicate() // Function returns the copy of this matrix
         {
-            var matrix = new Mat(_rows, _cols);
+            var matrix = new Matrix(_rows, _cols);
             for (var i = 0; i < _rows; i++)
             for (var j = 0; j < _cols; j++)
                 matrix[i, j] = _mat[i, j];
             return matrix;
         }
 
-        public static Mat ZeroMatrix(int iRows, int iCols) // Function generates the zero matrix
+        public static Matrix ZeroMatrix(int iRows, int iCols) // Function generates the zero matrix
         {
-            var matrix = new Mat(iRows, iCols);
+            var matrix = new Matrix(iRows, iCols);
             for (var i = 0; i < iRows; i++)
             for (var j = 0; j < iCols; j++)
                 matrix[i, j] = 0;
             return matrix;
         }
 
-        public static Mat IdentityMatrix(int iRows, int iCols) // Function generates the identity matrix
+        public static Matrix IdentityMatrix(int iRows, int iCols) // Function generates the identity matrix
         {
             var matrix = ZeroMatrix(iRows, iCols);
             for (var i = 0; i < Math.Min(iRows, iCols); i++)
@@ -909,7 +909,7 @@ namespace RoboDk.API
         ///     Returns an identity 4x4 matrix (homogeneous matrix)
         /// </summary>
         /// <returns></returns>
-        public static Mat Identity4x4()
+        public static Matrix Identity4x4()
         {
             return IdentityMatrix(4, 4);
         }
@@ -972,21 +972,21 @@ namespace RoboDk.API
         ///     Transpose a matrix
         /// </summary>
         /// <returns></returns>
-        public Mat Transpose()
+        public Matrix Transpose()
         {
             return Transpose(this);
         }
 
-        public static Mat Transpose(Mat m) // Matrix transpose, for any rectangular matrix
+        public static Matrix Transpose(Matrix m) // Matrix transpose, for any rectangular matrix
         {
-            var t = new Mat(m._cols, m._rows);
+            var t = new Matrix(m._cols, m._rows);
             for (var i = 0; i < m._rows; i++)
             for (var j = 0; j < m._cols; j++)
                 t[j, i] = m[i, j];
             return t;
         }
 
-        public static Mat MultiplyMatSimple(Mat m1, Mat m2)
+        public static Matrix MultiplyMatSimple(Matrix m1, Matrix m2)
         {
             if (m1._cols != m2._rows)
                 throw new MatException("Wrong dimensions of matrix!");
@@ -1022,32 +1022,32 @@ namespace RoboDk.API
 
 
         // Operators
-        public static Mat operator -(Mat m)
+        public static Matrix operator -(Matrix m)
         {
             return Multiply(-1, m);
         }
 
-        public static Mat operator +(Mat m1, Mat m2)
+        public static Matrix operator +(Matrix m1, Matrix m2)
         {
             return Add(m1, m2);
         }
 
-        public static Mat operator -(Mat m1, Mat m2)
+        public static Matrix operator -(Matrix m1, Matrix m2)
         {
             return Add(m1, -m2);
         }
 
-        public static Mat operator *(Mat m1, Mat m2)
+        public static Matrix operator *(Matrix m1, Matrix m2)
         {
             return Multiply(m1, m2);
         }
 
-        public static Mat operator *(double n, Mat m)
+        public static Matrix operator *(double n, Matrix m)
         {
             return Multiply(n, m);
         }
 
-        public static double[] operator *(Mat m, double[] n)
+        public static double[] operator *(Matrix m, double[] n)
         {
             return Multiply(m, n);
         }
@@ -1114,45 +1114,45 @@ namespace RoboDk.API
         /// <param name="reference"></param>
         /// <param name="yaxis_hint"></param>
         /// <returns></returns>
-        static public Mat xyzijk_2_pose(double[] point, double[] zaxis, double[] yaxis_hint = null)
+        static public Matrix xyzijk_2_pose(double[] point, double[] zaxis, double[] yaxis_hint = null)
         {
-            Mat pose = Mat.Identity4x4();
+            Matrix pose = Matrix.Identity4x4();
             if (yaxis_hint == null)
             {
                 yaxis_hint = new double[] { 0, 0, 1 };
             }
             pose.setPos(point);
             pose.setVZ(zaxis);
-            if (Mat.angle3(zaxis, yaxis_hint) < 2 * Math.PI / 180)
+            if (Matrix.angle3(zaxis, yaxis_hint) < 2 * Math.PI / 180)
             {
                 yaxis_hint = new double[] { 0, 1, 1 };
             }
-            double[] xaxis = Mat.normalize3(Mat.cross(yaxis_hint, zaxis));
-            double[] yaxis = Mat.cross(zaxis, xaxis);
+            double[] xaxis = Matrix.normalize3(Matrix.cross(yaxis_hint, zaxis));
+            double[] yaxis = Matrix.cross(zaxis, xaxis);
             pose.setVX(xaxis);
             pose.setVY(yaxis);
             return pose;
         }
 
-        public Mat ConcatenateHorizontal(Mat matrix)
+        public Matrix ConcatenateHorizontal(Matrix matrix)
         {
             return ConcatenateHorizontal(this, matrix);
         }
 
-        public Mat ConcatenateVertical(Mat matrix)
+        public Matrix ConcatenateVertical(Matrix matrix)
         {
             return ConcatenateVertical(this, matrix);
         }
 
-        public Mat TranslationPose()
+        public Matrix TranslationPose()
         {
             double[] pos = Pos();
             return transl(pos[0], pos[1], pos[2]);
         }
 
-        public Mat RotationPose()
+        public Matrix RotationPose()
         {
-            Mat result = new Mat(this);
+            Matrix result = new Matrix(this);
             result.setPos(0.0, 0.0, 0.0);
             return result;
         }
@@ -1189,7 +1189,7 @@ namespace RoboDk.API
         /// <param name="ry">Rotation around the Tool Y axis (deg) (optional)</param>
         /// <param name="rz">Rotation around the Tool Z axis (deg) (optional)</param>
         /// <returns>Returns relative target</returns>
-        public Mat RelTool(Mat targetPose, double x, double y, double z, double rx = 0.0, double ry = 0.0, double rz = 0.0)
+        public Matrix RelTool(Matrix targetPose, double x, double y, double z, double rx = 0.0, double ry = 0.0, double rz = 0.0)
         {
             return targetPose * transl(x, y, z) * rotx(rx * Math.PI / 180) * roty(ry * Math.PI / 180) * rotz(rz * Math.PI / 180);
         }
@@ -1205,7 +1205,7 @@ namespace RoboDk.API
         /// <param name="ry">Rotation around the Tool Y axis (deg) (optional)</param>
         /// <param name="rz">Rotation around the Tool Z axis (deg) (optional)</param>
         /// <returns>Returns relative target</returns>
-        public Mat Offset(Mat targetPose, double x, double y, double z, double rx = 0.0, double ry = 0.0, double rz = 0.0)
+        public Matrix Offset(Matrix targetPose, double x, double y, double z, double rx = 0.0, double ry = 0.0, double rz = 0.0)
         {
             if (!targetPose.IsHomogeneous())
             {
@@ -1224,7 +1224,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="Ti"></param>
         /// <returns></returns>
-        private static double[] ToQuaternion(Mat Ti)
+        private static double[] ToQuaternion(Matrix Ti)
         {
             const double Tolerance_0 = 1e-9;
             const double Tolerance_180 = 1e-7;
@@ -1296,7 +1296,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="q"></param>
         /// <returns></returns>
-        private static Mat FromQuaternion(double[] qin)
+        private static Matrix FromQuaternion(double[] qin)
         {
             var qnorm = Math.Sqrt(qin[0] * qin[0] + qin[1] * qin[1] + qin[2] * qin[2] + qin[3] * qin[3]);
             var q = new double[4];
@@ -1304,7 +1304,7 @@ namespace RoboDk.API
             q[1] = qin[1] / qnorm;
             q[2] = qin[2] / qnorm;
             q[3] = qin[3] / qnorm;
-            var pose = new Mat(1 - 2 * q[2] * q[2] - 2 * q[3] * q[3], 2 * q[1] * q[2] - 2 * q[3] * q[0],
+            var pose = new Matrix(1 - 2 * q[2] * q[2] - 2 * q[3] * q[3], 2 * q[1] * q[2] - 2 * q[3] * q[0],
                 2 * q[1] * q[3] + 2 * q[2] * q[0], 0, 2 * q[1] * q[2] + 2 * q[3] * q[0],
                 1 - 2 * q[1] * q[1] - 2 * q[3] * q[3], 2 * q[2] * q[3] - 2 * q[1] * q[0], 0,
                 2 * q[1] * q[3] - 2 * q[2] * q[0], 2 * q[2] * q[3] + 2 * q[1] * q[0], 1 - 2 * q[1] * q[1] - 2 * q[2] * q[2],
@@ -1317,14 +1317,14 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="H"></param>
         /// <returns></returns>
-        private static double[] ToABB(Mat H)
+        private static double[] ToABB(Matrix H)
         {
             var q = ToQuaternion(H);
             double[] xyzq1234 = {H[0, 3], H[1, 3], H[2, 3], q[0], q[1], q[2], q[3]};
             return xyzq1234;
         }
 
-        private static void SafeAplusBintoC(Mat A, int xa, int ya, Mat B, int xb, int yb, Mat C, int size)
+        private static void SafeAplusBintoC(Matrix A, int xa, int ya, Matrix B, int xb, int yb, Matrix C, int size)
         {
             for (var i = 0; i < size; i++) // rows
             for (var j = 0; j < size; j++) // cols
@@ -1337,7 +1337,7 @@ namespace RoboDk.API
             }
         }
 
-        private static void SafeAminusBintoC(Mat A, int xa, int ya, Mat B, int xb, int yb, Mat C, int size)
+        private static void SafeAminusBintoC(Matrix A, int xa, int ya, Matrix B, int xb, int yb, Matrix C, int size)
         {
             for (var i = 0; i < size; i++) // rows
             for (var j = 0; j < size; j++) // cols
@@ -1350,7 +1350,7 @@ namespace RoboDk.API
             }
         }
 
-        private static void SafeACopytoC(Mat A, int xa, int ya, Mat C, int size)
+        private static void SafeACopytoC(Matrix A, int xa, int ya, Matrix C, int size)
         {
             for (var i = 0; i < size; i++) // rows
             for (var j = 0; j < size; j++) // cols
@@ -1361,33 +1361,33 @@ namespace RoboDk.API
             }
         }
 
-        private static void AplusBintoC(Mat A, int xa, int ya, Mat B, int xb, int yb, Mat C, int size)
+        private static void AplusBintoC(Matrix A, int xa, int ya, Matrix B, int xb, int yb, Matrix C, int size)
         {
             for (var i = 0; i < size; i++) // rows
             for (var j = 0; j < size; j++)
                 C[i, j] = A[ya + i, xa + j] + B[yb + i, xb + j];
         }
 
-        private static void AminusBintoC(Mat A, int xa, int ya, Mat B, int xb, int yb, Mat C, int size)
+        private static void AminusBintoC(Matrix A, int xa, int ya, Matrix B, int xb, int yb, Matrix C, int size)
         {
             for (var i = 0; i < size; i++) // rows
             for (var j = 0; j < size; j++)
                 C[i, j] = A[ya + i, xa + j] - B[yb + i, xb + j];
         }
 
-        private static void ACopytoC(Mat A, int xa, int ya, Mat C, int size)
+        private static void ACopytoC(Matrix A, int xa, int ya, Matrix C, int size)
         {
             for (var i = 0; i < size; i++) // rows
             for (var j = 0; j < size; j++)
                 C[i, j] = A[ya + i, xa + j];
         }
 
-        private static Mat Multiply(Mat A, Mat B) // Smart matrix multiplication
+        private static Matrix Multiply(Matrix A, Matrix B) // Smart matrix multiplication
         {
             if (A._cols != B._rows)
                 throw new MatException("Wrong dimension of matrix!");
 
-            Mat R;
+            Matrix R;
 
             var msize = Math.Max(Math.Max(A._rows, A._cols), Math.Max(B._rows, B._cols));
 
@@ -1412,7 +1412,7 @@ namespace RoboDk.API
             var h = size / 2;
 
 
-            var mField = new Mat[n, 9];
+            var mField = new Matrix[n, 9];
 
             /*
          *  8x8, 8x8, 8x8, ...
@@ -1426,7 +1426,7 @@ namespace RoboDk.API
             {
                 z = (int) Math.Pow(2, n - i - 1);
                 for (var j = 0; j < 9; j++)
-                    mField[i, j] = new Mat(z, z);
+                    mField[i, j] = new Matrix(z, z);
             }
 
             SafeAplusBintoC(A, 0, 0, A, h, h, mField[0, 0], h);
@@ -1457,7 +1457,7 @@ namespace RoboDk.API
             SafeAplusBintoC(B, 0, h, B, h, h, mField[0, 1], h);
             StrassenMultiplyRun(mField[0, 0], mField[0, 1], mField[0, 1 + 7], 1, mField); // (A12 - A22) * (B21 + B22);
 
-            R = new Mat(A._rows, B._cols); // result
+            R = new Matrix(A._rows, B._cols); // result
 
             /// C11
             for (var i = 0; i < Math.Min(h, R._rows); i++) // rows
@@ -1486,7 +1486,7 @@ namespace RoboDk.API
         // function for square matrix 2^N x 2^N
 
         private static void
-            StrassenMultiplyRun(Mat A, Mat B, Mat C, int l, Mat[,] f) // A * B into C, level of recursion, matrix field
+            StrassenMultiplyRun(Matrix A, Matrix B, Matrix C, int l, Matrix[,] f) // A * B into C, level of recursion, matrix field
         {
             var size = A._rows;
             var h = size / 2;
@@ -1553,16 +1553,16 @@ namespace RoboDk.API
                           f[l, 1 + 6][i - h, j - h];
         }
 
-        private static Mat Multiply(double n, Mat m) // Multiplication by constant n
+        private static Matrix Multiply(double n, Matrix m) // Multiplication by constant n
         {
-            var r = new Mat(m._rows, m._cols);
+            var r = new Matrix(m._rows, m._cols);
             for (var i = 0; i < m._rows; i++)
             for (var j = 0; j < m._cols; j++)
                 r[i, j] = m[i, j] * n;
             return r;
         }
 
-        private static double[] Multiply(Mat m1, double[] p1)         // Add matrix
+        private static double[] Multiply(Matrix m1, double[] p1)         // Add matrix
         {
             double[] p2 = new double[p1.Length];
             if (m1._cols == 4 && m1._rows == 4 && p1.Length == 3)
@@ -1586,25 +1586,25 @@ namespace RoboDk.API
             return p2;
         }
 
-        private static Mat Add(Mat m1, Mat m2) // Add matrix
+        private static Matrix Add(Matrix m1, Matrix m2) // Add matrix
         {
             if (m1._rows != m2._rows || m1._cols != m2._cols)
                 throw new MatException("Matrices must have the same dimensions!");
-            var r = new Mat(m1._rows, m1._cols);
+            var r = new Matrix(m1._rows, m1._cols);
             for (var i = 0; i < r._rows; i++)
             for (var j = 0; j < r._cols; j++)
                 r[i, j] = m1[i, j] + m2[i, j];
             return r;
         }
 
-        private static Mat ConcatenateHorizontal(Mat m1, Mat m2)
+        private static Matrix ConcatenateHorizontal(Matrix m1, Matrix m2)
         {
             if (m1._rows != m2._rows)
             {
                 throw new MatException("Vertical size of matrices does not match");
             }
 
-            var result = new Mat(m1._rows, m1._cols + m2._cols);
+            var result = new Matrix(m1._rows, m1._cols + m2._cols);
 
             for (int row = 0; row < m1._rows; row++)
             {
@@ -1622,14 +1622,14 @@ namespace RoboDk.API
             return result;
         }
 
-        private static Mat ConcatenateVertical(Mat m1, Mat m2)
+        private static Matrix ConcatenateVertical(Matrix m1, Matrix m2)
         {
             if (m1._cols != m2._cols)
             {
                 throw new MatException("Horizontal size of matrices does not match");
             }
 
-            var result = new Mat(m1._rows + m2._rows, m1._cols);
+            var result = new Matrix(m1._rows + m2._rows, m1._cols);
 
             for (int col = 0; col < m1._cols; col++)
             {

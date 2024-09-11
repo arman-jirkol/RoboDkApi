@@ -42,7 +42,7 @@ namespace RoboDk.API.Model
 {
     public class MeasurePoseResult
     {
-        public MeasurePoseResult(Mat pose, double averageError, double maximumError)
+        public MeasurePoseResult(Matrix pose, double averageError, double maximumError)
         {
             Pose = pose;
             AverageError = averageError;
@@ -52,7 +52,7 @@ namespace RoboDk.API.Model
         /// <summary>
         /// Measured object reference frame
         /// </summary>
-        public Mat Pose { get; private set; }
+        public Matrix Pose { get; private set; }
         /// <summary>
         /// Average error in mm
         /// </summary>

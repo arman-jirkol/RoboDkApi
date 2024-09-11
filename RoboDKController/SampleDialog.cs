@@ -298,7 +298,7 @@ namespace SamplePanelRoboDK
             if (xyzwpr == null) return;
 
             //Mat pose = Mat.FromXYZRPW(xyzwpr);
-            var pose = Mat.FromTxyzRxyz(xyzwpr);
+            var pose = RoboDk.API.Matrix.FromTxyzRxyz(xyzwpr);
             try
             {
                 _robot.MoveJ(pose, MoveBlocking);
@@ -317,8 +317,8 @@ namespace SamplePanelRoboDK
             // make sure RDK is running and we have a valid input
             if (xyzwpr == null) return;
 
-            Mat pos = Mat.FromXYZRPW(xyzwpr);
-            var pose = Mat.FromTxyzRxyz(xyzwpr);
+            RoboDk.API.Matrix pos = RoboDk.API.Matrix.FromXYZRPW(xyzwpr);
+            var pose = RoboDk.API.Matrix.FromTxyzRxyz(xyzwpr);
             try
             {
                 _robot.MoveL(xyzwpr, MoveBlocking);
@@ -338,7 +338,7 @@ namespace SamplePanelRoboDK
             if (pose == null) return;
 
             //Matrix matrix = Matrix.FromXyzrpw(pose);
-            var matrix = Mat.FromTxyzRxyz(pose);
+            var matrix = RoboDk.API.Matrix.FromTxyzRxyz(pose);
 
             try
             {

@@ -50,7 +50,7 @@ namespace RoboDk.API.Model
 
         public MoveType MoveType { get; set; }
         public bool IsJointTarget { get; set; }
-        public Mat Target { get; set; }
+        public Matrix Target { get; set; }
         public double[] Joints { get; set; }
     }
 }

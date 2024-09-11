@@ -308,7 +308,7 @@ namespace SamplePanelRoboDK
             if (!Check_ROBOT() || xyzwpr == null) return;
 
             //Mat pose = Mat.FromXYZRPW(xyzwpr);
-            var pose = Mat.FromTxyzRxyz(xyzwpr);
+            var pose = Matrix.FromTxyzRxyz(xyzwpr);
             try
             {
                 _robot.MoveJ(pose, MoveBlocking);
@@ -720,13 +720,13 @@ namespace SamplePanelRoboDK
 
                 var move_xyzwpr = new double[6] {0, 0, 0, 0, 0, 0};
                 move_xyzwpr[moveId] = moveStep;
-                var movementPose = Mat.FromTxyzRxyz(move_xyzwpr);
+                var movementPose = Matrix.FromTxyzRxyz(move_xyzwpr);
 
                 // the the current position of the robot (as a 4x4 matrix)
                 var robotPose = _robot.Pose();
 
                 // Calculate the new position of the robot
-                Mat newRobotPose;
+                Matrix newRobotPose;
                 var isTcpRelativeMove = rad_Move_wrt_Tool.Checked;
                 if (isTcpRelativeMove)
                 {
@@ -739,7 +739,7 @@ namespace SamplePanelRoboDK
                     // new_robot_pose = movement_pose * robot_pose;
                     // Note: Rotation applies from the robot axes.
 
-                    var transformationAxes = new Mat(robotPose);
+                    var transformationAxes = new Matrix(robotPose);
                     transformationAxes.setPos(0, 0, 0);
                     var movementPoseAligned = transformationAxes.inv() * movementPose * transformationAxes;
                     newRobotPose = robotPose * movementPoseAligned;
@@ -949,7 +949,7 @@ namespace SamplePanelRoboDK
                     var angle = (double) i / n_sides * 2.0 * Math.PI;
 
                     // calculate the next position
-                    var pose_i = poseRef * Mat.rotz(angle) * Mat.transl(100, 0, 0) * Mat.rotz(-angle);
+                    var pose_i = poseRef * Matrix.rotz(angle) * Matrix.transl(100, 0, 0) * Matrix.rotz(-angle);
 
                     // Add an instruction (comment)
                     _robot.RunCodeCustom($"Moving to point {i}", ProgramRunType.Comment);
@@ -1135,7 +1135,7 @@ namespace SamplePanelRoboDK
             return;*/
 
 
-            _rdk.SetViewPose(_rdk.GetViewPose() * Mat.rotx(10 * 3.141592 / 180));
+            _rdk.SetViewPose(_rdk.GetViewPose() * Matrix.rotx(10 * 3.141592 / 180));
             return;
 
             //---------------------------------------------------------
@@ -1264,7 +1264,7 @@ namespace SamplePanelRoboDK
 
             // Calculate the robot pose for the selected target and use the tool Y axis as a reference
             // (we try to get the pose that has the Y axis as close as possible as the current robot position)
-            var pose_surface_abs = Mat.xyzijk_2_pose(point_xyz, point_ijk, robotPoseAbs.VY());
+            var pose_surface_abs = Matrix.xyzijk_2_pose(point_xyz, point_ijk, robotPoseAbs.VY());
 
             if (!pose_surface_abs.IsHomogeneous())
             {

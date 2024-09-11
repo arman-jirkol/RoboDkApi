@@ -252,7 +252,7 @@ namespace RoboDk.API
         ///     If a robot is provided, it will set the pose of the end effector.
         /// </summary>
         /// <param name="pose">4x4 homogeneous matrix</param>
-        void SetPose(Mat pose);
+        void SetPose(Matrix pose);
 
         /// <summary>
         ///     Returns the local position (pose) of an object, target or reference frame. For example, the position of an
@@ -260,28 +260,28 @@ namespace RoboDk.API
         ///     If a robot is provided, it will get the pose of the end effector
         /// </summary>
         /// <returns>4x4 homogeneous matrix (pose)</returns>
-        Mat Pose();
+        Matrix Pose();
 
         /// <summary>
         ///     Sets the position (pose) the object geometry with respect to its own reference frame. This procedure works for
         ///     tools and objects.
         /// </summary>
         /// <param name="pose">4x4 homogeneous matrix</param>
-        void SetGeometryPose(Mat pose);
+        void SetGeometryPose(Matrix pose);
 
         /// <summary>
         ///     Returns the position (pose) the object geometry with respect to its own reference frame. This procedure works for
         ///     tools and objects.
         /// </summary>
         /// <returns>4x4 homogeneous matrix (pose)</returns>
-        Mat GeometryPose();
+        Matrix GeometryPose();
 
         /// <summary>
         ///     Obsolete: Use setPoseTool(pose) instead. Sets the tool pose of a tool item. If a robot is provided it will set the
         ///     tool pose of the active tool held by the robot.
         /// </summary>
         /// <param name="pose">4x4 homogeneous matrix (pose)</param>
-        void SetHtool(Mat pose);
+        void SetHtool(Matrix pose);
 
         /// <summary>
         ///     Obsolete: Use PoseTool() instead.
@@ -289,21 +289,21 @@ namespace RoboDk.API
         ///     robot.
         /// </summary>
         /// <returns>4x4 homogeneous matrix (pose)</returns>
-        Mat Htool();
+        Matrix Htool();
 
         /// <summary>
         ///     Returns the tool pose of an item. If a robot is provided it will get the tool pose of the active tool held by the
         ///     robot.
         /// </summary>
         /// <returns>4x4 homogeneous matrix (pose)</returns>
-        Mat PoseTool();
+        Matrix PoseTool();
 
         /// <summary>
         ///     Returns the reference frame pose of an item. If a robot is provided it will get the tool pose of the active
         ///     reference frame used by the robot.
         /// </summary>
         /// <returns>4x4 homogeneous matrix (pose)</returns>
-        Mat PoseFrame();
+        Matrix PoseFrame();
 
         /// <summary>
         ///     Sets the tool of a robot or a tool object (Tool Center Point, or TCP) to a frame position.
@@ -311,11 +311,11 @@ namespace RoboDk.API
         ///     If the item is a tool, it links the robot to the tool item.If tool is a pose, it updates the current robot TCP.
         /// </summary>
         /// <param name="framePose"></param>
-        void SetPoseFrame(Mat framePose);
+        void SetPoseFrame(Matrix framePose);
 
         /// <summary>
         ///     Sets the tool of a robot or a tool object (Tool Center Point, or TCP) to a frame position.
-        ///     To set a new pose position <seealso cref="SetPoseFrame(Mat)"/>
+        ///     To set a new pose position <seealso cref="SetPoseFrame(Matrix)"/>
         ///     If the item is a tool, it links the robot to the tool item.If tool is a pose, it updates the current robot TCP.
         /// </summary>
         /// <param name="frameItem"></param>
@@ -327,7 +327,7 @@ namespace RoboDk.API
         ///     If the item is a tool, it links the robot to the tool item.If tool is a pose, it updates the current robot TCP.
         /// </summary>
         /// <param name="toolPose"></param>
-        void SetPoseTool(Mat toolPose);
+        void SetPoseTool(Matrix toolPose);
 
         /// <summary>
         ///     Sets the tool of a robot or a tool object (Tool Center Point, or TCP). The tool pose can be either an item or a 4x4
@@ -342,14 +342,14 @@ namespace RoboDk.API
         ///     station origin.
         /// </summary>
         /// <param name="pose">4x4 homogeneous matrix (pose)</param>
-        void SetPoseAbs(Mat pose);
+        void SetPoseAbs(Matrix pose);
 
         /// <summary>
         ///     Returns the global position (pose) of an item. For example, the position of an object/frame/target with respect to
         ///     the station origin.
         /// </summary>
         /// <returns>4x4 homogeneous matrix (pose)</returns>
-        Mat PoseAbs();
+        Matrix PoseAbs();
 
         /// <summary>
         ///     Changes the color of a robot/object/tool. A color must must in the format COLOR=[R,G,B,(A=1)] where all values
@@ -430,7 +430,7 @@ namespace RoboDk.API
         ///     N must be multiple of 3 because vertices must be stacked by groups of 3)
         /// </param>
         /// <returns>Added object/shape</returns>
-        IItem AddShape(Mat trianglePoints);
+        IItem AddShape(Matrix trianglePoints);
 
         /// <summary>
         ///     Adds a shape to the object provided some triangle coordinates.
@@ -442,7 +442,7 @@ namespace RoboDk.API
         ///     N must be multiple of 3 because vertices must be stacked by groups of 3)
         /// </param>
         /// <returns>Added object/shape</returns>
-        IItem AddShape(List<Mat> listTrianglePoints);
+        IItem AddShape(List<Matrix> listTrianglePoints);
 
         /// <summary>
         ///     Adds a curve provided point coordinates. The provided points must be a list of vertices. A vertex normal can be
@@ -455,7 +455,7 @@ namespace RoboDk.API
         ///     point normal and recalculate the normal vector on the surface projected.
         /// </param>
         /// <returns>returns the object where the curve was added or null if failed</returns>
-        IItem AddCurve(Mat curvePoints, bool addToRef = false,
+        IItem AddCurve(Matrix curvePoints, bool addToRef = false,
             ProjectionType projectionType = ProjectionType.AlongNormalRecalc);
 
         /// <summary>
@@ -468,7 +468,7 @@ namespace RoboDk.API
         ///     project along the point normal and recalculate the normal vector on the surface projected.
         /// </param>
         /// <returns>projected points (empty matrix if failed)</returns>
-        Mat ProjectPoints(Mat points, ProjectionType projectionType = ProjectionType.AlongNormalRecalc);
+        Matrix ProjectPoints(Matrix points, ProjectionType projectionType = ProjectionType.AlongNormalRecalc);
 
         /// <summary>
         /// Retrieve the currently selected feature for this object (surface, point, line, ...)
@@ -485,7 +485,7 @@ namespace RoboDk.API
         /// <param name="featureId">The internal ID to retrieve the right geometry from the object (use SelectedFeature)</param>
         /// <param name="pointList">The point or a list of points as XYZijk, coordinates are relative to the object (ijk is the normal to the surface)</param>
         /// <returns>The name of the selected geometry (if applicable)</returns>
-        string GetPoints(ObjectSelectionType featureType, int featureId, out Mat pointList);
+        string GetPoints(ObjectSelectionType featureType, int featureId, out Matrix pointList);
 
         /// <summary>
         /// Update the robot milling path input and parameters. Parameter input can be an NC file (G-code or APT file) or an object item in RoboDK. A curve or a point follow project will be automatically set up for a robot manufacturing project.
@@ -607,7 +607,7 @@ namespace RoboDk.API
         ///     of the robot frame.
         /// </summary>
         /// <param name="frame">item/pose -> frame item or 4x4 Matrix (pose of the reference frame)</param>
-        void SetFrame(Mat frame);
+        void SetFrame(Matrix frame);
 
         /// <summary>
         ///     Obsolete: Use setPoseTool instead.
@@ -625,7 +625,7 @@ namespace RoboDk.API
         ///     the robot tool.
         /// </summary>
         /// <param name="tool">item/pose -> tool item or 4x4 Matrix (pose of the tool frame)</param>
-        void SetTool(Mat tool);
+        void SetTool(Matrix tool);
 
         /// <summary>
         ///     Adds an empty tool to the robot provided the tool pose (4x4 Matrix) and the tool name.
@@ -633,7 +633,7 @@ namespace RoboDk.API
         /// <param name="toolPose"></param>
         /// <param name="toolName"></param>
         /// <returns>new item created</returns>
-        IItem AddTool(Mat toolPose, string toolName = "New TCP");
+        IItem AddTool(Matrix toolPose, string toolName = "New TCP");
 
         /// <summary>
         ///     Computes the forward kinematics of the robot for the provided joints. The tool and the reference frame are not
@@ -641,7 +641,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="joints"></param>
         /// <returns>4x4 homogeneous matrix: pose of the robot flange with respect to the robot base</returns>
-        Mat SolveFK(double[] joints);
+        Matrix SolveFK(double[] joints);
 
         /// <summary>
         ///     Returns the robot configuration state for a set of robot joints.
@@ -659,7 +659,7 @@ namespace RoboDk.API
         /// <param name="tool">4x4 matrix -> Optionally provide a tool, otherwise, the robot flange is used. Tip: use robot.PoseTool() to retrieve the active robot tool.</param>
         /// <param name="reference">4x4 matrix -> Optionally provide a reference, otherwise, the robot base is used. Tip: use robot.PoseFrame() to retrieve the active robot reference frame.</param>
         /// <returns>array of joints</returns>
-        double[] SolveIK(Mat pose, double[] jointsApprox = null, Mat tool = null, Mat reference = null);
+        double[] SolveIK(Matrix pose, double[] jointsApprox = null, Matrix tool = null, Matrix reference = null);
 
         /// <summary>
         ///     Computes the inverse kinematics for the specified robot and pose. The function returns all available joint
@@ -669,7 +669,7 @@ namespace RoboDk.API
         /// <param name="tool">4x4 matrix -> Optionally provide a tool, otherwise, the robot flange is used. Tip: use robot.PoseTool() to retrieve the active robot tool.</param>
         /// <param name="reference">4x4 matrix -> Optionally provide a reference, otherwise, the robot base is used. Tip: use robot.PoseFrame() to retrieve the active robot reference frame.</param>
         /// <returns>double x n x m -> joint list (2D matrix)</returns>
-        Mat SolveIK_All(Mat pose, Mat tool = null, Mat reference = null);
+        Matrix SolveIK_All(Matrix pose, Matrix tool = null, Matrix reference = null);
 
         /// <summary>
         ///     Connect to a real robot using the robot driver.
@@ -746,7 +746,7 @@ namespace RoboDk.API
         ///     blocking -> True if we want the instruction to block until the robot finished the movement
         ///     (default=true)
         /// </param>
-        void MoveJ(Mat target, bool blocking = true);
+        void MoveJ(Matrix target, bool blocking = true);
 
         /// <summary>
         /// Moves a robot to a specific target ("Move Linear" mode). By default, this function blocks until the robot finishes its movements.
@@ -776,7 +776,7 @@ namespace RoboDk.API
         ///     blocking -> True if we want the instruction to block until the robot finished the movement
         ///     (default=true)
         /// </param>
-        void MoveL(Mat target, bool blocking = true);
+        void MoveL(Matrix target, bool blocking = true);
 
         /// <summary>
         ///     Moves a robot to a specific target and stops when a specific input switch is detected ("Search Linear" mode).
@@ -800,7 +800,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="target">Pose target to move to. It must be a 4x4 Homogeneous matrix</param>
         /// <param name="blocking">Set to true to wait until the robot finished the movement (default=true)</param>
-        double[] SearchL(Mat target, bool blocking = true);
+        double[] SearchL(Matrix target, bool blocking = true);
 
         /// <summary>
         ///     Moves a robot to a specific target ("Move Circular" mode). By default, this function blocks until the robot
@@ -836,7 +836,7 @@ namespace RoboDk.API
         ///     blocking -> True if we want the instruction to block until the robot finished the movement
         ///     (default=true)
         /// </param>
-        void MoveC(Mat target1, Mat target2, bool blocking = true);
+        void MoveC(Matrix target1, Matrix target2, bool blocking = true);
 
         /// <summary>
         ///     Checks if a joint movement is free of collision.
@@ -871,7 +871,7 @@ namespace RoboDk.API
         ///     collision : returns 0 if the movement is free of collision. Otherwise it returns the number of pairs of
         ///     objects that collided if there was a collision.
         /// </returns>
-        int MoveL_Test(double[] j1, Mat t2, double minstepDeg = -1);
+        int MoveL_Test(double[] j1, Matrix t2, double minstepDeg = -1);
 
         /// <summary>
         /// Sets the speed and/or the acceleration of a robot.
@@ -904,7 +904,7 @@ namespace RoboDk.API
         ///     Displays a sequence of joints
         /// </summary>
         /// <param name="sequence">joint sequence as a 6xN matrix or instruction sequence as a 7xN matrix</param>
-        void ShowSequence(Mat sequence);
+        void ShowSequence(Matrix sequence);
 
         /// <summary>
         ///     Displays a sequence of joints or poses
@@ -913,7 +913,7 @@ namespace RoboDk.API
         /// <param name="poses">List of poses</param>
         /// <param name="flags">Display options</param>
         /// <param name="timeout">Display timeout, in milliseconds (default: -1)</param>
-        void ShowSequence(List<double[]> joints = null, List<Mat> poses = null, SequenceDisplayFlags flags = SequenceDisplayFlags.Default, int timeout = -1);
+        void ShowSequence(List<double[]> joints = null, List<Matrix> poses = null, SequenceDisplayFlags flags = SequenceDisplayFlags.Default, int timeout = -1);
 
         /// <summary>
         ///     Checks if a robot or program is currently running (busy or moving)
@@ -1096,7 +1096,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="instructions">the matrix of instructions</param>
         /// <returns>Returns 0 if success</returns>
-        int InstructionList(out Mat instructions);
+        int InstructionList(out Matrix instructions);
 
         /// <summary>
         /// Returns a list of joints. 
@@ -1133,7 +1133,7 @@ namespace RoboDk.API
         /// <param name="time_step">Time step for time-based calculation (ListJointsType must be set to TimeBased)</param>
         /// <returns>Returns 0 if success, otherwise, it will return negative values</returns>
         int InstructionListJoints(out string errorMsg,
-            out Mat jointList,
+            out Matrix jointList,
             double mmStep = 10.0,
             double degStep = 5.0,
             string saveToFile = "",
@@ -1177,7 +1177,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="source">Source item</param>
         /// <param name="pose">Relative position</param>
-        void AddGeometry(IItem source, Mat pose);
+        void AddGeometry(IItem source, Matrix pose);
 
         /// <summary>
         /// Adds a list of points to the object. The provided points must be a list of vertices. A vertex normal can be provided optionally.
@@ -1186,7 +1186,7 @@ namespace RoboDk.API
         /// <param name="addToRef">If True, the points will be added as part of the object in the RoboDK item tree (a reference object must be provided)</param>
         /// <param name="projectionType">Type of projection.Use the PROJECTION_* flags.</param>
         /// <returns>added object/shape (0 if failed)</returns>
-        IItem AddPoints(Mat points, bool addToRef = false, ProjectionType projectionType = ProjectionType.AlongNormalRecalc);
+        IItem AddPoints(Matrix points, bool addToRef = false, ProjectionType projectionType = ProjectionType.AlongNormalRecalc);
 
         /// <summary>
         /// Check if if this item is in a collision state with another item
@@ -1348,7 +1348,7 @@ namespace RoboDk.API
         /// <param name="variableName">Property name</param>
         /// <param name="value">Property value</param>
         /// <returns></returns>
-        Mat SetValue(string variableName, Mat value = null);
+        Matrix SetValue(string variableName, Matrix value = null);
 
         /// <summary>
         ///     Set a specific property name to a given value.
@@ -1379,7 +1379,7 @@ namespace RoboDk.API
         /// <param name="pose">Pose of the robot TCP with respect to the robot reference frame</param>
         /// <param name="approximatedJoints">Approximated desired joints to define the preferred configuration</param>
         /// <returns>FilterTargetResult with filtered pose and joints</returns>
-        FilterTargetResult FilterTarget(Mat pose, double[] approximatedJoints = null);
+        FilterTargetResult FilterTarget(Matrix pose, double[] approximatedJoints = null);
 
         /// <summary>
         ///     Get positions of the joint links for a provided robot configuration (joints).
@@ -1387,7 +1387,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="joints">Robot configuration (joints)</param>
         /// <returns>Returns an array of 4x4 homogeneous matrices. Index 0 is the base frame reference (it never moves when the joints move).</returns>
-        List<Mat> GetJointPoses(double[] joints = null);
+        List<Matrix> GetJointPoses(double[] joints = null);
 
         #endregion
     }

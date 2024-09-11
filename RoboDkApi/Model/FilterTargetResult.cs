@@ -42,7 +42,7 @@ namespace RoboDk.API.Model
 {
     public class FilterTargetResult
     {
-        public FilterTargetResult(Mat pose, double[] joints)
+        public FilterTargetResult(Matrix pose, double[] joints)
         {
             Pose = pose;
             Joints = joints;
@@ -51,7 +51,7 @@ namespace RoboDk.API.Model
         /// <summary>
         /// Filtered Pose
         /// </summary>
-        public Mat Pose { get; private set; }
+        public Matrix Pose { get; private set; }
         /// <summary>
         /// Filtered Joints
         /// </summary>
