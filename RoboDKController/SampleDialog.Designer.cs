@@ -73,7 +73,7 @@
             this.pnlControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlControl.Location = new System.Drawing.Point(0, 0);
             this.pnlControl.Name = "pnlControl";
-            this.pnlControl.Size = new System.Drawing.Size(1217, 119);
+            this.pnlControl.Size = new System.Drawing.Size(1443, 87);
             this.pnlControl.TabIndex = 0;
             // 
             // btnReadRobotPosL
@@ -136,9 +136,10 @@
             // 
             // txtRobotPort
             // 
+            this.txtRobotPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtRobotPort.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtRobotPort.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.txtRobotPort.Location = new System.Drawing.Point(1003, 83);
+            this.txtRobotPort.Location = new System.Drawing.Point(1229, 48);
             this.txtRobotPort.Name = "txtRobotPort";
             this.txtRobotPort.Size = new System.Drawing.Size(68, 29);
             this.txtRobotPort.TabIndex = 14;
@@ -146,9 +147,10 @@
             // 
             // txtRobotIP
             // 
+            this.txtRobotIP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtRobotIP.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtRobotIP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.txtRobotIP.Location = new System.Drawing.Point(882, 83);
+            this.txtRobotIP.Location = new System.Drawing.Point(1108, 48);
             this.txtRobotIP.Name = "txtRobotIP";
             this.txtRobotIP.Size = new System.Drawing.Size(115, 29);
             this.txtRobotIP.TabIndex = 13;
@@ -156,7 +158,8 @@
             // 
             // btnConnectToRobot
             // 
-            this.btnConnectToRobot.Location = new System.Drawing.Point(1077, 83);
+            this.btnConnectToRobot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnConnectToRobot.Location = new System.Drawing.Point(1303, 48);
             this.btnConnectToRobot.Name = "btnConnectToRobot";
             this.btnConnectToRobot.Size = new System.Drawing.Size(128, 29);
             this.btnConnectToRobot.TabIndex = 12;
@@ -186,9 +189,10 @@
             // 
             // chkRunMode
             // 
+            this.chkRunMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkRunMode.AutoSize = true;
             this.chkRunMode.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.chkRunMode.Location = new System.Drawing.Point(1092, 55);
+            this.chkRunMode.Location = new System.Drawing.Point(1229, 16);
             this.chkRunMode.Name = "chkRunMode";
             this.chkRunMode.Size = new System.Drawing.Size(96, 17);
             this.chkRunMode.TabIndex = 9;
@@ -198,7 +202,8 @@
             // 
             // btnMoveToHomePos
             // 
-            this.btnMoveToHomePos.Location = new System.Drawing.Point(1092, 12);
+            this.btnMoveToHomePos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnMoveToHomePos.Location = new System.Drawing.Point(1331, 12);
             this.btnMoveToHomePos.Name = "btnMoveToHomePos";
             this.btnMoveToHomePos.Size = new System.Drawing.Size(100, 23);
             this.btnMoveToHomePos.TabIndex = 8;
@@ -247,16 +252,16 @@
             // pnlRDK
             // 
             this.pnlRDK.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlRDK.Location = new System.Drawing.Point(0, 119);
+            this.pnlRDK.Location = new System.Drawing.Point(0, 87);
             this.pnlRDK.Name = "pnlRDK";
-            this.pnlRDK.Size = new System.Drawing.Size(1217, 556);
+            this.pnlRDK.Size = new System.Drawing.Size(1443, 588);
             this.pnlRDK.TabIndex = 0;
             // 
             // SampleDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1217, 675);
+            this.ClientSize = new System.Drawing.Size(1443, 675);
             this.Controls.Add(this.pnlRDK);
             this.Controls.Add(this.pnlControl);
             this.Name = "SampleDialog";
