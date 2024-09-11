@@ -30,7 +30,6 @@ namespace SamplePanelRoboDK
         // Keep the ROBOT item as a global variable
         private IItem _robot;
 
-
         public SampleDialog()
         {
             InitializeComponent();
@@ -301,11 +300,31 @@ namespace SamplePanelRoboDK
             var pose = Mat.FromTxyzRxyz(xyzwpr);
             try
             {
-                _robot.MoveL(pose, MoveBlocking);
+                _robot.MoveJ(pose, MoveBlocking);
             }
             catch (RdkException rdkex)
             {
                 ShowError("The robot can't move to " + txtPosition.Text + Environment.NewLine + rdkex.Message);
+            }
+        }
+
+        private void btnMoveRobotLinear_Click(object sender, EventArgs e)
+        {
+            // retrieve the robot position from the text and validate input
+            var xyzwpr = String_2_Values(txtLinearPos.Text);
+
+            // make sure RDK is running and we have a valid input
+            if (xyzwpr == null) return;
+
+            Mat pos = Mat.FromXYZRPW(xyzwpr);
+            var pose = Mat.FromTxyzRxyz(xyzwpr);
+            try
+            {
+                _robot.MoveL(xyzwpr, MoveBlocking);
+            }
+            catch (RdkException rdkex)
+            {
+                ShowError("The robot can't move to " + txtLinearPos.Text + Environment.NewLine + rdkex.Message);
             }
         }
 
@@ -413,6 +432,14 @@ namespace SamplePanelRoboDK
             txtPosition.Text = strpose;
         }
 
+        private void btnReadRobotLinearPos_Click(object sender, EventArgs e)
+        {
+            var joints = _robot.Joints();
+            // update the joints
+            var strjoints = Values_2_String(joints);
+            txtLinearPos.Text = strjoints;
+        }
+
         private void btnConnectToRobot_Click(object sender, EventArgs e)
         {
             ConfigureKukaRobot();
@@ -452,6 +479,5 @@ namespace SamplePanelRoboDK
                 ShowError(ex.Message);
             }
         }
-
     }
 }

@@ -29,6 +29,11 @@
         private void InitializeComponent()
         {
             this.pnlControl = new System.Windows.Forms.Panel();
+            this.txtRobotPort = new System.Windows.Forms.TextBox();
+            this.txtRobotIP = new System.Windows.Forms.TextBox();
+            this.btnConnectToRobot = new System.Windows.Forms.Button();
+            this.btnReadRobotPos = new System.Windows.Forms.Button();
+            this.btnReadRobotJoint = new System.Windows.Forms.Button();
             this.chkRunMode = new System.Windows.Forms.CheckBox();
             this.btnMoveToHomePos = new System.Windows.Forms.Button();
             this.txtPosition = new System.Windows.Forms.TextBox();
@@ -36,17 +41,18 @@
             this.txtJoints = new System.Windows.Forms.TextBox();
             this.btnMoveRobotJoint = new System.Windows.Forms.Button();
             this.pnlRDK = new System.Windows.Forms.Panel();
-            this.btnReadRobotPos = new System.Windows.Forms.Button();
-            this.btnReadRobotJoint = new System.Windows.Forms.Button();
-            this.txtRobotIP = new System.Windows.Forms.TextBox();
-            this.btnConnectToRobot = new System.Windows.Forms.Button();
-            this.txtRobotPort = new System.Windows.Forms.TextBox();
+            this.btnReadRobotPosL = new System.Windows.Forms.Button();
+            this.txtLinearPos = new System.Windows.Forms.TextBox();
+            this.btnMoveRobotLinear = new System.Windows.Forms.Button();
             this.pnlControl.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlControl
             // 
             this.pnlControl.BackColor = System.Drawing.Color.Black;
+            this.pnlControl.Controls.Add(this.btnReadRobotPosL);
+            this.pnlControl.Controls.Add(this.txtLinearPos);
+            this.pnlControl.Controls.Add(this.btnMoveRobotLinear);
             this.pnlControl.Controls.Add(this.txtRobotPort);
             this.pnlControl.Controls.Add(this.txtRobotIP);
             this.pnlControl.Controls.Add(this.btnConnectToRobot);
@@ -61,8 +67,58 @@
             this.pnlControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlControl.Location = new System.Drawing.Point(0, 0);
             this.pnlControl.Name = "pnlControl";
-            this.pnlControl.Size = new System.Drawing.Size(1217, 87);
+            this.pnlControl.Size = new System.Drawing.Size(1217, 119);
             this.pnlControl.TabIndex = 0;
+            // 
+            // txtRobotPort
+            // 
+            this.txtRobotPort.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtRobotPort.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.txtRobotPort.Location = new System.Drawing.Point(691, 11);
+            this.txtRobotPort.Name = "txtRobotPort";
+            this.txtRobotPort.Size = new System.Drawing.Size(68, 29);
+            this.txtRobotPort.TabIndex = 14;
+            this.txtRobotPort.Text = "1234";
+            // 
+            // txtRobotIP
+            // 
+            this.txtRobotIP.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtRobotIP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.txtRobotIP.Location = new System.Drawing.Point(570, 11);
+            this.txtRobotIP.Name = "txtRobotIP";
+            this.txtRobotIP.Size = new System.Drawing.Size(115, 29);
+            this.txtRobotIP.TabIndex = 13;
+            this.txtRobotIP.Text = "10.20.30.40";
+            // 
+            // btnConnectToRobot
+            // 
+            this.btnConnectToRobot.Location = new System.Drawing.Point(765, 11);
+            this.btnConnectToRobot.Name = "btnConnectToRobot";
+            this.btnConnectToRobot.Size = new System.Drawing.Size(128, 29);
+            this.btnConnectToRobot.TabIndex = 12;
+            this.btnConnectToRobot.Text = "Connect to Robot";
+            this.btnConnectToRobot.UseVisualStyleBackColor = true;
+            this.btnConnectToRobot.Click += new System.EventHandler(this.btnConnectToRobot_Click);
+            // 
+            // btnReadRobotPos
+            // 
+            this.btnReadRobotPos.Location = new System.Drawing.Point(503, 47);
+            this.btnReadRobotPos.Name = "btnReadRobotPos";
+            this.btnReadRobotPos.Size = new System.Drawing.Size(43, 29);
+            this.btnReadRobotPos.TabIndex = 11;
+            this.btnReadRobotPos.Text = "R";
+            this.btnReadRobotPos.UseVisualStyleBackColor = true;
+            this.btnReadRobotPos.Click += new System.EventHandler(this.btnReadRobotPos_Click);
+            // 
+            // btnReadRobotJoint
+            // 
+            this.btnReadRobotJoint.Location = new System.Drawing.Point(503, 12);
+            this.btnReadRobotJoint.Name = "btnReadRobotJoint";
+            this.btnReadRobotJoint.Size = new System.Drawing.Size(43, 29);
+            this.btnReadRobotJoint.TabIndex = 10;
+            this.btnReadRobotJoint.Text = "R";
+            this.btnReadRobotJoint.UseVisualStyleBackColor = true;
+            this.btnReadRobotJoint.Click += new System.EventHandler(this.btnReadRobotJoint_Click);
             // 
             // chkRunMode
             // 
@@ -90,14 +146,14 @@
             // 
             this.txtPosition.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPosition.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.txtPosition.Location = new System.Drawing.Point(12, 42);
+            this.txtPosition.Location = new System.Drawing.Point(12, 47);
             this.txtPosition.Name = "txtPosition";
-            this.txtPosition.Size = new System.Drawing.Size(269, 29);
+            this.txtPosition.Size = new System.Drawing.Size(351, 29);
             this.txtPosition.TabIndex = 7;
             // 
             // btnMoveRobotPos
             // 
-            this.btnMoveRobotPos.Location = new System.Drawing.Point(287, 42);
+            this.btnMoveRobotPos.Location = new System.Drawing.Point(369, 47);
             this.btnMoveRobotPos.Name = "btnMoveRobotPos";
             this.btnMoveRobotPos.Size = new System.Drawing.Size(128, 29);
             this.btnMoveRobotPos.TabIndex = 6;
@@ -111,12 +167,12 @@
             this.txtJoints.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.txtJoints.Location = new System.Drawing.Point(12, 12);
             this.txtJoints.Name = "txtJoints";
-            this.txtJoints.Size = new System.Drawing.Size(269, 29);
+            this.txtJoints.Size = new System.Drawing.Size(351, 29);
             this.txtJoints.TabIndex = 5;
             // 
             // btnMoveRobotJoint
             // 
-            this.btnMoveRobotJoint.Location = new System.Drawing.Point(287, 12);
+            this.btnMoveRobotJoint.Location = new System.Drawing.Point(369, 12);
             this.btnMoveRobotJoint.Name = "btnMoveRobotJoint";
             this.btnMoveRobotJoint.Size = new System.Drawing.Size(128, 29);
             this.btnMoveRobotJoint.TabIndex = 4;
@@ -127,60 +183,39 @@
             // pnlRDK
             // 
             this.pnlRDK.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlRDK.Location = new System.Drawing.Point(0, 87);
+            this.pnlRDK.Location = new System.Drawing.Point(0, 119);
             this.pnlRDK.Name = "pnlRDK";
-            this.pnlRDK.Size = new System.Drawing.Size(1217, 588);
+            this.pnlRDK.Size = new System.Drawing.Size(1217, 556);
             this.pnlRDK.TabIndex = 0;
             // 
-            // btnReadRobotPos
+            // btnReadRobotPosL
             // 
-            this.btnReadRobotPos.Location = new System.Drawing.Point(421, 42);
-            this.btnReadRobotPos.Name = "btnReadRobotPos";
-            this.btnReadRobotPos.Size = new System.Drawing.Size(43, 29);
-            this.btnReadRobotPos.TabIndex = 11;
-            this.btnReadRobotPos.Text = "R";
-            this.btnReadRobotPos.UseVisualStyleBackColor = true;
-            this.btnReadRobotPos.Click += new System.EventHandler(this.btnReadRobotPos_Click);
+            this.btnReadRobotPosL.Location = new System.Drawing.Point(503, 81);
+            this.btnReadRobotPosL.Name = "btnReadRobotPosL";
+            this.btnReadRobotPosL.Size = new System.Drawing.Size(43, 29);
+            this.btnReadRobotPosL.TabIndex = 17;
+            this.btnReadRobotPosL.Text = "R";
+            this.btnReadRobotPosL.UseVisualStyleBackColor = true;
+            this.btnReadRobotPosL.Click += new System.EventHandler(this.btnReadRobotLinearPos_Click);
             // 
-            // btnReadRobotJoint
+            // txtLinearPos
             // 
-            this.btnReadRobotJoint.Location = new System.Drawing.Point(421, 12);
-            this.btnReadRobotJoint.Name = "btnReadRobotJoint";
-            this.btnReadRobotJoint.Size = new System.Drawing.Size(43, 29);
-            this.btnReadRobotJoint.TabIndex = 10;
-            this.btnReadRobotJoint.Text = "R";
-            this.btnReadRobotJoint.UseVisualStyleBackColor = true;
-            this.btnReadRobotJoint.Click += new System.EventHandler(this.btnReadRobotJoint_Click);
+            this.txtLinearPos.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLinearPos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.txtLinearPos.Location = new System.Drawing.Point(12, 81);
+            this.txtLinearPos.Name = "txtLinearPos";
+            this.txtLinearPos.Size = new System.Drawing.Size(351, 29);
+            this.txtLinearPos.TabIndex = 16;
             // 
-            // txtRobotIP
+            // btnMoveRobotLinear
             // 
-            this.txtRobotIP.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtRobotIP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.txtRobotIP.Location = new System.Drawing.Point(488, 11);
-            this.txtRobotIP.Name = "txtRobotIP";
-            this.txtRobotIP.Size = new System.Drawing.Size(115, 29);
-            this.txtRobotIP.TabIndex = 13;
-            this.txtRobotIP.Text = "10.20.30.40";
-            // 
-            // btnConnectToRobot
-            // 
-            this.btnConnectToRobot.Location = new System.Drawing.Point(683, 11);
-            this.btnConnectToRobot.Name = "btnConnectToRobot";
-            this.btnConnectToRobot.Size = new System.Drawing.Size(128, 29);
-            this.btnConnectToRobot.TabIndex = 12;
-            this.btnConnectToRobot.Text = "Connect to Robot";
-            this.btnConnectToRobot.UseVisualStyleBackColor = true;
-            this.btnConnectToRobot.Click += new System.EventHandler(this.btnConnectToRobot_Click);
-            // 
-            // txtRobotPort
-            // 
-            this.txtRobotPort.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtRobotPort.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.txtRobotPort.Location = new System.Drawing.Point(609, 11);
-            this.txtRobotPort.Name = "txtRobotPort";
-            this.txtRobotPort.Size = new System.Drawing.Size(68, 29);
-            this.txtRobotPort.TabIndex = 14;
-            this.txtRobotPort.Text = "1234";
+            this.btnMoveRobotLinear.Location = new System.Drawing.Point(369, 81);
+            this.btnMoveRobotLinear.Name = "btnMoveRobotLinear";
+            this.btnMoveRobotLinear.Size = new System.Drawing.Size(128, 29);
+            this.btnMoveRobotLinear.TabIndex = 15;
+            this.btnMoveRobotLinear.Text = "Move Robot Linear";
+            this.btnMoveRobotLinear.UseVisualStyleBackColor = true;
+            this.btnMoveRobotLinear.Click += new System.EventHandler(this.btnMoveRobotLinear_Click);
             // 
             // SampleDialog
             // 
@@ -213,5 +248,8 @@
         private System.Windows.Forms.TextBox txtRobotPort;
         private System.Windows.Forms.TextBox txtRobotIP;
         private System.Windows.Forms.Button btnConnectToRobot;
+        private System.Windows.Forms.Button btnReadRobotPosL;
+        private System.Windows.Forms.TextBox txtLinearPos;
+        private System.Windows.Forms.Button btnMoveRobotLinear;
     }
 }
