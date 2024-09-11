@@ -124,9 +124,9 @@
     <None Include="Resources\IconRoboDK.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RoboDkApi\RoboDkApi.csproj">
+    <ProjectReference Include="..\RoboDkApi\RoboDKApi.csproj">
       <Project>{afd4e4ee-6042-42b6-98a9-9a83e6ba7428}</Project>
-      <Name>RoboDkApi</Name>
+      <Name>RoboDKApi</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
