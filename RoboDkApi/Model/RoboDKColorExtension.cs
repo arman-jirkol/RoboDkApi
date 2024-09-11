@@ -15,7 +15,7 @@ namespace RoboDk.API.Model
     /// Extension methods to convert between System.Windows.Media.Color and RoboDK color array [R,G,B,A]
     /// </summary>
     // ReSharper disable once InconsistentNaming
-    public static class RDKColorExtension
+    public static class RoboDKColorExtension
     {
         public static double[] ToRoboDKColorArray(this Color color)
         {

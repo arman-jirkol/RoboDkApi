@@ -75,11 +75,11 @@
     <Compile Include="SampleDialog.Designer.cs">
       <DependentUpon>SampleDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="SpashDialog.cs">
+    <Compile Include="SplashDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SpashDialog.Designer.cs">
-      <DependentUpon>SpashDialog.cs</DependentUpon>
+    <Compile Include="SplashDialog.Designer.cs">
+      <DependentUpon>SplashDialog.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="FormRobot.resx">
       <DependentUpon>FormRobot.cs</DependentUpon>
@@ -97,8 +97,8 @@
     <EmbeddedResource Include="SampleDialog.resx">
       <DependentUpon>SampleDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SpashDialog.resx">
-      <DependentUpon>SpashDialog.cs</DependentUpon>
+    <EmbeddedResource Include="SplashDialog.resx">
+      <DependentUpon>SplashDialog.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

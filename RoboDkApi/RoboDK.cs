@@ -534,7 +534,7 @@ namespace RoboDk.API
         {
             if (RoboDKServerEndPort < RoboDKServerStartPort)
             {
-                throw new RdkException($"RoboDKServerEndPort:{RoboDKServerEndPort} < RoboDKServerStartPort:{RoboDKServerStartPort}");
+                throw new RoboDKException($"RoboDKServerEndPort:{RoboDKServerEndPort} < RoboDKServerStartPort:{RoboDKServerStartPort}");
             }
 
             var connected = StartNewInstance ? StartNewRoboDkInstance() : TryConnectToExistingRoboDkInstance();
@@ -2195,7 +2195,7 @@ namespace RoboDk.API
         {
             if (featureType < ObjectSelectionType.HoverObjectMesh)
             {
-                throw new RdkException("Invalid feature type, use ObjectSelectionType.HoverObjectMesh, ObjectSelectionType.HoverObject or equivalent");
+                throw new RoboDKException("Invalid feature type, use ObjectSelectionType.HoverObjectMesh, ObjectSelectionType.HoverObject or equivalent");
             }
 
             check_connection();
@@ -2337,7 +2337,7 @@ namespace RoboDk.API
         {
             if (items.Count != poses.Count)
             {
-                throw new RdkException("The number of items must match the number of poses");
+                throw new RoboDKException("The number of items must match the number of poses");
             }
 
             if (items.Count == 0)
@@ -2361,7 +2361,7 @@ namespace RoboDk.API
         {
             if (items.Count != poses.Count)
             {
-                throw new RdkException("The number of items must match the number of poses");
+                throw new RoboDKException("The number of items must match the number of poses");
             }
 
             if (items.Count == 0)
@@ -2480,7 +2480,7 @@ namespace RoboDk.API
             Process = Process.Start(processStartInfo);
             if (Process == null || Process.HasExited)
             {
-                throw new RdkException("Unable to start RoboDK.exe.");
+                throw new RoboDKException("Unable to start RoboDK.exe.");
             }
 
             // wait for RoboDK to output (stdout) RoboDK is Running. Works after v3.4.0.
@@ -2490,7 +2490,7 @@ namespace RoboDk.API
                 var line = Process.StandardOutput.ReadLine();
                 if (line == null)
                 {
-                    throw new RdkException("Unable to start RoboDK.exe. StandardOutput closed unexpectedly.");
+                    throw new RoboDKException("Unable to start RoboDK.exe. StandardOutput closed unexpectedly.");
                 }
                 Debug.WriteLine($"RoboDK: {line}");
                 roboDkRunning = line.Contains("RoboDK is Running");
@@ -2507,7 +2507,7 @@ namespace RoboDk.API
             {
                 if (!processStartInfo.Arguments.StartsWith($"{CommandLineOption.SwitchDelimiter}NEWINSTANCE"))
                 {
-                    throw new RdkException("The NEWINSTANCE Parameter must be the first command line parameter.");
+                    throw new RoboDKException("The NEWINSTANCE Parameter must be the first command line parameter.");
                 }
             }
         }
@@ -2560,7 +2560,7 @@ namespace RoboDk.API
 
             if (!is_connected() && !Connect())
             {
-                throw new RdkException("Can't connect to RoboDK API");
+                throw new RoboDKException("Can't connect to RoboDK API");
             }
         }
 
@@ -2578,7 +2578,7 @@ namespace RoboDk.API
 
                 case 1:
                     LastStatusMessage = "Invalid item provided: The item identifier provided is not valid or it does not exist.";
-                    throw new RdkException(LastStatusMessage);
+                    throw new RoboDKException(LastStatusMessage);
 
                 case 2:
                     {
@@ -2594,30 +2594,30 @@ namespace RoboDk.API
                     {
                         // output error
                         LastStatusMessage = rec_line();
-                        throw new RdkException(LastStatusMessage);
+                        throw new RoboDKException(LastStatusMessage);
                     }
                 case 9:
                     {
                         LastStatusMessage = "Invalid license. Contact us at: info@robodk.com";
-                        throw new RdkException(LastStatusMessage);
+                        throw new RoboDKException(LastStatusMessage);
                     }
                 case 10:
                     {
                         // Target reach error
                         LastStatusMessage = rec_line();
-                        throw new RdkException(LastStatusMessage);
+                        throw new RoboDKException(LastStatusMessage);
                     }
                 case 11:
                     {
                         // Stopped by user
                         LastStatusMessage = rec_line();
-                        throw new RdkException(LastStatusMessage);
+                        throw new RoboDKException(LastStatusMessage);
                     }
                 case 12:
                     {
                         // Invalid input exception
                         LastStatusMessage = rec_line();
-                        throw new RdkException(LastStatusMessage);
+                        throw new RoboDKException(LastStatusMessage);
                     }
                 default:
                     {
@@ -2625,12 +2625,12 @@ namespace RoboDk.API
                         {
                             // dedicated exception with message
                             LastStatusMessage = rec_line();
-                            throw new RdkException(LastStatusMessage);
+                            throw new RoboDKException(LastStatusMessage);
                         }
                         else { 
                             //raise Exception('Problems running function');
                             LastStatusMessage = "Unknown problem running RoboDK API function";
-                            throw new RdkException(LastStatusMessage);
+                            throw new RoboDKException(LastStatusMessage);
                         }
                     }
             }
@@ -2645,7 +2645,7 @@ namespace RoboDk.API
         {
             if (color.Length < 4)
             {
-                throw new RdkException("Invalid color. A color must be a 4-size double array [r,g,b,a]");
+                throw new RoboDKException("Invalid color. A color must be a 4-size double array [r,g,b,a]");
             }
 
             return true;
@@ -2662,7 +2662,7 @@ namespace RoboDk.API
             }
             catch
             {
-                throw new RdkException("Send line failed.");
+                throw new RoboDKException("Send line failed.");
             }
         }
 
@@ -2691,7 +2691,7 @@ namespace RoboDk.API
 
             if (bytes.Length != 8)
             {
-                throw new RdkException("API error");
+                throw new RoboDKException("API error");
             }
 
             try
@@ -2700,7 +2700,7 @@ namespace RoboDk.API
             }
             catch
             {
-                throw new RdkException("_socket.Send failed.");
+                throw new RoboDKException("_socket.Send failed.");
             }
         }
 
@@ -2819,7 +2819,7 @@ namespace RoboDk.API
             }
             catch
             {
-                throw new RdkException("_socket.Send failed.");
+                throw new RoboDKException("_socket.Send failed.");
             }
         }
 
@@ -2839,7 +2839,7 @@ namespace RoboDk.API
             }
             catch
             {
-                throw new RdkException("_socket.Send failed.");
+                throw new RoboDKException("_socket.Send failed.");
             }
         }
 
@@ -2961,7 +2961,7 @@ namespace RoboDk.API
             }
             else
             {
-                throw new RdkException("Invalid target type"); //raise Exception('Problems running function');
+                throw new RoboDKException("Invalid target type"); //raise Exception('Problems running function');
             }
 
             send_item(itemrobot);
@@ -3007,7 +3007,7 @@ namespace RoboDk.API
             }
             else
             {
-                throw new RdkException("Invalid type of target 1");
+                throw new RoboDKException("Invalid type of target 1");
             }
 
             /////////////////////////////////////
@@ -3031,7 +3031,7 @@ namespace RoboDk.API
             }
             else
             {
-                throw new RdkException("Invalid type of target 2");
+                throw new RoboDKException("Invalid type of target 2");
             }
 
             /////////////////////////////////////
@@ -3095,7 +3095,7 @@ namespace RoboDk.API
 
                     case ConnectionType.None:
                     default:
-                        throw new RdkException($"unknown ConnectionType: {_connectionType}");
+                        throw new RoboDKException($"unknown ConnectionType: {_connectionType}");
                 }
             }
             catch (SocketException socketException)
@@ -3113,7 +3113,7 @@ namespace RoboDk.API
 
             if (RoboDKBuild < buildRequired)
             {
-                throw new RdkException("This function is unavailable. Update RoboDK to use this function through the API.");
+                throw new RoboDKException("This function is unavailable. Update RoboDK to use this function through the API.");
             }
 
             return true;

@@ -12,9 +12,9 @@ using System.Windows.Forms;
 
 namespace SamplePanelRoboDK
 {
-    public partial class SpashDialog : Form
+    public partial class SplashDialog : Form
     {
-        public SpashDialog()
+        public SplashDialog()
         {
             InitializeComponent();
         }

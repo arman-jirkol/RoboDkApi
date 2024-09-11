@@ -199,7 +199,7 @@ namespace RoboDk.API
         {
             if (ItemId == 0)
             {
-                throw new RdkException("Item does not exist");
+                throw new RoboDKException("Item does not exist");
             }
             Link.check_connection();
             var command = "Remove";
@@ -711,7 +711,7 @@ namespace RoboDk.API
             Link.check_connection();
             if (scale.Length != 3)
             {
-                throw new RdkException("scale must be a single value or a 3-vector value");
+                throw new RoboDKException("scale must be a single value or a 3-vector value");
             }
 
             var command = "Scale";

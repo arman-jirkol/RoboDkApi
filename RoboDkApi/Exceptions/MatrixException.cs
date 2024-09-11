@@ -50,11 +50,11 @@ namespace RoboDk.API.Exceptions
     /// </summary>
     /// <seealso cref="System.Exception" />
     [Serializable]
-    public class MatException : Exception
+    public class MatrixException : Exception
     {
         #region Constructors
 
-        public MatException(string message)
+        public MatrixException(string message)
             : base(message)
         {
         }

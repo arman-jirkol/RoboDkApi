@@ -214,7 +214,7 @@ namespace SamplePanelRoboDK
             {
                 notifybar.Text = $@"Using robot: {_robot.Name()}";
             }
-            catch (RdkException rdkException)
+            catch (RoboDKException rdkException)
             {
                 notifybar.Text = $@"The robot has been deleted: {rdkException.Message}";
                 return false;
@@ -292,7 +292,7 @@ namespace SamplePanelRoboDK
                 //Console.WriteLine("Robot joints are valid: " + jnts_valid.ToString());
                 _robot.MoveJ(joints, MoveBlocking);
             }
-            catch (RdkException rdkException)
+            catch (RoboDKException rdkException)
             {
                 notifybar.Text = $@"Problems moving the robot: {rdkException.Message}";
                 //MessageBox.Show("The robot can't move to " + new_pose.ToString());
@@ -313,7 +313,7 @@ namespace SamplePanelRoboDK
             {
                 _robot.MoveJ(pose, MoveBlocking);
             }
-            catch (RdkException rdkex)
+            catch (RoboDKException rdkex)
             {
                 notifybar.Text = $@"Problems moving the robot: {rdkex.Message}";
                 //MessageBox.Show("The robot can't move to " + new_pose.ToString());
@@ -695,7 +695,7 @@ namespace SamplePanelRoboDK
                     _robot.MoveJ(joints, MoveBlocking);
                     //ROBOT.MoveL(joints, MOVE_BLOCKING);
                 }
-                catch (RdkException rdkException)
+                catch (RoboDKException rdkException)
                 {
                     notifybar.Text = $@"The robot can't move to the target joints: {rdkException.Message}";
                     //MessageBox.Show("The robot can't move to " + new_pose.ToString());
@@ -750,7 +750,7 @@ namespace SamplePanelRoboDK
                 {
                     _robot.MoveJ(newRobotPose, MoveBlocking);
                 }
-                catch (RdkException rdkException)
+                catch (RoboDKException rdkException)
                 {
                     notifybar.Text = $@"The robot can't move to {newRobotPose.ToString()} : {rdkException.Message}";
                     //MessageBox.Show("The robot can't move to " + new_pose.ToString());
@@ -960,7 +960,7 @@ namespace SamplePanelRoboDK
                 _robot.RunCodeCustom("CallOnStart");
                 _robot.MoveL(poseRef);
             }
-            catch (RdkException rdkException)
+            catch (RoboDKException rdkException)
             {
                 notifybar.Text = $@"Failed to complete the movement: {rdkException.Message}";
             }

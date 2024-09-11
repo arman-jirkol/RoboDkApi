@@ -97,7 +97,7 @@ namespace RoboDk.API
                 _rows = 4;
                 if (point.GetLength(0) < 16)
                 {
-                    throw new MatException("Invalid array size to create a pose Mat"); //raise Exception('Problems running function');
+                    throw new MatrixException("Invalid array size to create a pose Mat"); //raise Exception('Problems running function');
                 }
 
                 // Convert a double array of arrays to a Mat object:
@@ -230,7 +230,7 @@ namespace RoboDk.API
                 }
             } else
             {
-                throw new MatException("Invalid rank size. Provide a 1-dimensional or 2-dimensional double array to create a Mat.");
+                throw new MatrixException("Invalid rank size. Provide a 1-dimensional or 2-dimensional double array to create a Mat.");
             }
         }
 
@@ -350,7 +350,7 @@ namespace RoboDk.API
         {
             if (!IsHomogeneous())
             {
-                throw new MatException("It is not possible to retrieve a sub 3x3 rotation mat"); //raise Exception('Problems running function');
+                throw new MatrixException("It is not possible to retrieve a sub 3x3 rotation mat"); //raise Exception('Problems running function');
             }
 
             return new Matrix(_mat[0, 0], _mat[0, 1], _mat[0, 2], 
@@ -708,7 +708,7 @@ namespace RoboDk.API
         public Matrix inv()
         {
             if (!IsHomogeneous())
-                throw new MatException("Can't invert a non-homogeneous matrix");
+                throw new MatrixException("Can't invert a non-homogeneous matrix");
             var xyz = Pos();
             var mat_xyz = new Matrix(xyz[0], xyz[1], xyz[2]);
             var hinv = Duplicate();
@@ -730,7 +730,7 @@ namespace RoboDk.API
         public static Matrix rotate(Matrix pose, Matrix vector)
         {
             if (pose._cols < 3 || pose._rows < 3 || vector._rows < 3)
-                throw new MatException("Invalid matrix size");
+                throw new MatrixException("Invalid matrix size");
             var pose3x3 = pose.Duplicate();
             var vector3 = vector.Duplicate();
             pose3x3._rows = 3;
@@ -989,7 +989,7 @@ namespace RoboDk.API
         public static Matrix MultiplyMatSimple(Matrix m1, Matrix m2)
         {
             if (m1._cols != m2._rows)
-                throw new MatException("Wrong dimensions of matrix!");
+                throw new MatrixException("Wrong dimensions of matrix!");
 
             var result = ZeroMatrix(m1._rows, m2._cols);
             for (var i = 0; i < result._rows; i++)
@@ -1209,7 +1209,7 @@ namespace RoboDk.API
         {
             if (!targetPose.IsHomogeneous())
             {
-                throw new MatException("Pose matrix is not homogeneous");
+                throw new MatrixException("Pose matrix is not homogeneous");
             }
 
             return transl(x, y, z) * rotx(rx * Math.PI / 180.0) * roty(ry * Math.PI / 180.0) * rotz(rz * Math.PI / 180.0) * targetPose;
@@ -1385,7 +1385,7 @@ namespace RoboDk.API
         private static Matrix Multiply(Matrix A, Matrix B) // Smart matrix multiplication
         {
             if (A._cols != B._rows)
-                throw new MatException("Wrong dimension of matrix!");
+                throw new MatrixException("Wrong dimension of matrix!");
 
             Matrix R;
 
@@ -1573,7 +1573,7 @@ namespace RoboDk.API
                 p2[2] = m1[2, 0] * p1[0] + m1[2, 1] * p1[1] + m1[2, 2] * p1[2] + m1[2, 3];
                 return p2;
             }
-            if (m1._cols != p1.Length) throw new MatException("Matrices must have the same dimensions!");
+            if (m1._cols != p1.Length) throw new MatrixException("Matrices must have the same dimensions!");
             for (var i = 0; i < m1._rows; i++)
             {
                 double vi = 0;
@@ -1589,7 +1589,7 @@ namespace RoboDk.API
         private static Matrix Add(Matrix m1, Matrix m2) // Add matrix
         {
             if (m1._rows != m2._rows || m1._cols != m2._cols)
-                throw new MatException("Matrices must have the same dimensions!");
+                throw new MatrixException("Matrices must have the same dimensions!");
             var r = new Matrix(m1._rows, m1._cols);
             for (var i = 0; i < r._rows; i++)
             for (var j = 0; j < r._cols; j++)
@@ -1601,7 +1601,7 @@ namespace RoboDk.API
         {
             if (m1._rows != m2._rows)
             {
-                throw new MatException("Vertical size of matrices does not match");
+                throw new MatrixException("Vertical size of matrices does not match");
             }
 
             var result = new Matrix(m1._rows, m1._cols + m2._cols);
@@ -1626,7 +1626,7 @@ namespace RoboDk.API
         {
             if (m1._cols != m2._cols)
             {
-                throw new MatException("Horizontal size of matrices does not match");
+                throw new MatrixException("Horizontal size of matrices does not match");
             }
 
             var result = new Matrix(m1._rows + m2._rows, m1._cols);

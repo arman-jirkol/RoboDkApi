@@ -12,7 +12,7 @@ namespace RoboDk.API.Exceptions
     /// Class used for RoboDK exceptions
     /// </summary>  
     [Serializable]
-    public class RdkException : Exception
+    public class RoboDKException : Exception
     {
         #region Fields
 
@@ -22,7 +22,7 @@ namespace RoboDk.API.Exceptions
 
         #region Constructors
 
-        public RdkException(string message, [CallerMemberName] string memberName = "",
+        public RoboDKException(string message, [CallerMemberName] string memberName = "",
             [CallerLineNumber] int lineNumber = 0, [CallerFilePath] string filePath = "")
             : base(message)
         {
@@ -31,19 +31,19 @@ namespace RoboDk.API.Exceptions
             LineNumber = lineNumber;
         }
 
-        public RdkException()
+        public RoboDKException()
         {
         }
 
-        public RdkException(string message) : base(message)
+        public RoboDKException(string message) : base(message)
         {
         }
 
-        public RdkException(string message, Exception innerException) : base(message, innerException)
+        public RoboDKException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
-        protected RdkException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected RoboDKException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
 

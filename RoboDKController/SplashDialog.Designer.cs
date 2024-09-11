@@ -1,6 +1,6 @@
 ﻿namespace SamplePanelRoboDK
 {
-    partial class SpashDialog
+    partial class SplashDialog
     {
         /// <summary>
         /// Required designer variable.

@@ -22,7 +22,7 @@ namespace SamplePanelRoboDK
         // Define if the robot movements will be blocking
         private const bool MoveBlocking = false;
 
-        private SpashDialog spashDialog;
+        private SplashDialog spashDialog;
 
         // RDK holds the main object to interact with RoboDK.
         // The RoboDK application starts when a RoboDK object is created.
@@ -85,7 +85,7 @@ namespace SamplePanelRoboDK
 
         private void ShowSplashScreen()
         {
-            this.spashDialog = new SpashDialog();
+            this.spashDialog = new SplashDialog();
 
             spashDialog.Show();
             Application.DoEvents();
@@ -283,7 +283,7 @@ namespace SamplePanelRoboDK
                 //Console.WriteLine("Robot joints are valid: " + jnts_valid.ToString());
                 _robot.MoveJ(joints, MoveBlocking);
             }
-            catch (RdkException rdkException)
+            catch (RoboDKException rdkException)
             {
                 ShowError("The robot can't move to " + txtJoints.Text + Environment.NewLine + rdkException.Message);
             }
@@ -303,7 +303,7 @@ namespace SamplePanelRoboDK
             {
                 _robot.MoveJ(pose, MoveBlocking);
             }
-            catch (RdkException rdkex)
+            catch (RoboDKException rdkex)
             {
                 ShowError("The robot can't move to " + txtPosition.Text + Environment.NewLine + rdkex.Message);
             }
@@ -323,7 +323,7 @@ namespace SamplePanelRoboDK
             {
                 _robot.MoveL(xyzwpr, MoveBlocking);
             }
-            catch (RdkException rdkex)
+            catch (RoboDKException rdkex)
             {
                 ShowError("The robot can't move to " + txtLinearPos.Text + Environment.NewLine + rdkex.Message);
             }
@@ -344,7 +344,7 @@ namespace SamplePanelRoboDK
             {
                 _robot.MoveL(matrix, MoveBlocking);
             }
-            catch (RdkException exception)
+            catch (RoboDKException exception)
             {
                 ShowError("The robot can't move to " + txtPosLinear.Text + Environment.NewLine + exception.Message);
             }
