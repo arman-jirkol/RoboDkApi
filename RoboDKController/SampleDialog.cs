@@ -267,8 +267,6 @@ namespace SamplePanelRoboDK
 
             try
             {
-                //bool jnts_valid = ROBOT.setJoints(joints, RoboDK.SETJOINTS_SATURATE_APPLY);
-                //Console.WriteLine("Robot joints are valid: " + jnts_valid.ToString());
                 _robot.MoveJ(joints, MoveBlocking);
             }
             catch (RoboDKException rdkException)
@@ -280,16 +278,14 @@ namespace SamplePanelRoboDK
         private void btnMovePosition_Click(object sender, EventArgs e)
         {
             // retrieve the robot position from the text and validate input
-            var xyzwpr = String_2_Values(txtPosition.Text);
+            var position = String_2_Values(txtPosition.Text);
 
             // make sure RDK is running and we have a valid input
-            if (xyzwpr == null) return;
-
-            //Mat pose = Mat.FromXYZRPW(xyzwpr);
-            var pose = Matrix.FromTxyzRxyz(xyzwpr);
+            if (position == null) return;
+            
             try
             {
-                _robot.MoveJ(pose, MoveBlocking);
+                _robot.MoveJ(Matrix.FromTxyzRxyz(position), MoveBlocking);
             }
             catch (RoboDKException roboDKException)
             {
@@ -300,20 +296,18 @@ namespace SamplePanelRoboDK
         private void btnMoveJointLinear_Click(object sender, EventArgs e)
         {
             // retrieve the robot position from the text and validate input
-            var xyzwpr = String_2_Values(txtJointLinear.Text);
+            var joints = String_2_Values(txtJointLinear.Text);
 
             // make sure RDK is running and we have a valid input
-            if (xyzwpr == null) return;
+            if (joints == null) return;
 
-            //Matrix pos = Matrix.FromXyzrpw(xyzwpr);
-            var pose = Matrix.FromTxyzRxyz(xyzwpr);
             try
             {
-                _robot.MoveL(xyzwpr, MoveBlocking);
+                _robot.MoveL(joints, MoveBlocking);
             }
-            catch (RoboDKException rdkex)
+            catch (RoboDKException roboDKException)
             {
-                ShowError("The robot can't move to " + txtJointLinear.Text + Environment.NewLine + rdkex.Message);
+                ShowError("The robot can't move to " + txtJointLinear.Text + Environment.NewLine + roboDKException.Message);
             }
         }
 
@@ -324,9 +318,8 @@ namespace SamplePanelRoboDK
 
             // make sure RDK is running and we have a valid input
             if (pose == null) return;
-
-            //Matrix matrix = Matrix.FromXyzrpw(pose);
-            var matrix = RoboDk.API.Matrix.FromTxyzRxyz(pose);
+            
+            var matrix = Matrix.FromTxyzRxyz(pose);
 
             try
             {
@@ -339,39 +332,40 @@ namespace SamplePanelRoboDK
         }
 
         /// <summary>
-        ///     Convert a list of numbers provided as a string to an array of values
+        ///     Convert a list of numbers provided as a string to an array of value
         /// </summary>
-        /// <param name="strvalues"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public double[] String_2_Values(string strvalues)
+        public double[] String_2_Values(string value)
         {
-            double[] dvalues = null;
+            double[] output = null;
             try
             {
-                dvalues = Array.ConvertAll(strvalues.Split(','), double.Parse);
+                output = Array.ConvertAll(value.Split(','), double.Parse);
             }
             catch (FormatException ex)
             {
-                ShowError($@"Invalid input: {strvalues}: {ex.Message}");
+                ShowError($@"Invalid input: {value}: {ex.Message}");
             }
 
-            return dvalues;
+            return output;
         }
 
         /// <summary>
-        ///     Convert an array of values as a string
+        ///     Convert an array of value as a string
         /// </summary>
-        /// <param name="dvalues"></param>
+        /// <param name="values"></param>
         /// <returns></returns>
-        public string Values_2_String(double[] dvalues)
+        public string Values_2_String(double[] values)
         {
-            if (dvalues == null || dvalues.Length < 1) return "Invalid values";
-            // Not supported on .NET Framework 2.0:
-            //string strvalues = String.Join(" , ", dvalues.Select(p => p.ToString("0.0")).ToArray());
-            var strvalues = dvalues[0].ToString("0.0");
-            for (var i = 1; i < dvalues.Length; i++) strvalues += $" , {dvalues[i]:0.0}";
+            if (values == null || values.Length < 1) return "Invalid value";
 
-            return strvalues;
+            // Not supported on .NET Framework 2.0:
+            //string value = String.Join(" , ", value.Select(p => p.ToString("0.0")).ToArray());
+            var output = values[0].ToString("0.0");
+            for (var i = 1; i < values.Length; i++) output += $" , {values[i]:0.0}";
+
+            return output;
             //return "";
         }
 
@@ -429,25 +423,20 @@ namespace SamplePanelRoboDK
         {
             var joints = _robot.Joints();
             // update the joints
-            var strjoints = Values_2_String(joints);
-            txtJoints.Text = strjoints;
+            txtJoints.Text = Values_2_String(joints);
         }
 
         private void btnReadPosition_Click(object sender, EventArgs e)
         {
-            // update the pose as xyzwpr
-            var pose = _robot.Pose();
-            var xyzwpr = pose.ToTxyzRxyz();
-            var strpose = Values_2_String(xyzwpr);
-            txtPosition.Text = strpose;
+            // update the pose
+            var position = _robot.Pose().ToTxyzRxyz();
+            txtPosition.Text = Values_2_String(position);
         }
 
         private void btnReadJointLinear_Click(object sender, EventArgs e)
         {
-            var joints = _robot.Joints();
             // update the joints
-            var strjoints = Values_2_String(joints);
-            txtJointLinear.Text = strjoints;
+            txtJointLinear.Text = Values_2_String(_robot.Joints());
         }
 
         private void btnReadPositionLinear_Click(object sender, EventArgs e)
@@ -482,7 +471,7 @@ namespace SamplePanelRoboDK
             {
                 if (_robot.Connect(txtRobotIP.Text))
                 {
-                    MessageBox.Show("Connected");
+                    MessageBox.Show(@"Connected");
                 }
                 else
                 {
