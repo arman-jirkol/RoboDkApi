@@ -16,7 +16,7 @@ namespace SamplePanelRoboDK
         // Define if the robot movements will be blocking
         private const bool MoveBlocking = false;
 
-        private SplashDialog _spashDialog;
+        private SplashDialog _splashDialog;
 
         // RDK holds the main object to interact with RoboDK.
         // The RoboDK application starts when a RoboDK object is created.
@@ -57,7 +57,7 @@ namespace SamplePanelRoboDK
             //Activate all features:
             _rdk.SetWindowFlags(WindowFlags.All);
 
-            RetreiveJoints();
+            RetrieveJoints();
 
             HideSplashScreen();
 
@@ -67,7 +67,7 @@ namespace SamplePanelRoboDK
 
         private void HideSplashScreen()
         {
-            this._spashDialog.Close();
+            this._splashDialog.Close();
         }
 
         private void SampleDialog_Load(object sender, EventArgs e)
@@ -79,9 +79,9 @@ namespace SamplePanelRoboDK
 
         private void ShowSplashScreen()
         {
-            this._spashDialog = new SplashDialog();
+            this._splashDialog = new SplashDialog();
 
-            _spashDialog.Show();
+            _splashDialog.Show();
             Application.DoEvents();
         }
 
@@ -105,10 +105,10 @@ namespace SamplePanelRoboDK
             }
         }
 
-        private bool IsRoboDKAlreadyRunning()
-        {
-            return Process.GetProcessesByName("RoboDK").Any();
-        }
+        //private bool IsRoboDKAlreadyRunning()
+        //{
+        //    return Process.GetProcessesByName("RoboDK").Any();
+        //}
 
         private void KillOldRoboDKProcess()
         {
@@ -138,10 +138,10 @@ namespace SamplePanelRoboDK
             return true;
         }
 
-        private void ConnectToRoboDK()
-        {
-            _rdk.Connect();
-        }
+        //private void ConnectToRoboDK()
+        //{
+        //    _rdk.Connect();
+        //}
 
         [DllImport("user32.dll")]
         private static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
@@ -228,42 +228,36 @@ namespace SamplePanelRoboDK
             _rdk = null;
         }
 
-        //lock internal robodk feaures
-        private void LockRoboDK()
-        {
-            //RDK.setFlagsRoboDK(RoboDK.FLAG_ROBODK_MENUEDIT_ACTIVE | RoboDK.FLAG_ROBODK_MENUEDIT_ACTIVE);
-            _rdk.SetWindowFlags(WindowFlags.None);
-            _rdk.SetItemFlags(ItemFlags.None);
-            if (_robot != null && _robot.Valid()) _robot.SetItemFlags();
-        }
+        ////lock internal roboDK features
+        //private void LockRoboDK()
+        //{
+        //    //RDK.setFlagsRoboDK(RoboDK.FLAG_ROBODK_MENUEDIT_ACTIVE | RoboDK.FLAG_ROBODK_MENUEDIT_ACTIVE);
+        //    _rdk.SetWindowFlags(WindowFlags.None);
+        //    _rdk.SetItemFlags(ItemFlags.None);
+        //    if (_robot != null && _robot.Valid()) _robot.SetItemFlags();
+        //}
 
-        //unlock internal robodk feaures
-        private void UnlockRoboDK()
-        {
-            _rdk.SetWindowFlags(WindowFlags.All);
-            _rdk.SetItemFlags();
-            _rdk.ShowRoboDK();
+        ////unlock internal roboDK features
+        //private void UnlockRoboDK()
+        //{
+        //    _rdk.SetWindowFlags(WindowFlags.All);
+        //    _rdk.SetItemFlags();
+        //    _rdk.ShowRoboDK();
 
-        }
+        //}
 
         //get current pos of joints
-        private void RetreiveJoints()
+        private void RetrieveJoints()
         {
-
-            var joints = _robot.Joints();
-            var pose = _robot.Pose();
-
             // update the joints
-            var strjoints = Values_2_String(joints);
-            txtJoints.Text = strjoints;
+            txtJoints.Text = Values_2_String(_robot.Joints());
 
-            // update the pose as xyzwpr
-            var xyzwpr = pose.ToTxyzRxyz();
-            var strpose = Values_2_String(xyzwpr);
-            txtPosition.Text = strpose;
+            // update the pose
+            var pose = _robot.Pose().ToTxyzRxyz();
+            txtPosition.Text = Values_2_String(pose);
         }
 
-        private void btnMoveRobotJoint_Click(object sender, EventArgs e)
+        private void btnMoveJoint_Click(object sender, EventArgs e)
         {
             // retrieve the robot joints from the text and validate input
             var joints = String_2_Values(txtJoints.Text);
@@ -283,7 +277,7 @@ namespace SamplePanelRoboDK
             }
         }
 
-        private void btnMoveRobotPos_Click(object sender, EventArgs e)
+        private void btnMovePosition_Click(object sender, EventArgs e)
         {
             // retrieve the robot position from the text and validate input
             var xyzwpr = String_2_Values(txtPosition.Text);
@@ -292,41 +286,41 @@ namespace SamplePanelRoboDK
             if (xyzwpr == null) return;
 
             //Mat pose = Mat.FromXYZRPW(xyzwpr);
-            var pose = RoboDk.API.Matrix.FromTxyzRxyz(xyzwpr);
+            var pose = Matrix.FromTxyzRxyz(xyzwpr);
             try
             {
                 _robot.MoveJ(pose, MoveBlocking);
             }
-            catch (RoboDKException rdkex)
+            catch (RoboDKException roboDKException)
             {
-                ShowError("The robot can't move to " + txtPosition.Text + Environment.NewLine + rdkex.Message);
+                ShowError("The robot can't move to " + txtPosition.Text + Environment.NewLine + roboDKException.Message);
             }
         }
 
-        private void btnMoveRobotLinear_Click(object sender, EventArgs e)
+        private void btnMoveJointLinear_Click(object sender, EventArgs e)
         {
             // retrieve the robot position from the text and validate input
-            var xyzwpr = String_2_Values(txtLinearPos.Text);
+            var xyzwpr = String_2_Values(txtJointLinear.Text);
 
             // make sure RDK is running and we have a valid input
             if (xyzwpr == null) return;
 
-            RoboDk.API.Matrix pos = RoboDk.API.Matrix.FromXyzrpw(xyzwpr);
-            var pose = RoboDk.API.Matrix.FromTxyzRxyz(xyzwpr);
+            //Matrix pos = Matrix.FromXyzrpw(xyzwpr);
+            var pose = Matrix.FromTxyzRxyz(xyzwpr);
             try
             {
                 _robot.MoveL(xyzwpr, MoveBlocking);
             }
             catch (RoboDKException rdkex)
             {
-                ShowError("The robot can't move to " + txtLinearPos.Text + Environment.NewLine + rdkex.Message);
+                ShowError("The robot can't move to " + txtJointLinear.Text + Environment.NewLine + rdkex.Message);
             }
         }
 
-        private void btnMoveRobotPosLinear_Click(object sender, EventArgs e)
+        private void btnMovePositionLinear_Click(object sender, EventArgs e)
         {
             // retrieve the robot position from the text and validate input
-            var pose = String_2_Values(txtPosLinear.Text);
+            var pose = String_2_Values(txtPositionLinear.Text);
 
             // make sure RDK is running and we have a valid input
             if (pose == null) return;
@@ -340,7 +334,7 @@ namespace SamplePanelRoboDK
             }
             catch (RoboDKException exception)
             {
-                ShowError("The robot can't move to " + txtPosLinear.Text + Environment.NewLine + exception.Message);
+                ShowError("The robot can't move to " + txtPositionLinear.Text + Environment.NewLine + exception.Message);
             }
         }
 
@@ -381,7 +375,7 @@ namespace SamplePanelRoboDK
             //return "";
         }
 
-        private void btnMoveToHomePos_Click(object sender, EventArgs e)
+        private void btnMoveToHomePosition_Click(object sender, EventArgs e)
         {
             var jointsHome = _robot.JointsHome();
 
@@ -431,7 +425,7 @@ namespace SamplePanelRoboDK
             chkRunMode.Tag = null;
         }
 
-        private void btnReadRobotJoint_Click(object sender, EventArgs e)
+        private void btnReadJoint_Click(object sender, EventArgs e)
         {
             var joints = _robot.Joints();
             // update the joints
@@ -439,7 +433,7 @@ namespace SamplePanelRoboDK
             txtJoints.Text = strjoints;
         }
 
-        private void btnReadRobotPos_Click(object sender, EventArgs e)
+        private void btnReadPosition_Click(object sender, EventArgs e)
         {
             // update the pose as xyzwpr
             var pose = _robot.Pose();
@@ -448,19 +442,19 @@ namespace SamplePanelRoboDK
             txtPosition.Text = strpose;
         }
 
-        private void btnReadRobotLinearPos_Click(object sender, EventArgs e)
+        private void btnReadJointLinear_Click(object sender, EventArgs e)
         {
             var joints = _robot.Joints();
             // update the joints
             var strjoints = Values_2_String(joints);
-            txtLinearPos.Text = strjoints;
+            txtJointLinear.Text = strjoints;
         }
 
-        private void btnReadRobotPosL_Click(object sender, EventArgs e)
+        private void btnReadPositionLinear_Click(object sender, EventArgs e)
         {
             // update the pose
             var pose = _robot.Pose().ToTxyzRxyz();
-            txtPosLinear.Text = Values_2_String(pose);
+            txtPositionLinear.Text = Values_2_String(pose);
         }
 
         private void btnConnectToRobot_Click(object sender, EventArgs e)
