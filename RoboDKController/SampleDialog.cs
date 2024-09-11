@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -328,6 +329,27 @@ namespace SamplePanelRoboDK
             }
         }
 
+        private void btnMoveRobotPosLinear_Click(object sender, EventArgs e)
+        {
+            // retrieve the robot position from the text and validate input
+            var pose = String_2_Values(txtPosLinear.Text);
+
+            // make sure RDK is running and we have a valid input
+            if (pose == null) return;
+
+            //Matrix matrix = Matrix.FromXyzrpw(pose);
+            var matrix = Mat.FromTxyzRxyz(pose);
+
+            try
+            {
+                _robot.MoveL(matrix, MoveBlocking);
+            }
+            catch (RdkException exception)
+            {
+                ShowError("The robot can't move to " + txtPosLinear.Text + Environment.NewLine + exception.Message);
+            }
+        }
+
         /// <summary>
         ///     Convert a list of numbers provided as a string to an array of values
         /// </summary>
@@ -438,6 +460,13 @@ namespace SamplePanelRoboDK
             // update the joints
             var strjoints = Values_2_String(joints);
             txtLinearPos.Text = strjoints;
+        }
+
+        private void btnReadRobotPosL_Click(object sender, EventArgs e)
+        {
+            // update the pose
+            var pose = _robot.Pose().ToTxyzRxyz();
+            txtPosLinear.Text = Values_2_String(pose);
         }
 
         private void btnConnectToRobot_Click(object sender, EventArgs e)
