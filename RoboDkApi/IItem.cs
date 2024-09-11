@@ -96,13 +96,13 @@ namespace RoboDk.API
         ///     Use RDK() instead. Returns the RoboDK link Robolink().
         /// </summary>
         /// <returns></returns>
-        RoboDK RL();
+        RoboDK Rl();
 
         /// <summary>
         ///     Returns the RoboDK link Robolink().
         /// </summary>
         /// <returns></returns>
-        RoboDK RDK();
+        RoboDK Rdk();
 
         /// <summary>
         /// Get RoboDK low level link interface.
@@ -221,8 +221,8 @@ namespace RoboDk.API
 		/// Sets the tool mass and center of gravity. This is only used with accurate robots to improve accuracy.
 		/// </summary>
 		/// <param name="toolMass">Tool weigth in Kg.</param>
-		/// <param name="toolCOG">Tool center of gravity as [x,y,z] with respect to the robot flange.</param>
-		void setParamRobotTool(double toolMass, double[] toolCOG);
+		/// <param name="toolCog">Tool center of gravity as [x,y,z] with respect to the robot flange.</param>
+		void SetParamRobotTool(double toolMass, double[] toolCog);
 
         /// <summary>
         /// Send a specific parameter for an item.
@@ -565,9 +565,9 @@ namespace RoboDk.API
         ///     preferred joints (configuration) to go to that cartesian position.
         /// </summary>
         /// <param name="joints">array of joint values, in degrees or mm for linear axes</param>
-        /// <param name="saturate_action">Behavior to saturate or ignore invalid joints (only applicable to robot items)</param>
+        /// <param name="saturateAction">Behavior to saturate or ignore invalid joints (only applicable to robot items)</param>
         /// <returns>Returns True if the joints are valid (not saturated), False if they are outside the joint limitations.</returns>
-        bool SetJoints(double[] joints, SetJointsType saturate_action=SetJointsType.Default);
+        bool SetJoints(double[] joints, SetJointsType saturateAction=SetJointsType.Default);
 
         /// <summary>
         ///     Returns the joint limits of a robot
@@ -641,7 +641,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="joints"></param>
         /// <returns>4x4 homogeneous matrix: pose of the robot flange with respect to the robot base</returns>
-        Matrix SolveFK(double[] joints);
+        Matrix SolveFk(double[] joints);
 
         /// <summary>
         ///     Returns the robot configuration state for a set of robot joints.
@@ -659,7 +659,7 @@ namespace RoboDk.API
         /// <param name="tool">4x4 matrix -> Optionally provide a tool, otherwise, the robot flange is used. Tip: use robot.PoseTool() to retrieve the active robot tool.</param>
         /// <param name="reference">4x4 matrix -> Optionally provide a reference, otherwise, the robot base is used. Tip: use robot.PoseFrame() to retrieve the active robot reference frame.</param>
         /// <returns>array of joints</returns>
-        double[] SolveIK(Matrix pose, double[] jointsApprox = null, Matrix tool = null, Matrix reference = null);
+        double[] SolveIk(Matrix pose, double[] jointsApprox = null, Matrix tool = null, Matrix reference = null);
 
         /// <summary>
         ///     Computes the inverse kinematics for the specified robot and pose. The function returns all available joint
@@ -696,12 +696,12 @@ namespace RoboDk.API
 		/// <summary>
 		/// Set the robot connection parameters.
 		/// </summary>
-		/// <param name="robotIP">IP address of robot.</param>
+		/// <param name="robotIp">IP address of robot.</param>
 		/// <param name="port">Port of robot.</param>
 		/// <param name="remotePath">FTP path to connect to.</param>
 		/// <param name="ftpUser">FTP username</param>
 		/// <param name="ftpPass">FTP password</param>
-		void setConnectionParams(string robotIP, int port, string remotePath, string ftpUser, string ftpPass);
+		void SetConnectionParams(string robotIp, int port, string remotePath, string ftpUser, string ftpPass);
 
 		/// <summary>
 		/// Check connection status with a real robot.
@@ -1007,7 +1007,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="ioVar">io_var -> digital output (string or number)</param>
         /// <param name="ioValue">io_value -> value (string or number)</param>
-        void setDO(string ioVar, string ioValue);
+        void SetDo(string ioVar, string ioValue);
 
         /// <summary>
         ///     Waits for an input io_id to attain a given value io_value. Optionally, a timeout can be provided.
@@ -1015,7 +1015,7 @@ namespace RoboDk.API
         /// <param name="ioVar">io_var -> digital output (string or number)</param>
         /// <param name="ioValue">io_value -> value (string or number)</param>
         /// <param name="timeoutMs">int (optional) -> timeout in miliseconds</param>
-        void waitDI(string ioVar, string ioValue, double timeoutMs = -1);
+        void WaitDi(string ioVar, string ioValue, double timeoutMs = -1);
 
         /// <summary>
         ///     Add a custom instruction. This instruction will execute a Python file or an executable file.
@@ -1108,7 +1108,7 @@ namespace RoboDk.API
         /// <param name="collisionCheck">Check for collisions: will set to 1 or 0</param>
         /// <param name="flags">Reserved for future compatibility</param>
         /// <param name="timeoutSec">Maximum time to wait for the result (in seconds)</param>
-        /// <param name="time_step">Time step in seconds for time-based calculation (ListJointsType must be set to TimeBased)</param>
+        /// <param name="timeStep">Time step in seconds for time-based calculation (ListJointsType must be set to TimeBased)</param>
         /// <returns>List of InstructionListJointsResult.</returns>
         InstructionListJointsResult GetInstructionListJoints(
             double mmStep = 10.0,
@@ -1117,7 +1117,7 @@ namespace RoboDk.API
             CollisionCheckOptions collisionCheck = CollisionCheckOptions.CollisionCheckOff,
             ListJointsType flags = 0,
             int timeoutSec = 3600,
-            double time_step = 0.2);
+            double timeStep = 0.2);
 
         /// <summary>
         /// Returns a list of joints an MxN matrix, where M is the number of robot axes plus 4 columns. Linear moves are rounded according to the smoothing parameter set inside the program.
@@ -1130,7 +1130,7 @@ namespace RoboDk.API
         /// <param name="collisionCheck">Check for collisions: will set to 1 or 0</param>
         /// <param name="flags">Reserved for future compatibility</param>
         /// <param name="timeoutSec">Maximum time to wait for the result (in seconds)</param>
-        /// <param name="time_step">Time step for time-based calculation (ListJointsType must be set to TimeBased)</param>
+        /// <param name="timeStep">Time step for time-based calculation (ListJointsType must be set to TimeBased)</param>
         /// <returns>Returns 0 if success, otherwise, it will return negative values</returns>
         int InstructionListJoints(out string errorMsg,
             out Matrix jointList,
@@ -1140,7 +1140,7 @@ namespace RoboDk.API
             CollisionCheckOptions collisionCheck = CollisionCheckOptions.CollisionCheckOff,
             ListJointsType flags = 0,
             int timeoutSec = 3600,
-            double time_step = 0.2);
+            double timeStep = 0.2);
 
         /// <summary>
         ///     Disconnect from the RoboDK API. This flushes any pending program generation.
@@ -1199,25 +1199,25 @@ namespace RoboDk.API
         ///     Copy the item to the clipboard (same as Ctrl+C).
         ///     Use together with Paste() to duplicate items.
         /// </summary>        
-        /// <param name="copy_children">Set to false to prevent copying all items attached to this item</param>
-        void Copy(bool copy_children = true);
+        /// <param name="copyChildren">Set to false to prevent copying all items attached to this item</param>
+        void Copy(bool copyChildren = true);
 
         /// <summary>
         ///     Paste the copied item as a dependency of another item (same as Ctrl+V).
         ///     Paste should be used after Copy().
         /// </summary>
-        /// <param name="paste_to">Item to attach the copied item (optional)</param>
+        /// <param name="pasteTo">Item to attach the copied item (optional)</param>
         /// <returns>Returns the new item created</returns>
-        IItem Paste(IItem paste_to = null);
+        IItem Paste(IItem pasteTo = null);
 
         /// <summary>
         ///     Paste the copied item as a dependency of another item (same as Ctrl+V).
         ///     Paste should be used after Copy().
         /// </summary>
-        /// <param name="paste_to">Item to attach the copied item (can be null)</param>
-        /// <param name="paste_times">Number of times to paste the item</param>
+        /// <param name="pasteTo">Item to attach the copied item (can be null)</param>
+        /// <param name="pasteTimes">Number of times to paste the item</param>
         /// <returns>Returns the list of new items created</returns>
-        List<IItem> Paste(IItem paste_to, int paste_times);
+        List<IItem> Paste(IItem pasteTo, int pasteTimes);
 
         /// <summary>
         ///     Filter a program file to improve accuracy for a specific robot.

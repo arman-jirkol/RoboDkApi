@@ -146,13 +146,13 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public RoboDK RL()
+        public RoboDK Rl()
         {
             return Link;
         }
 
         /// <inheritdoc />
-        public RoboDK RDK()
+        public RoboDK Rdk()
         {
             return Link;
         }
@@ -378,7 +378,7 @@ namespace RoboDk.API
         }
 
 		/// <inheritdoc />
-		public void setParamRobotTool(double toolMass = 5, double[] toolCOG = null)
+		public void SetParamRobotTool(double toolMass = 5, double[] toolCOG = null)
 		{
 			Link.check_connection();
 			var command = "S_ParamCalibTool";
@@ -1013,7 +1013,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public Matrix SolveFK(double[] joints)
+        public Matrix SolveFk(double[] joints)
         {
             Link.check_connection();
             var command = "G_FK";
@@ -1040,11 +1040,11 @@ namespace RoboDk.API
 
         /// <inheritdoc />
         /// <returns>array of joints</returns>
-        public double[] SolveIK(Matrix pose, double[] jointsApprox = null, Matrix tool = null, Matrix reference = null)
+        public double[] SolveIk(Matrix pose, double[] jointsApprox = null, Matrix tool = null, Matrix reference = null)
         {
             if (tool != null)
             {
-                pose = pose * tool.inv();
+                pose = pose * tool.Inv();
             }
             if (reference != null)
             {
@@ -1073,7 +1073,7 @@ namespace RoboDk.API
         {
             if (tool != null)
             {
-                pose = pose * tool.inv();
+                pose = pose * tool.Inv();
             }
             if (reference != null)
             {
@@ -1164,7 +1164,7 @@ namespace RoboDk.API
 		}
 
 		/// <inheritdoc />
-		public void setConnectionParams(string robotIP, int port, string remotePath, string ftpUser, string ftpPass)
+		public void SetConnectionParams(string robotIP, int port, string remotePath, string ftpUser, string ftpPass)
 		{
 			Link.check_connection();
 			var command = "setConnectParams";
@@ -1592,7 +1592,7 @@ namespace RoboDk.API
 
 
         /// <inheritdoc />
-        public void setDO(string ioVar, string ioValue)
+        public void SetDo(string ioVar, string ioValue)
         {
             Link.check_connection();
             var command = "setDO";
@@ -1604,7 +1604,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void waitDI(string ioVar, string ioValue, double timeoutMs = -1)
+        public void WaitDi(string ioVar, string ioValue, double timeoutMs = -1)
         {
             Link.check_connection();
             var command = "waitDI";

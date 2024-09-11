@@ -62,8 +62,8 @@ namespace RoboDk.API
         private int _cols;
         private readonly double[,] _mat;
 
-        public Matrix L;
-        public Matrix U;
+        public Matrix _l;
+        public Matrix _u;
 
         #endregion
 
@@ -200,13 +200,13 @@ namespace RoboDk.API
         ///     RDK.AddCurve(new Mat(new double[4, 6] {{0,0,0, 0,0,1}, { 500, 0, 0, 0, 0, 1 }, { 500, 500, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 1 } }));
         ///     RDK.AddPoints(new Mat(new double[6] {{0,0,0, 0,0,1}}));
         /// </summary>
-        /// <param name="point_list">List of points (array of array of doubles)</param>
-        public Matrix(double[,] point_list)
+        /// <param name="pointList">List of points (array of array of doubles)</param>
+        public Matrix(double[,] pointList)
         {
-            if (point_list.Rank == 2)
+            if (pointList.Rank == 2)
             {
-                _cols = point_list.GetLength(0);
-                _rows = point_list.GetLength(1);
+                _cols = pointList.GetLength(0);
+                _rows = pointList.GetLength(1);
 
                 // Convert a double array of arrays to a Mat object:
                 _mat = new double[_rows, _cols];
@@ -214,19 +214,19 @@ namespace RoboDk.API
                 {
                     for (int r = 0; r < _rows; r++)
                     {
-                        _mat[r, c] = point_list[c, r];
+                        _mat[r, c] = pointList[c, r];
                     }
                 }
-            } else if (point_list.Rank == 1)
+            } else if (pointList.Rank == 1)
             {
                 _cols = 1;
-                _rows = point_list.GetLength(0);
+                _rows = pointList.GetLength(0);
 
                 // Convert a double array of arrays to a Mat object:
                 _mat = new double[_rows, _cols];
                 for (int r = 0; r < _rows; r++)
                 {
-                    _mat[r, 1] = point_list[0,r];
+                    _mat[r, 1] = pointList[0,r];
                 }
             } else
             {
@@ -265,10 +265,10 @@ namespace RoboDk.API
         /// <param name="y">translation along Y (mm)</param>
         /// <param name="z">translation along Z (mm)</param>
         /// <returns></returns>
-        public static Matrix transl(double x, double y, double z)
+        public static Matrix Transl(double x, double y, double z)
         {
             var mat = IdentityMatrix(4, 4);
-            mat.setPos(x, y, z);
+            mat.SetPos(x, y, z);
             return mat;
         }
 
@@ -281,7 +281,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="rx">rotation around X axis (in radians)</param>
         /// <returns></returns>
-        public static Matrix rotx(double rx)
+        public static Matrix Rotx(double rx)
         {
             var cx = Math.Cos(rx);
             var sx = Math.Sin(rx);
@@ -297,7 +297,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="ry">rotation around Y axis (in radians)</param>
         /// <returns></returns>
-        public static Matrix roty(double ry)
+        public static Matrix Roty(double ry)
         {
             var cy = Math.Cos(ry);
             var sy = Math.Sin(ry);
@@ -313,7 +313,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="rz">rotation around Z axis (in radians)</param>
         /// <returns></returns>
-        public static Matrix rotz(double rz)
+        public static Matrix Rotz(double rz)
         {
             var cz = Math.Cos(rz);
             var sz = Math.Sin(rz);
@@ -346,7 +346,7 @@ namespace RoboDk.API
         /// Returns the sub 3x3 matrix that represents the pose rotation
         /// </summary>
         /// <returns></returns>
-        public Matrix Rot3x3()
+        public Matrix Rot3X3()
         {
             if (!IsHomogeneous())
             {
@@ -362,7 +362,7 @@ namespace RoboDk.API
         /// Check if it is a Homogeneous Identity matrix
         /// </summary>
         /// <returns></returns>
-        public bool isIdentity()
+        public bool IsIdentity()
         {
             if (this.Cols != 4 || this.Rows != this.Cols)
                 return false;
@@ -453,7 +453,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="xyzwpr"></param>
         /// <returns>Homogeneous matrix (4x4)</returns>
-        public static Matrix FromXYZRPW(double[] xyzwpr)
+        public static Matrix FromXyzrpw(double[] xyzwpr)
         {
             if (xyzwpr.Length < 6)
                 return null;
@@ -563,7 +563,7 @@ namespace RoboDk.API
 		/// The uvw values are the rotation vector
 		/// </summary>
 		/// <returns>XYZWPR translation and rotation in mm and radians</returns>
-        public double[] ToUR()
+        public double[] ToUr()
         {
 			double[] xyzwpr = new double[6];
 			double x = _mat[0, 3];
@@ -578,9 +578,9 @@ namespace RoboDk.API
 				ry = 0;
 				rz = 0;		
 			} else {
-				double sin_angle = Math.Sin(angle);
-				double rxyz_norm_sq = rx*rx + ry*ry + rz*rz;
-				if (Math.Abs(sin_angle) < 1e-8 || rxyz_norm_sq < 1e-4){
+				double sinAngle = Math.Sin(angle);
+				double rxyzNormSq = rx*rx + ry*ry + rz*rz;
+				if (Math.Abs(sinAngle) < 1e-8 || rxyzNormSq < 1e-4){
 					double mx = 0;
 					if (_mat[0, 0] > _mat[1, 1] && _mat[0, 0] > _mat[2, 2]){
 						rx = _mat[0, 0] + 1;
@@ -598,12 +598,12 @@ namespace RoboDk.API
 						rz = _mat[2, 2] + 1;
 						mx = _mat[2, 2];
 					}
-					double mult_factor = angle / (Math.Sqrt(Math.Max(0, 2 * (1 + mx))));				
+					double multFactor = angle / (Math.Sqrt(Math.Max(0, 2 * (1 + mx))));				
 				} else {
-					double mult_factor = angle / Math.Sqrt(rxyz_norm_sq);
-					rx = rx * mult_factor;
-					ry = ry * mult_factor;
-					rz = rz * mult_factor;				
+					double multFactor = angle / Math.Sqrt(rxyzNormSq);
+					rx = rx * multFactor;
+					ry = ry * multFactor;
+					rz = rz * multFactor;				
 				}
 			}
 			xyzwpr[0] = x;
@@ -620,7 +620,7 @@ namespace RoboDk.API
 		/// </summary>
 		/// <param name="xyzwpr">The position and euler angles array</param>
 		/// <returns>Homogeneous matrix (4x4)</returns>
-        public static Matrix FromUR(double[] xyzwpr)
+        public static Matrix FromUr(double[] xyzwpr)
         {
 			double x = xyzwpr[0];
 			double y = xyzwpr[1];
@@ -629,7 +629,7 @@ namespace RoboDk.API
 			double p = xyzwpr[4];
 			double r = xyzwpr[5];
 			double angle = Math.Sqrt(w * w + p * p + r * r);
-			Matrix pose = Matrix.Identity4x4(); // Mat.IdentityMatrix(4, 4);
+			Matrix pose = Matrix.Identity4X4(); // Mat.IdentityMatrix(4, 4);
 			if (angle < 1e-6) {
 				// no rotation
 			} else {
@@ -641,7 +641,7 @@ namespace RoboDk.API
 				double[] q1234 = new double[] { cosang, q2, q3, q4 };
 				pose = Matrix.FromQuaternion(q1234);
 			}
-			pose.setPos(x, y, z);
+			pose.SetPos(x, y, z);
 			return pose;
         }
 
@@ -670,7 +670,7 @@ namespace RoboDk.API
             return _rows == _cols;
         }
 
-        public bool Is4x4()
+        public bool Is4X4()
         {
             if (_cols != 4 || _rows != 4)
                 return false;
@@ -682,7 +682,7 @@ namespace RoboDk.API
         /// </summary>
         public bool IsHomogeneous()
         {
-            if (!Is4x4())
+            if (!Is4X4())
                 return false;
             return true;
             /*
@@ -705,19 +705,19 @@ namespace RoboDk.API
         ///     Returns the inverse of a homogeneous matrix (4x4 matrix)
         /// </summary>
         /// <returns>Homogeneous matrix (4x4)</returns>
-        public Matrix inv()
+        public Matrix Inv()
         {
             if (!IsHomogeneous())
                 throw new MatrixException("Can't invert a non-homogeneous matrix");
             var xyz = Pos();
-            var mat_xyz = new Matrix(xyz[0], xyz[1], xyz[2]);
+            var matXyz = new Matrix(xyz[0], xyz[1], xyz[2]);
             var hinv = Duplicate();
-            hinv.setPos(0, 0, 0);
+            hinv.SetPos(0, 0, 0);
             hinv = hinv.Transpose();
-            var new_pos = rotate(hinv, mat_xyz);
-            hinv[0, 3] = -new_pos[0, 0];
-            hinv[1, 3] = -new_pos[1, 0];
-            hinv[2, 3] = -new_pos[2, 0];
+            var newPos = Rotate(hinv, matXyz);
+            hinv[0, 3] = -newPos[0, 0];
+            hinv[1, 3] = -newPos[1, 0];
+            hinv[2, 3] = -newPos[2, 0];
             return hinv;
         }
 
@@ -727,16 +727,16 @@ namespace RoboDk.API
         /// <param name="pose">4x4 homogeneous matrix or 3x3 rotation matrix</param>
         /// <param name="vector">4x1 or 3x1 vector</param>
         /// <returns></returns>
-        public static Matrix rotate(Matrix pose, Matrix vector)
+        public static Matrix Rotate(Matrix pose, Matrix vector)
         {
             if (pose._cols < 3 || pose._rows < 3 || vector._rows < 3)
                 throw new MatrixException("Invalid matrix size");
-            var pose3x3 = pose.Duplicate();
+            var pose3X3 = pose.Duplicate();
             var vector3 = vector.Duplicate();
-            pose3x3._rows = 3;
-            pose3x3._cols = 3;
+            pose3X3._rows = 3;
+            pose3X3._cols = 3;
             vector3._rows = 3;
-            return pose3x3 * vector3;
+            return pose3X3 * vector3;
         }
 
         /// <summary>
@@ -745,7 +745,7 @@ namespace RoboDk.API
         /// <returns>XYZ position</returns>
         public double[] Pos()
         {
-            if (!Is4x4())
+            if (!Is4X4())
                 return null;
             var xyz = new double[3];
             xyz[0] = _mat[0, 3];
@@ -758,9 +758,9 @@ namespace RoboDk.API
         ///     Sets the 4x4 position of the Homogeneous matrix
         /// </summary>
         /// <param name="xyz">XYZ position</param>
-        public void setPos(double[] xyz)
+        public void SetPos(double[] xyz)
         {
-            if (!Is4x4() || xyz.Length < 3)
+            if (!Is4X4() || xyz.Length < 3)
                 return;
             _mat[0, 3] = xyz[0];
             _mat[1, 3] = xyz[1];
@@ -773,9 +773,9 @@ namespace RoboDk.API
         /// <param name="x">X position</param>
         /// <param name="y">Y position</param>
         /// <param name="z">Z position</param>
-        public void setPos(double x, double y, double z)
+        public void SetPos(double x, double y, double z)
         {
-            if (!Is4x4())
+            if (!Is4X4())
                 return;
             _mat[0, 3] = x;
             _mat[1, 3] = y;
@@ -786,9 +786,9 @@ namespace RoboDk.API
         /// Returns the VX orientation vector of the Homogeneous matrix
         /// </summary>
         /// <returns>VX orientation vector</returns>
-        public double[] VX()
+        public double[] Vx()
         {
-            if (!Is4x4())
+            if (!Is4X4())
             {
                 return null;
             }
@@ -801,9 +801,9 @@ namespace RoboDk.API
         /// Sets the VX orientation vector of the Homogeneous matrix
         /// </summary>
         /// <param name="xyz">VX orientation vector</param>
-        public void setVX(double[] xyz)
+        public void SetVx(double[] xyz)
         {
-            if (!Is4x4() || xyz.Length < 3)
+            if (!Is4X4() || xyz.Length < 3)
             {
                 return;
             }
@@ -813,9 +813,9 @@ namespace RoboDk.API
         /// Returns the VY orientation vector of the Homogeneous matrix
         /// </summary>
         /// <returns>VY orientation vector</returns>
-        public double[] VY()
+        public double[] Vy()
         {
-            if (!Is4x4())
+            if (!Is4X4())
             {
                 return null;
             }
@@ -828,9 +828,9 @@ namespace RoboDk.API
         /// Sets the VY orientation vector of the Homogeneous matrix
         /// </summary>
         /// <param name="xyz">VY orientation vector</param>
-        public void setVY(double[] xyz)
+        public void SetVy(double[] xyz)
         {
-            if (!Is4x4() || xyz.Length < 3)
+            if (!Is4X4() || xyz.Length < 3)
             {
                 return;
             }
@@ -840,9 +840,9 @@ namespace RoboDk.API
         /// Returns the VZ orientation vector of the Homogeneous matrix
         /// </summary>
         /// <returns>VZ orientation vector</returns>
-        public double[] VZ()
+        public double[] Vz()
         {
-            if (!Is4x4())
+            if (!Is4X4())
             {
                 return null;
             }
@@ -855,9 +855,9 @@ namespace RoboDk.API
         /// Sets the VZ orientation vector of the Homogeneous matrix
         /// </summary>
         /// <param name="xyz">VZ orientation vector</param>
-        public void setVZ(double[] xyz)
+        public void SetVz(double[] xyz)
         {
-            if (!Is4x4() || xyz.Length < 3)
+            if (!Is4X4() || xyz.Length < 3)
             {
                 return;
             }
@@ -909,7 +909,7 @@ namespace RoboDk.API
         ///     Returns an identity 4x4 matrix (homogeneous matrix)
         /// </summary>
         /// <returns></returns>
-        public static Matrix Identity4x4()
+        public static Matrix Identity4X4()
         {
             return IdentityMatrix(4, 4);
         }
@@ -941,13 +941,13 @@ namespace RoboDk.API
         /// <summary>
         /// Returns the Matrix string (XYZWPR using the functino ToTxyzRxyz() or matrix values)
         /// </summary>
-        /// <param name="string_as_xyzabc"></param>
+        /// <param name="stringAsXyzabc"></param>
         /// <returns></returns>
-        public string ToString(bool string_as_xyzabc = true)                           // Function returns matrix as a string
+        public string ToString(bool stringAsXyzabc = true)                           // Function returns matrix as a string
         {
             string s = "";
-            string_as_xyzabc = string_as_xyzabc && IsHomogeneous();
-            if (string_as_xyzabc)
+            stringAsXyzabc = stringAsXyzabc && IsHomogeneous();
+            if (stringAsXyzabc)
             {
                 var letter = new List<string>() { "X=", "Y=", "Z=", "Rx=", "Ry=", "Rz=" };
                 var units = new List<string>() { "mm", "mm", "mm", "deg", "deg", "deg" };
@@ -1057,7 +1057,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        static public double norm(double[] p)
+        static public double Norm(double[] p)
         {
             return Math.Sqrt(p[0] * p[0] + p[1] * p[1] + p[2] * p[2]);
         }
@@ -1067,9 +1067,9 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        static public double[] normalize3(double[] p)
+        static public double[] Normalize3(double[] p)
         {
-            double norminv = 1.0 / norm(p);
+            double norminv = 1.0 / Norm(p);
             return new double[] { p[0] * norminv, p[1] * norminv, p[2] * norminv };
         }
 
@@ -1078,7 +1078,7 @@ namespace RoboDk.API
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        static public double[] cross(double[] a, double[] b)
+        static public double[] Cross(double[] a, double[] b)
         {
             return new double[] {a[1]* b[2] - a[2]* b[1],
           a[2]* b[0] - a[0]* b[2],
@@ -1090,7 +1090,7 @@ namespace RoboDk.API
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        static public double dot(double[] a, double[] b)
+        static public double Dot(double[] a, double[] b)
         {
             return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
         }
@@ -1101,9 +1101,9 @@ namespace RoboDk.API
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        static public double angle3(double[] a, double[] b)
+        static public double Angle3(double[] a, double[] b)
         {
-            return Math.Acos(dot(normalize3(a), normalize3(b)));
+            return Math.Acos(Dot(Normalize3(a), Normalize3(b)));
         }
 
         /// <summary>
@@ -1112,25 +1112,25 @@ namespace RoboDk.API
         /// <param name="point"></param>
         /// <param name="zaxis"></param>
         /// <param name="reference"></param>
-        /// <param name="yaxis_hint"></param>
+        /// <param name="yaxisHint"></param>
         /// <returns></returns>
-        static public Matrix xyzijk_2_pose(double[] point, double[] zaxis, double[] yaxis_hint = null)
+        static public Matrix xyzijk_2_pose(double[] point, double[] zaxis, double[] yaxisHint = null)
         {
-            Matrix pose = Matrix.Identity4x4();
-            if (yaxis_hint == null)
+            Matrix pose = Matrix.Identity4X4();
+            if (yaxisHint == null)
             {
-                yaxis_hint = new double[] { 0, 0, 1 };
+                yaxisHint = new double[] { 0, 0, 1 };
             }
-            pose.setPos(point);
-            pose.setVZ(zaxis);
-            if (Matrix.angle3(zaxis, yaxis_hint) < 2 * Math.PI / 180)
+            pose.SetPos(point);
+            pose.SetVz(zaxis);
+            if (Matrix.Angle3(zaxis, yaxisHint) < 2 * Math.PI / 180)
             {
-                yaxis_hint = new double[] { 0, 1, 1 };
+                yaxisHint = new double[] { 0, 1, 1 };
             }
-            double[] xaxis = Matrix.normalize3(Matrix.cross(yaxis_hint, zaxis));
-            double[] yaxis = Matrix.cross(zaxis, xaxis);
-            pose.setVX(xaxis);
-            pose.setVY(yaxis);
+            double[] xaxis = Matrix.Normalize3(Matrix.Cross(yaxisHint, zaxis));
+            double[] yaxis = Matrix.Cross(zaxis, xaxis);
+            pose.SetVx(xaxis);
+            pose.SetVy(yaxis);
             return pose;
         }
 
@@ -1147,17 +1147,17 @@ namespace RoboDk.API
         public Matrix TranslationPose()
         {
             double[] pos = Pos();
-            return transl(pos[0], pos[1], pos[2]);
+            return Transl(pos[0], pos[1], pos[2]);
         }
 
         public Matrix RotationPose()
         {
             Matrix result = new Matrix(this);
-            result.setPos(0.0, 0.0, 0.0);
+            result.SetPos(0.0, 0.0, 0.0);
             return result;
         }
 
-        public void SaveCSV(string filename)
+        public void SaveCsv(string filename)
         {
             Transpose().SaveMat(filename);
         }
@@ -1191,7 +1191,7 @@ namespace RoboDk.API
         /// <returns>Returns relative target</returns>
         public Matrix RelTool(Matrix targetPose, double x, double y, double z, double rx = 0.0, double ry = 0.0, double rz = 0.0)
         {
-            return targetPose * transl(x, y, z) * rotx(rx * Math.PI / 180) * roty(ry * Math.PI / 180) * rotz(rz * Math.PI / 180);
+            return targetPose * Transl(x, y, z) * Rotx(rx * Math.PI / 180) * Roty(ry * Math.PI / 180) * Rotz(rz * Math.PI / 180);
         }
 
         /// <summary>
@@ -1212,7 +1212,7 @@ namespace RoboDk.API
                 throw new MatrixException("Pose matrix is not homogeneous");
             }
 
-            return transl(x, y, z) * rotx(rx * Math.PI / 180.0) * roty(ry * Math.PI / 180.0) * rotz(rz * Math.PI / 180.0) * targetPose;
+            return Transl(x, y, z) * Rotx(rx * Math.PI / 180.0) * Roty(ry * Math.PI / 180.0) * Rotz(rz * Math.PI / 180.0) * targetPose;
         }
 
         #endregion
@@ -1222,16 +1222,16 @@ namespace RoboDk.API
         /// <summary>
         ///     Returns the quaternion of a pose (4x4 matrix)
         /// </summary>
-        /// <param name="Ti"></param>
+        /// <param name="ti"></param>
         /// <returns></returns>
-        private static double[] ToQuaternion(Matrix Ti)
+        private static double[] ToQuaternion(Matrix ti)
         {
-            const double Tolerance_0 = 1e-9;
-            const double Tolerance_180 = 1e-7;
+            const double tolerance0 = 1e-9;
+            const double tolerance180 = 1e-7;
             double[] q = new double[4];
 
-            double cosangle = Math.Min(Math.Max(((Ti[0, 0] + Ti[1, 1] + Ti[2, 2] - 1.0) * 0.5), -1.0), 1.0);  // Calculate the rotation angle
-            if (cosangle > 1.0 - Tolerance_0)
+            double cosangle = Math.Min(Math.Max(((ti[0, 0] + ti[1, 1] + ti[2, 2] - 1.0) * 0.5), -1.0), 1.0);  // Calculate the rotation angle
+            if (cosangle > 1.0 - tolerance0)
             {
                 // Identity matrix
                 q[0] = 1.0;
@@ -1239,12 +1239,12 @@ namespace RoboDk.API
                 q[2] = 0.0;
                 q[3] = 0.0;
             }
-            else if (cosangle < -1.0 + Tolerance_180)
+            else if (cosangle < -1.0 + tolerance180)
             {
                 // 180 rotation around an axis
-                double[] diag = new[] { Ti[0, 0], Ti[1, 1], Ti[2, 2] };
+                double[] diag = new[] { ti[0, 0], ti[1, 1], ti[2, 2] };
                 int k = Array.IndexOf(diag, diag.Max());
-                double[] col = new[] { Ti[0, k], Ti[1, k], Ti[2, k] };
+                double[] col = new[] { ti[0, k], ti[1, k], ti[2, k] };
                 col[k] = col[k] + 1.0;
                 double[] rotvector = col.Select(n => n / SqrtA(2.0 * (1.0 + diag[k]))).ToArray();
 
@@ -1265,21 +1265,21 @@ namespace RoboDk.API
             else
             {
                 // No edge case, normal calculation
-                double a = Ti[0, 0];
-                double b = Ti[1, 1];
-                double c = Ti[2, 2];
+                double a = ti[0, 0];
+                double b = ti[1, 1];
+                double c = ti[2, 2];
                 double sign2 = 1.0;
                 double sign3 = 1.0;
                 double sign4 = 1.0;
-                if (Ti[2, 1] - Ti[1, 2] < 0)
+                if (ti[2, 1] - ti[1, 2] < 0)
                 {
                     sign2 = -1.0;
                 }
-                if (Ti[0, 2] - Ti[2, 0] < 0)
+                if (ti[0, 2] - ti[2, 0] < 0)
                 {
                     sign3 = -1.0;
                 }
-                if (Ti[1, 0] - Ti[0, 1] < 0)
+                if (ti[1, 0] - ti[0, 1] < 0)
                 {
                     sign4 = -1.0;
                 }
@@ -1315,90 +1315,90 @@ namespace RoboDk.API
         /// <summary>
         ///     Converts a pose to an ABB target
         /// </summary>
-        /// <param name="H"></param>
+        /// <param name="h"></param>
         /// <returns></returns>
-        private static double[] ToABB(Matrix H)
+        private static double[] ToAbb(Matrix h)
         {
-            var q = ToQuaternion(H);
-            double[] xyzq1234 = {H[0, 3], H[1, 3], H[2, 3], q[0], q[1], q[2], q[3]};
+            var q = ToQuaternion(h);
+            double[] xyzq1234 = {h[0, 3], h[1, 3], h[2, 3], q[0], q[1], q[2], q[3]};
             return xyzq1234;
         }
 
-        private static void SafeAplusBintoC(Matrix A, int xa, int ya, Matrix B, int xb, int yb, Matrix C, int size)
+        private static void SafeAplusBintoC(Matrix a, int xa, int ya, Matrix b, int xb, int yb, Matrix c, int size)
         {
             for (var i = 0; i < size; i++) // rows
             for (var j = 0; j < size; j++) // cols
             {
-                C[i, j] = 0;
-                if (xa + j < A._cols && ya + i < A._rows)
-                    C[i, j] += A[ya + i, xa + j];
-                if (xb + j < B._cols && yb + i < B._rows)
-                    C[i, j] += B[yb + i, xb + j];
+                c[i, j] = 0;
+                if (xa + j < a._cols && ya + i < a._rows)
+                    c[i, j] += a[ya + i, xa + j];
+                if (xb + j < b._cols && yb + i < b._rows)
+                    c[i, j] += b[yb + i, xb + j];
             }
         }
 
-        private static void SafeAminusBintoC(Matrix A, int xa, int ya, Matrix B, int xb, int yb, Matrix C, int size)
+        private static void SafeAminusBintoC(Matrix a, int xa, int ya, Matrix b, int xb, int yb, Matrix c, int size)
         {
             for (var i = 0; i < size; i++) // rows
             for (var j = 0; j < size; j++) // cols
             {
-                C[i, j] = 0;
-                if (xa + j < A._cols && ya + i < A._rows)
-                    C[i, j] += A[ya + i, xa + j];
-                if (xb + j < B._cols && yb + i < B._rows)
-                    C[i, j] -= B[yb + i, xb + j];
+                c[i, j] = 0;
+                if (xa + j < a._cols && ya + i < a._rows)
+                    c[i, j] += a[ya + i, xa + j];
+                if (xb + j < b._cols && yb + i < b._rows)
+                    c[i, j] -= b[yb + i, xb + j];
             }
         }
 
-        private static void SafeACopytoC(Matrix A, int xa, int ya, Matrix C, int size)
+        private static void SafeACopytoC(Matrix a, int xa, int ya, Matrix c, int size)
         {
             for (var i = 0; i < size; i++) // rows
             for (var j = 0; j < size; j++) // cols
             {
-                C[i, j] = 0;
-                if (xa + j < A._cols && ya + i < A._rows)
-                    C[i, j] += A[ya + i, xa + j];
+                c[i, j] = 0;
+                if (xa + j < a._cols && ya + i < a._rows)
+                    c[i, j] += a[ya + i, xa + j];
             }
         }
 
-        private static void AplusBintoC(Matrix A, int xa, int ya, Matrix B, int xb, int yb, Matrix C, int size)
+        private static void AplusBintoC(Matrix a, int xa, int ya, Matrix b, int xb, int yb, Matrix c, int size)
         {
             for (var i = 0; i < size; i++) // rows
             for (var j = 0; j < size; j++)
-                C[i, j] = A[ya + i, xa + j] + B[yb + i, xb + j];
+                c[i, j] = a[ya + i, xa + j] + b[yb + i, xb + j];
         }
 
-        private static void AminusBintoC(Matrix A, int xa, int ya, Matrix B, int xb, int yb, Matrix C, int size)
+        private static void AminusBintoC(Matrix a, int xa, int ya, Matrix b, int xb, int yb, Matrix c, int size)
         {
             for (var i = 0; i < size; i++) // rows
             for (var j = 0; j < size; j++)
-                C[i, j] = A[ya + i, xa + j] - B[yb + i, xb + j];
+                c[i, j] = a[ya + i, xa + j] - b[yb + i, xb + j];
         }
 
-        private static void ACopytoC(Matrix A, int xa, int ya, Matrix C, int size)
+        private static void ACopytoC(Matrix a, int xa, int ya, Matrix c, int size)
         {
             for (var i = 0; i < size; i++) // rows
             for (var j = 0; j < size; j++)
-                C[i, j] = A[ya + i, xa + j];
+                c[i, j] = a[ya + i, xa + j];
         }
 
-        private static Matrix Multiply(Matrix A, Matrix B) // Smart matrix multiplication
+        private static Matrix Multiply(Matrix a, Matrix b) // Smart matrix multiplication
         {
-            if (A._cols != B._rows)
+            if (a._cols != b._rows)
                 throw new MatrixException("Wrong dimension of matrix!");
 
-            Matrix R;
+            Matrix r;
 
-            var msize = Math.Max(Math.Max(A._rows, A._cols), Math.Max(B._rows, B._cols));
+            var msize = Math.Max(Math.Max(a._rows, a._cols), Math.Max(b._rows, b._cols));
 
             if (msize < 32)
             {
-                R = ZeroMatrix(A._rows, B._cols);
-                for (var i = 0; i < R._rows; i++)
-                for (var j = 0; j < R._cols; j++)
-                for (var k = 0; k < A._cols; k++)
-                    R[i, j] += A[i, k] * B[k, j];
-                return R;
+                r = ZeroMatrix(a._rows, b._cols);
+                for (var i = 0; i < r._rows; i++)
+                for (var j = 0; j < r._cols; j++)
+                for (var k = 0; k < a._cols; k++)
+                    r[i, j] += a[i, k] * b[k, j];
+                return r;
             }
 
             var size = 1;
@@ -1429,127 +1429,127 @@ namespace RoboDk.API
                     mField[i, j] = new Matrix(z, z);
             }
 
-            SafeAplusBintoC(A, 0, 0, A, h, h, mField[0, 0], h);
-            SafeAplusBintoC(B, 0, 0, B, h, h, mField[0, 1], h);
+            SafeAplusBintoC(a, 0, 0, a, h, h, mField[0, 0], h);
+            SafeAplusBintoC(b, 0, 0, b, h, h, mField[0, 1], h);
             StrassenMultiplyRun(mField[0, 0], mField[0, 1], mField[0, 1 + 1], 1, mField); // (A11 + A22) * (B11 + B22);
 
-            SafeAplusBintoC(A, 0, h, A, h, h, mField[0, 0], h);
-            SafeACopytoC(B, 0, 0, mField[0, 1], h);
+            SafeAplusBintoC(a, 0, h, a, h, h, mField[0, 0], h);
+            SafeACopytoC(b, 0, 0, mField[0, 1], h);
             StrassenMultiplyRun(mField[0, 0], mField[0, 1], mField[0, 1 + 2], 1, mField); // (A21 + A22) * B11;
 
-            SafeACopytoC(A, 0, 0, mField[0, 0], h);
-            SafeAminusBintoC(B, h, 0, B, h, h, mField[0, 1], h);
+            SafeACopytoC(a, 0, 0, mField[0, 0], h);
+            SafeAminusBintoC(b, h, 0, b, h, h, mField[0, 1], h);
             StrassenMultiplyRun(mField[0, 0], mField[0, 1], mField[0, 1 + 3], 1, mField); //A11 * (B12 - B22);
 
-            SafeACopytoC(A, h, h, mField[0, 0], h);
-            SafeAminusBintoC(B, 0, h, B, 0, 0, mField[0, 1], h);
+            SafeACopytoC(a, h, h, mField[0, 0], h);
+            SafeAminusBintoC(b, 0, h, b, 0, 0, mField[0, 1], h);
             StrassenMultiplyRun(mField[0, 0], mField[0, 1], mField[0, 1 + 4], 1, mField); //A22 * (B21 - B11);
 
-            SafeAplusBintoC(A, 0, 0, A, h, 0, mField[0, 0], h);
-            SafeACopytoC(B, h, h, mField[0, 1], h);
+            SafeAplusBintoC(a, 0, 0, a, h, 0, mField[0, 0], h);
+            SafeACopytoC(b, h, h, mField[0, 1], h);
             StrassenMultiplyRun(mField[0, 0], mField[0, 1], mField[0, 1 + 5], 1, mField); //(A11 + A12) * B22;
 
-            SafeAminusBintoC(A, 0, h, A, 0, 0, mField[0, 0], h);
-            SafeAplusBintoC(B, 0, 0, B, h, 0, mField[0, 1], h);
+            SafeAminusBintoC(a, 0, h, a, 0, 0, mField[0, 0], h);
+            SafeAplusBintoC(b, 0, 0, b, h, 0, mField[0, 1], h);
             StrassenMultiplyRun(mField[0, 0], mField[0, 1], mField[0, 1 + 6], 1, mField); //(A21 - A11) * (B11 + B12);
 
-            SafeAminusBintoC(A, h, 0, A, h, h, mField[0, 0], h);
-            SafeAplusBintoC(B, 0, h, B, h, h, mField[0, 1], h);
+            SafeAminusBintoC(a, h, 0, a, h, h, mField[0, 0], h);
+            SafeAplusBintoC(b, 0, h, b, h, h, mField[0, 1], h);
             StrassenMultiplyRun(mField[0, 0], mField[0, 1], mField[0, 1 + 7], 1, mField); // (A12 - A22) * (B21 + B22);
 
-            R = new Matrix(A._rows, B._cols); // result
+            r = new Matrix(a._rows, b._cols); // result
 
             /// C11
-            for (var i = 0; i < Math.Min(h, R._rows); i++) // rows
-            for (var j = 0; j < Math.Min(h, R._cols); j++) // cols
-                R[i, j] = mField[0, 1 + 1][i, j] + mField[0, 1 + 4][i, j] - mField[0, 1 + 5][i, j] + mField[0, 1 + 7][i, j];
+            for (var i = 0; i < Math.Min(h, r._rows); i++) // rows
+            for (var j = 0; j < Math.Min(h, r._cols); j++) // cols
+                r[i, j] = mField[0, 1 + 1][i, j] + mField[0, 1 + 4][i, j] - mField[0, 1 + 5][i, j] + mField[0, 1 + 7][i, j];
 
             /// C12
-            for (var i = 0; i < Math.Min(h, R._rows); i++) // rows
-            for (var j = h; j < Math.Min(2 * h, R._cols); j++) // cols
-                R[i, j] = mField[0, 1 + 3][i, j - h] + mField[0, 1 + 5][i, j - h];
+            for (var i = 0; i < Math.Min(h, r._rows); i++) // rows
+            for (var j = h; j < Math.Min(2 * h, r._cols); j++) // cols
+                r[i, j] = mField[0, 1 + 3][i, j - h] + mField[0, 1 + 5][i, j - h];
 
             /// C21
-            for (var i = h; i < Math.Min(2 * h, R._rows); i++) // rows
-            for (var j = 0; j < Math.Min(h, R._cols); j++) // cols
-                R[i, j] = mField[0, 1 + 2][i - h, j] + mField[0, 1 + 4][i - h, j];
+            for (var i = h; i < Math.Min(2 * h, r._rows); i++) // rows
+            for (var j = 0; j < Math.Min(h, r._cols); j++) // cols
+                r[i, j] = mField[0, 1 + 2][i - h, j] + mField[0, 1 + 4][i - h, j];
 
             /// C22
-            for (var i = h; i < Math.Min(2 * h, R._rows); i++) // rows
-            for (var j = h; j < Math.Min(2 * h, R._cols); j++) // cols
-                R[i, j] = mField[0, 1 + 1][i - h, j - h] - mField[0, 1 + 2][i - h, j - h] + mField[0, 1 + 3][i - h, j - h] +
+            for (var i = h; i < Math.Min(2 * h, r._rows); i++) // rows
+            for (var j = h; j < Math.Min(2 * h, r._cols); j++) // cols
+                r[i, j] = mField[0, 1 + 1][i - h, j - h] - mField[0, 1 + 2][i - h, j - h] + mField[0, 1 + 3][i - h, j - h] +
                           mField[0, 1 + 6][i - h, j - h];
 
-            return R;
+            return r;
         }
 
         // function for square matrix 2^N x 2^N
 
         private static void
-            StrassenMultiplyRun(Matrix A, Matrix B, Matrix C, int l, Matrix[,] f) // A * B into C, level of recursion, matrix field
+            StrassenMultiplyRun(Matrix a, Matrix b, Matrix c, int l, Matrix[,] f) // A * B into C, level of recursion, matrix field
         {
-            var size = A._rows;
+            var size = a._rows;
             var h = size / 2;
 
             if (size < 32)
             {
-                for (var i = 0; i < C._rows; i++)
-                for (var j = 0; j < C._cols; j++)
+                for (var i = 0; i < c._rows; i++)
+                for (var j = 0; j < c._cols; j++)
                 {
-                    C[i, j] = 0;
-                    for (var k = 0; k < A._cols; k++)
-                        C[i, j] += A[i, k] * B[k, j];
+                    c[i, j] = 0;
+                    for (var k = 0; k < a._cols; k++)
+                        c[i, j] += a[i, k] * b[k, j];
                 }
                 return;
             }
 
-            AplusBintoC(A, 0, 0, A, h, h, f[l, 0], h);
-            AplusBintoC(B, 0, 0, B, h, h, f[l, 1], h);
+            AplusBintoC(a, 0, 0, a, h, h, f[l, 0], h);
+            AplusBintoC(b, 0, 0, b, h, h, f[l, 1], h);
             StrassenMultiplyRun(f[l, 0], f[l, 1], f[l, 1 + 1], l + 1, f); // (A11 + A22) * (B11 + B22);
 
-            AplusBintoC(A, 0, h, A, h, h, f[l, 0], h);
-            ACopytoC(B, 0, 0, f[l, 1], h);
+            AplusBintoC(a, 0, h, a, h, h, f[l, 0], h);
+            ACopytoC(b, 0, 0, f[l, 1], h);
             StrassenMultiplyRun(f[l, 0], f[l, 1], f[l, 1 + 2], l + 1, f); // (A21 + A22) * B11;
 
-            ACopytoC(A, 0, 0, f[l, 0], h);
-            AminusBintoC(B, h, 0, B, h, h, f[l, 1], h);
+            ACopytoC(a, 0, 0, f[l, 0], h);
+            AminusBintoC(b, h, 0, b, h, h, f[l, 1], h);
             StrassenMultiplyRun(f[l, 0], f[l, 1], f[l, 1 + 3], l + 1, f); //A11 * (B12 - B22);
 
-            ACopytoC(A, h, h, f[l, 0], h);
-            AminusBintoC(B, 0, h, B, 0, 0, f[l, 1], h);
+            ACopytoC(a, h, h, f[l, 0], h);
+            AminusBintoC(b, 0, h, b, 0, 0, f[l, 1], h);
             StrassenMultiplyRun(f[l, 0], f[l, 1], f[l, 1 + 4], l + 1, f); //A22 * (B21 - B11);
 
-            AplusBintoC(A, 0, 0, A, h, 0, f[l, 0], h);
-            ACopytoC(B, h, h, f[l, 1], h);
+            AplusBintoC(a, 0, 0, a, h, 0, f[l, 0], h);
+            ACopytoC(b, h, h, f[l, 1], h);
             StrassenMultiplyRun(f[l, 0], f[l, 1], f[l, 1 + 5], l + 1, f); //(A11 + A12) * B22;
 
-            AminusBintoC(A, 0, h, A, 0, 0, f[l, 0], h);
-            AplusBintoC(B, 0, 0, B, h, 0, f[l, 1], h);
+            AminusBintoC(a, 0, h, a, 0, 0, f[l, 0], h);
+            AplusBintoC(b, 0, 0, b, h, 0, f[l, 1], h);
             StrassenMultiplyRun(f[l, 0], f[l, 1], f[l, 1 + 6], l + 1, f); //(A21 - A11) * (B11 + B12);
 
-            AminusBintoC(A, h, 0, A, h, h, f[l, 0], h);
-            AplusBintoC(B, 0, h, B, h, h, f[l, 1], h);
+            AminusBintoC(a, h, 0, a, h, h, f[l, 0], h);
+            AplusBintoC(b, 0, h, b, h, h, f[l, 1], h);
             StrassenMultiplyRun(f[l, 0], f[l, 1], f[l, 1 + 7], l + 1, f); // (A12 - A22) * (B21 + B22);
 
             /// C11
             for (var i = 0; i < h; i++) // rows
             for (var j = 0; j < h; j++) // cols
-                C[i, j] = f[l, 1 + 1][i, j] + f[l, 1 + 4][i, j] - f[l, 1 + 5][i, j] + f[l, 1 + 7][i, j];
+                c[i, j] = f[l, 1 + 1][i, j] + f[l, 1 + 4][i, j] - f[l, 1 + 5][i, j] + f[l, 1 + 7][i, j];
 
             /// C12
             for (var i = 0; i < h; i++) // rows
             for (var j = h; j < size; j++) // cols
-                C[i, j] = f[l, 1 + 3][i, j - h] + f[l, 1 + 5][i, j - h];
+                c[i, j] = f[l, 1 + 3][i, j - h] + f[l, 1 + 5][i, j - h];
 
             /// C21
             for (var i = h; i < size; i++) // rows
             for (var j = 0; j < h; j++) // cols
-                C[i, j] = f[l, 1 + 2][i - h, j] + f[l, 1 + 4][i - h, j];
+                c[i, j] = f[l, 1 + 2][i - h, j] + f[l, 1 + 4][i - h, j];
 
             /// C22
             for (var i = h; i < size; i++) // rows
             for (var j = h; j < size; j++) // cols
-                C[i, j] = f[l, 1 + 1][i - h, j - h] - f[l, 1 + 2][i - h, j - h] + f[l, 1 + 3][i - h, j - h] +
+                c[i, j] = f[l, 1 + 1][i - h, j - h] - f[l, 1 + 2][i - h, j - h] + f[l, 1 + 3][i - h, j - h] +
                           f[l, 1 + 6][i - h, j - h];
         }
 

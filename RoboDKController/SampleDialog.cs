@@ -16,7 +16,7 @@ namespace SamplePanelRoboDK
         // Define if the robot movements will be blocking
         private const bool MoveBlocking = false;
 
-        private SplashDialog spashDialog;
+        private SplashDialog _spashDialog;
 
         // RDK holds the main object to interact with RoboDK.
         // The RoboDK application starts when a RoboDK object is created.
@@ -67,7 +67,7 @@ namespace SamplePanelRoboDK
 
         private void HideSplashScreen()
         {
-            this.spashDialog.Close();
+            this._spashDialog.Close();
         }
 
         private void SampleDialog_Load(object sender, EventArgs e)
@@ -79,9 +79,9 @@ namespace SamplePanelRoboDK
 
         private void ShowSplashScreen()
         {
-            this.spashDialog = new SplashDialog();
+            this._spashDialog = new SplashDialog();
 
-            spashDialog.Show();
+            _spashDialog.Show();
             Application.DoEvents();
         }
 
@@ -211,7 +211,7 @@ namespace SamplePanelRoboDK
         }
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
+        public static extern bool MoveWindow(IntPtr hWnd, int x, int y, int nWidth, int nHeight, bool bRepaint);
 
         private void Panel_Resized(object sender, EventArgs e)
         {
@@ -311,7 +311,7 @@ namespace SamplePanelRoboDK
             // make sure RDK is running and we have a valid input
             if (xyzwpr == null) return;
 
-            RoboDk.API.Matrix pos = RoboDk.API.Matrix.FromXYZRPW(xyzwpr);
+            RoboDk.API.Matrix pos = RoboDk.API.Matrix.FromXyzrpw(xyzwpr);
             var pose = RoboDk.API.Matrix.FromTxyzRxyz(xyzwpr);
             try
             {
@@ -474,7 +474,7 @@ namespace SamplePanelRoboDK
         {
             try
             {
-                _robot.setConnectionParams(txtRobotIP.Text, int.Parse(txtRobotPort.Text), "C:\\", "morteza", "123");
+                _robot.SetConnectionParams(txtRobotIP.Text, int.Parse(txtRobotPort.Text), "C:\\", "morteza", "123");
             }
             catch (Exception ex)
             {

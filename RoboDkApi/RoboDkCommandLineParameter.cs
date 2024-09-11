@@ -31,7 +31,7 @@ namespace RoboDk.API
     {
         #region Fields
 
-        internal static int DefaultApiServerPort = 20500;
+        internal static int _defaultApiServerPort = 20500;
 
         /// <summary>
         /// List of command line arguments.
@@ -324,7 +324,7 @@ namespace RoboDk.API
     {
         #region Fields
 
-        internal static string SwitchDelimiter = "-";
+        internal static string _switchDelimiter = "-";
 
         #endregion
 
@@ -370,7 +370,7 @@ namespace RoboDk.API
 
         protected bool IsDefault => Equals(Value, DefaultValue);
 
-        internal override string CommandLineOptionString => IsDefault ? "" : $"{SwitchDelimiter}{Argument}";
+        internal override string CommandLineOptionString => IsDefault ? "" : $"{_switchDelimiter}{Argument}";
 
         #endregion
     }
@@ -402,7 +402,7 @@ namespace RoboDk.API
 
         #region Properties
 
-        internal override string CommandLineOptionString => IsDefault ? "" : $"{SwitchDelimiter}{Argument}={Value}";
+        internal override string CommandLineOptionString => IsDefault ? "" : $"{_switchDelimiter}{Argument}={Value}";
 
         #endregion
     }
@@ -445,7 +445,7 @@ namespace RoboDk.API
             {
                 if (Value != null)
                 {
-                    return string.IsNullOrWhiteSpace(Value) ? $"{SwitchDelimiter}{Argument}" : $"{SwitchDelimiter}{Argument}={Value}";
+                    return string.IsNullOrWhiteSpace(Value) ? $"{_switchDelimiter}{Argument}" : $"{_switchDelimiter}{Argument}={Value}";
                 }
 
                 return "";

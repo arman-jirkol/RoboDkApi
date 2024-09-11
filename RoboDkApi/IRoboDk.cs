@@ -156,7 +156,7 @@ namespace RoboDk.API
         /// </summary>
         string Version();
 
-        void SetBGColor(Color color);
+        void SetBgColor(Color color);
 
         /// <summary>
         /// Set the state of the RoboDK window
@@ -169,23 +169,23 @@ namespace RoboDk.API
         /// Makes a copy of an item (same as Ctrl+C), which can be pasted (Ctrl+V) using Paste().
         /// </summary>        
         /// <param name="tocopy">Item to copy</param>
-        /// <param name="copy_children">Set to false to prevent copying all items attached to this item</param>
-        void Copy(IItem tocopy, bool copy_children = true);
+        /// <param name="copyChildren">Set to false to prevent copying all items attached to this item</param>
+        void Copy(IItem tocopy, bool copyChildren = true);
 
         /// <summary>
         /// Paste the copied item as a dependency of another item (same as Ctrl+V). Paste should be used after Copy(). It returns the newly created item. 
         /// </summary>
-        /// <param name="paste_to">Item to attach the copied item (optional)</param>
+        /// <param name="pasteTo">Item to attach the copied item (optional)</param>
         /// <returns>New item created</returns>
-        IItem Paste(IItem paste_to = null);
+        IItem Paste(IItem pasteTo = null);
 
         /// <summary>
         /// Paste the copied item as a dependency of another item (same as Ctrl+V). Paste should be used after Copy(). It returns the newly created item. 
         /// </summary>
-        /// <param name="paste_to">Item to attach the copied item</param>
-        /// <param name="paste_times">Number of times to replicate the copied object</param>
+        /// <param name="pasteTo">Item to attach the copied item</param>
+        /// <param name="pasteTimes">Number of times to replicate the copied object</param>
         /// <returns>New item created</returns>
-        List<IItem> Paste(IItem paste_to, int paste_times);
+        List<IItem> Paste(IItem pasteTo, int pasteTimes);
 
         /// <summary>
         /// Load a file and attaches it to parent and returns the newly added IItem. 
@@ -443,7 +443,7 @@ namespace RoboDk.API
         /// <summary>
         /// Delete a list of items
         /// </summary>
-        void Delete(List<IItem> item_list);
+        void Delete(List<IItem> itemList);
 
         /// <summary>
         ///  Adds a new Frame that can be referenced by a robot.
@@ -723,14 +723,14 @@ namespace RoboDk.API
         /// <param name="robotList">list of items</param>
         /// <param name="jointsList">list of joint</param>
         /// <param name="solutionOkList">optional list of bool flags to notify about failed/invalid result</param>
-        List<Matrix> SolveFK(List<IItem> robotList, List<double[]> jointsList, List<bool> solutionOkList = null);
+        List<Matrix> SolveFk(List<IItem> robotList, List<double[]> jointsList, List<bool> solutionOkList = null);
 
         /// <summary>
         /// Calculate the inverse kinematics solution for multiple robots at the same time (faster)
         /// </summary>
         /// <param name="robotList">list of items</param>
         /// <param name="poseList">list of poses</param>
-        List<double[]> SolveIK(List<IItem> robotList, List<Matrix> poseList);
+        List<double[]> SolveIk(List<IItem> robotList, List<Matrix> poseList);
 
         /// <summary>
         /// Calculate the inverse kinematics solution for multiple robots at the same time (faster)
@@ -738,7 +738,7 @@ namespace RoboDk.API
         /// <param name="robotList">list of items</param>
         /// <param name="poseList">list of poses</param>
         /// <param name="japroxList"></param>
-        List<double[]> SolveIK(List<IItem> robotList, List<Matrix> poseList, List<double[]> japroxList);
+        List<double[]> SolveIk(List<IItem> robotList, List<Matrix> poseList, List<double[]> japroxList);
 
         /// <summary>
         /// Calculate the inverse kinematics solution for multiple robots at the same time. This call allows you to have a bulk calculation for faster performance.
@@ -767,24 +767,24 @@ namespace RoboDk.API
         /// <summary>
         /// Sets the color for a list of items given the a color object
         /// </summary>
-        /// <param name="item_list">list of items</param>
-        /// <param name="color_list">list of colors</param>
-        void SetColor(List<IItem> item_list, List<Color> color_list);
+        /// <param name="itemList">list of items</param>
+        /// <param name="colorList">list of colors</param>
+        void SetColor(List<IItem> itemList, List<Color> colorList);
 
         /// <summary>
         /// Sets the color for a list of items given a 4D, 3D or 1D array of doubles
         /// </summary>
-        /// <param name="item_list">list of items</param>
-        /// <param name="color_list">list of colors as an array of doubles. Valid colors and alpha channel must be within the range [0-1]. Each array of doubles can be provided as a 4D, 3D or 1D array. Options: [r,g,b,a], [r,g,b], [a]. If you provide [-1,-1,-1,a] only the alpha channel is modified.</param>
-        void SetColor(List<IItem> item_list, List<double[]> color_list);
+        /// <param name="itemList">list of items</param>
+        /// <param name="colorList">list of colors as an array of doubles. Valid colors and alpha channel must be within the range [0-1]. Each array of doubles can be provided as a 4D, 3D or 1D array. Options: [r,g,b,a], [r,g,b], [a]. If you provide [-1,-1,-1,a] only the alpha channel is modified.</param>
+        void SetColor(List<IItem> itemList, List<double[]> colorList);
 
         /// <summary>
         /// Show a list of objects or a robot link as collided (red) or as not collided (normal color)
         /// </summary>
-        /// <param name="item_list">List of items</param>
-        /// <param name="collided_list">List of collided flags (True=show as collided)</param>
-        /// <param name="robot_link_id">Robot link ID, when applicable</param>
-        void ShowAsCollided(List<IItem> item_list, List<bool> collided_list, List<int> robot_link_id = null);
+        /// <param name="itemList">List of items</param>
+        /// <param name="collidedList">List of collided flags (True=show as collided)</param>
+        /// <param name="robotLinkId">Robot link ID, when applicable</param>
+        void ShowAsCollided(List<IItem> itemList, List<bool> collidedList, List<int> robotLinkId = null);
 
         /// <summary>
         /// Get Joint positions of all robots defined in the robotItemList.
@@ -826,7 +826,7 @@ namespace RoboDk.API
         /// <param name="robot"></param>
         /// <returns>TODO: Document return value.</returns>
         Matrix CalibrateReference(Matrix joints,
-            ReferenceCalibrationType method = ReferenceCalibrationType.Frame3P_P1OnX,
+            ReferenceCalibrationType method = ReferenceCalibrationType.Frame3PP1OnX,
             bool useJoints = false, IItem robot = null);
 
 
@@ -946,13 +946,13 @@ namespace RoboDk.API
         /// Set the selection in the tree
         /// </summary>
         /// <returns></returns>
-        void SetSelectedItems(List<IItem> item_list);
+        void SetSelectedItems(List<IItem> itemList);
 
         /// <summary>
         /// Merge multiple object items as one. Source objects are not deleted and a new object is created.
         /// </summary>
         /// <returns>New item</returns>
-        IItem MergeItems(List<IItem> item_list);
+        IItem MergeItems(List<IItem> itemList);
 
         /// <summary>
         /// Show the popup menu to create the ISO9283 path for path accuracy and performance testing
@@ -967,7 +967,7 @@ namespace RoboDk.API
         /// <param name="defaultRefFlags">When a movement is specified, we can provide what motion we allow by default with respect to the coordinate system (set apropriate flags)</param>
         /// <param name="customItems">Provide a list of optional items to customize the move behavior for these specific items (important: the lenght of custom_ref_flags must match)</param>
         /// <param name="customRefFlags">Provide a matching list of flags to customize the movement behavior for specific items</param>
-        void SetInteractiveMode(InteractiveType modeType = InteractiveType.MoveReferences, DisplayRefType defaultRefFlags = DisplayRefType.DEFAULT, List<IItem> customItems = null, List<DisplayRefType> customRefFlags = null);
+        void SetInteractiveMode(InteractiveType modeType = InteractiveType.MoveReferences, DisplayRefType defaultRefFlags = DisplayRefType.Default, List<IItem> customItems = null, List<DisplayRefType> customRefFlags = null);
 
         /// <summary>
         /// Returns the position of the cursor as XYZ coordinates (by default), or the 3D position of a given set of 2D coordinates of the window (x and y coordinates in pixels from the top left corner)
@@ -978,7 +978,7 @@ namespace RoboDk.API
         /// <param name="yCoord">Y coordinate in pixels</param>
         /// <param name="xyzStation">XYZ coordinates in mm (absolute coordinates)</param>
         /// <returns>Item under the mouse cursor.</returns>
-        IItem GetCursorXYZ(int xCoord = -1, int yCoord = -1, List<double> xyzStation = null);
+        IItem GetCursorXyz(int xCoord = -1, int yCoord = -1, List<double> xyzStation = null);
 
         /// <summary>
         /// Add a joint movement to a program

@@ -77,82 +77,82 @@ namespace RoboDk.API.Model
         /// <summary>
         /// Display the 3D geometry attached to the robot base.
         /// </summary>
-        RobotAxis_Base_3D = 0x01 << 1,
+        RobotAxisBase3D = 0x01 << 1,
 
         /// <summary>
         /// Display the reference frame attached to the robot base. The reference frame is only visible when the geometry is visible.
         /// </summary>
-        RobotAxis_Base_Ref = 0x01 << 2,
+        RobotAxisBaseRef = 0x01 << 2,
 
         /// <summary>
         /// Display the 3D geometry attached to the robot axis 1.
         /// </summary>
-        RobotAxis_1_3D = 0x01 << 3,
+        RobotAxis13D = 0x01 << 3,
 
         /// <summary>
         /// Display the reference frame attached to the robot axis 1. The reference frame is only visible when the geometry is visible.
         /// </summary>
-        RobotAxis_1_Ref = 0x01 << 4,
+        RobotAxis1Ref = 0x01 << 4,
 
         /// <summary>
         /// Display the 3D geometry attached to the robot axis 2.
         /// </summary>
-        RobotAxis_2_3D = 0x01 << 5,
+        RobotAxis23D = 0x01 << 5,
 
         /// <summary>
         /// Display the reference frame attached to the robot axis 2. The reference frame is only visible when the geometry is visible.
         /// </summary>
-        RobotAxis_2_Ref = 0x01 << 6,
+        RobotAxis2Ref = 0x01 << 6,
 
         /// <summary>
         /// Display the 3D geometry attached to the robot axis 3.
         /// </summary>
-        RobotAxis_3_3D = 0x01 << 7,
+        RobotAxis33D = 0x01 << 7,
 
         /// <summary>
         /// Display the reference frame attached to the robot axis 3. The reference frame is only visible when the geometry is visible.
         /// </summary>
-        RobotAxis_3_Ref = 0x01 << 8,
+        RobotAxis3Ref = 0x01 << 8,
 
         /// <summary>
         /// Display the 3D geometry attached to the robot axis 4.
         /// </summary>
-        RobotAxis_4_3D = 0x01 << 9,
+        RobotAxis43D = 0x01 << 9,
 
         /// <summary>
         /// Display the reference frame attached to the robot axis 4. The reference frame is only visible when the geometry is visible.
         /// </summary>
-        RobotAxis_4_Ref = 0x01 << 10,
+        RobotAxis4Ref = 0x01 << 10,
 
         /// <summary>
         /// Display the 3D geometry attached to the robot axis 5.
         /// </summary>
-        RobotAxis_5_3D = 0x01 << 11,
+        RobotAxis53D = 0x01 << 11,
 
         /// <summary>
         /// Display the reference frame attached to the robot axis 5. The reference frame is only visible when the geometry is visible.
         /// </summary>
-        RobotAxis_5_Ref = 0x01 << 12,
+        RobotAxis5Ref = 0x01 << 12,
 
         /// <summary>
         /// Display the 3D geometry attached to the robot axis 6.
         /// </summary>
-        RobotAxis_6_3D = 0x01 << 13,
+        RobotAxis63D = 0x01 << 13,
 
         /// <summary>
         /// Display the reference frame attached to the robot axis 6. The reference frame is only visible when the geometry is visible.
         /// </summary>
-        RobotAxis_6_Ref = 0x01 << 14,
+        RobotAxis6Ref = 0x01 << 14,
 
         /// <summary>
         /// Display the 3D geometry attached to the robot axis 7.
         /// </summary>
-        RobotAxis_7_3D = 0x01 << 15,
+        RobotAxis73D = 0x01 << 15,
 
         /// <summary>
         /// Display the reference frame attached to the robot axis 7. The reference frame is only visible when the geometry is visible.
         /// </summary>
-        RobotAxis_7_Ref = 0x01 << 16,
+        RobotAxis7Ref = 0x01 << 16,
 
         /// <summary>
         /// Set the robot to be displayed in the default state (show the geometry, hide the internal links).

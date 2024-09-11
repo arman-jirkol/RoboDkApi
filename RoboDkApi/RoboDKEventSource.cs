@@ -140,7 +140,7 @@ namespace RoboDk.API
 					
 					case EventType.ProgsliderSet:
                         //Debug.WriteLine($"RoboDK Event: {eventType}");
-						int slider_index = _roboDkEventConnection.rec_int();
+						int sliderIndex = _roboDkEventConnection.rec_int();
                         return new EventResult(EventType.StationChanged, null);
 					
                     default:

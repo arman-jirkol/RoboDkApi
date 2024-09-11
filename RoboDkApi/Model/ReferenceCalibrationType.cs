@@ -45,8 +45,8 @@ namespace RoboDk.API.Model
         // Reference frame calibration types
     public enum ReferenceCalibrationType
     {
-        Frame3P_P1OnX = 0, //Calibrate by 3 points: [X, X+, Y+] (p1 on X axis)
-        Frame3P_P1IsOrigin = 1, //Calibrate by 3 points: [Origin, X+, XY+] (p1 is origin)
+        Frame3PP1OnX = 0, //Calibrate by 3 points: [X, X+, Y+] (p1 on X axis)
+        Frame3PP1IsOrigin = 1, //Calibrate by 3 points: [Origin, X+, XY+] (p1 is origin)
         Frame6P = 2, //Calibrate by 6 points
         Turntable = 3 //Calibrate turntable
     }

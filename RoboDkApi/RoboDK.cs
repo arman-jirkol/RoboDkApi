@@ -84,9 +84,9 @@ namespace RoboDk.API
         #region Constants
 
         // Station parameters request
-        public const string PATH_OPENSTATION = "PATH_OPENSTATION";
-        public const string FILE_OPENSTATION = "FILE_OPENSTATION";
-        public const string PATH_DESKTOP = "PATH_DESKTOP";
+        public const string PathOpenstation = "PATH_OPENSTATION";
+        public const string FileOpenstation = "FILE_OPENSTATION";
+        public const string PathDesktop = "PATH_DESKTOP";
 
         #endregion
 
@@ -129,7 +129,7 @@ namespace RoboDk.API
             RoboDKServerIpAddress = "localhost";
 
             // Default RoboDK Port Range: 20500 .. 20502
-            RoboDKServerStartPort = RoboDkCommandLineParameter.DefaultApiServerPort;
+            RoboDKServerStartPort = RoboDkCommandLineParameter._defaultApiServerPort;
             RoboDKServerEndPort = RoboDKServerStartPort + 2;
 
             RoboDKBuild = 0;
@@ -139,7 +139,7 @@ namespace RoboDk.API
 
         #region Properties
 
-        public int DefaultApiServerPort => RoboDkCommandLineParameter.DefaultApiServerPort;
+        public int DefaultApiServerPort => RoboDkCommandLineParameter._defaultApiServerPort;
 
         /// <summary>
         /// <see cref="RoboDkCommandLineParameter.HideWindowsWhileLoadingNcFile"/>
@@ -594,7 +594,7 @@ namespace RoboDk.API
             return new RoboDKEventSource(this);
         }
 
-        public void SetBGColor(Color color)
+        public void SetBgColor(Color color)
         {
             check_connection();
             var command = "ColorBgBottom";
@@ -641,7 +641,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void Copy(IItem tocopy, bool copy_children = true)
+        public void Copy(IItem tocopy, bool copyChildren = true)
         {
             if (RoboDKBuild < 18705)
             {
@@ -656,42 +656,42 @@ namespace RoboDk.API
                 check_connection();
                 send_line("Copy2");
                 send_item(tocopy);
-                send_int(copy_children ? 1 : 0);
+                send_int(copyChildren ? 1 : 0);
                 check_status();
             }
         }
 
         /// <inheritdoc />
-        public IItem Paste(IItem paste_to = null)
+        public IItem Paste(IItem pasteTo = null)
         {
             check_connection();
             send_line("Paste");
-            send_item(paste_to);
+            send_item(pasteTo);
             IItem newitem = rec_item();
             check_status();
             return newitem;
         }
 
         /// <inheritdoc />
-        public List<IItem> Paste(IItem paste_to, int paste_times)
+        public List<IItem> Paste(IItem pasteTo, int pasteTimes)
         {
             check_connection();
             send_line("PastN");
-            send_item(paste_to);
-            send_int(paste_times);
-            ReceiveTimeout = paste_times * 1000;
+            send_item(pasteTo);
+            send_int(pasteTimes);
+            ReceiveTimeout = pasteTimes * 1000;
             int ntimes = rec_int();
 
-            List<IItem> list_items = new List<IItem>();
+            List<IItem> listItems = new List<IItem>();
             for (int i = 0; i < ntimes; i++)
             {
                 IItem newitem = rec_item();
-                list_items.Add(newitem);
+                listItems.Add(newitem);
             }
 
             ReceiveTimeout = DefaultSocketTimeoutMilliseconds;
             check_status();
-            return list_items;
+            return listItems;
         }
 
         /// <inheritdoc />
@@ -1013,7 +1013,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public IItem AddShape(List<Matrix> listTrianglePoints, IItem add_to = null, bool shape_override = false, List<Color> listColor = null)
+        public IItem AddShape(List<Matrix> listTrianglePoints, IItem addTo = null, bool shapeOverride = false, List<Color> listColor = null)
         {
             RequireBuild(16532);
             int nsubobjs = listTrianglePoints.Count;
@@ -1023,8 +1023,8 @@ namespace RoboDk.API
             }
             check_connection();
             send_line("AddShape4");
-            send_item(add_to);
-            send_int(shape_override ? 1 : 0);
+            send_item(addTo);
+            send_int(shapeOverride ? 1 : 0);
             send_int(nsubobjs);
             for (int i = 0; i < nsubobjs; i++)
             {
@@ -1107,14 +1107,14 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void Delete(List<IItem> item_list)
+        public void Delete(List<IItem> itemList)
         {
             RequireBuild(12939);
             check_connection();
             var command = "RemoveLst";
             send_line(command);
-            send_int(item_list.Count());
-            foreach (IItem itm in item_list){
+            send_int(itemList.Count());
+            foreach (IItem itm in itemList){
                 send_item(itm);
                 // itm.ItemId = 0; // how to make Item a friend class of Robolink in C#?
             }
@@ -1290,7 +1290,7 @@ namespace RoboDk.API
             check_connection();
             send_line("Collision_Pairs");
             int nitems = rec_int();
-            List<CollisionPair> list_items = new List<CollisionPair>(nitems);
+            List<CollisionPair> listItems = new List<CollisionPair>(nitems);
             for (int i = 0; i < nitems; i++)
             {
                 IItem item1 = rec_item();
@@ -1298,10 +1298,10 @@ namespace RoboDk.API
                 IItem item2 = rec_item();
                 int id2 = rec_int();
                 CollisionPair collisionPair = new CollisionPair(item1, id1, item2, id2);
-                list_items.Add(collisionPair);
+                listItems.Add(collisionPair);
             }
             check_status();
-            return list_items;
+            return listItems;
         }
 
 
@@ -1551,7 +1551,7 @@ namespace RoboDk.API
         {
             if (reference == null)
             {
-                reference = Matrix.Identity4x4();
+                reference = Matrix.Identity4X4();
             }
 
             check_connection();
@@ -1566,7 +1566,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public List<Matrix> SolveFK(List<IItem> robotList, List<double[]> jointsList, List<bool> solutionOkList = null)
+        public List<Matrix> SolveFk(List<IItem> robotList, List<double[]> jointsList, List<bool> solutionOkList = null)
         {
             RequireBuild(6535);
             var numberOfItems = Math.Min(robotList.Count, jointsList.Count);
@@ -1590,7 +1590,7 @@ namespace RoboDk.API
 
 
         /// <inheritdoc />
-        public List<double[]> SolveIK(List<IItem> robotList, List<Matrix> poseList)
+        public List<double[]> SolveIk(List<IItem> robotList, List<Matrix> poseList)
         {
             RequireBuild(6535);
             var numberOfItems = Math.Min(robotList.Count, poseList.Count);
@@ -1611,7 +1611,7 @@ namespace RoboDk.API
 
 
         /// <inheritdoc />
-        public List<double[]> SolveIK(List<IItem> robotList, List<Matrix> poseList, List<double[]> japroxList)
+        public List<double[]> SolveIk(List<IItem> robotList, List<Matrix> poseList, List<double[]> japroxList)
         {
             RequireBuild(7399);
             var numberOfItems = Math.Min(Math.Min(robotList.Count, poseList.Count), japroxList.Count);
@@ -1694,7 +1694,7 @@ namespace RoboDk.API
         }
 
 
-        static char[] hexDigits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+        static char[] _hexDigits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
         public static string Color2Hex(Color color)
         {
             byte[] bytes = new byte[4];
@@ -1706,38 +1706,38 @@ namespace RoboDk.API
             for (int i = 0; i < bytes.Length; i++)
             {
                 int b = bytes[i];
-                chars[i * 2] = hexDigits[b >> 4];
-                chars[i * 2 + 1] = hexDigits[b & 0xF];
+                chars[i * 2] = _hexDigits[b >> 4];
+                chars[i * 2 + 1] = _hexDigits[b & 0xF];
             }
             return new string(chars);
         }
 
         /// <inheritdoc />
-        public void SetColor(List<IItem> item_list, List<Color> color_list)
+        public void SetColor(List<IItem> itemList, List<Color> colorList)
         {
             RequireBuild(6471);
-            int nitm = Math.Min(item_list.Count, color_list.Count);
+            int nitm = Math.Min(itemList.Count, colorList.Count);
             check_connection();
             send_line("S_ColorList");
             send_int(nitm);
             for (int i = 0; i < nitm; i++)
             {
-                send_item(item_list[i]);
-                send_line("#" + Color2Hex(color_list[i]));
+                send_item(itemList[i]);
+                send_line("#" + Color2Hex(colorList[i]));
             }
             check_status();
         }
-        public void SetColor(List<IItem> item_list, List<double[]> color_list)
+        public void SetColor(List<IItem> itemList, List<double[]> colorList)
         {
             RequireBuild(6471);
-            int nitm = Math.Min(item_list.Count, color_list.Count);
+            int nitm = Math.Min(itemList.Count, colorList.Count);
             check_connection();
             send_line("S_ColorList2");
             send_int(nitm);
             for (int i = 0; i < nitm; i++)
             {
-                send_item(item_list[i]);
-                send_array(color_list[i]);
+                send_item(itemList[i]);
+                send_array(colorList[i]);
             }
             check_status();
         }
@@ -1745,27 +1745,27 @@ namespace RoboDk.API
 
 
         /// <inheritdoc />
-        public void ShowAsCollided(List<IItem> item_list, List<bool> collided_list, List<int> robot_link_id = null)
+        public void ShowAsCollided(List<IItem> itemList, List<bool> collidedList, List<int> robotLinkId = null)
         {
             RequireBuild(5794);
             check_connection();
-            int nitms = Math.Min(item_list.Count, collided_list.Count);
-            if (robot_link_id != null)
+            int nitms = Math.Min(itemList.Count, collidedList.Count);
+            if (robotLinkId != null)
             {
-                nitms = Math.Min(nitms, robot_link_id.Count);
+                nitms = Math.Min(nitms, robotLinkId.Count);
             }
             send_line("ShowAsCollidedList");
             send_int(nitms);
             for (int i = 0; i < nitms; i++)
             {
-                send_item(item_list[i]);
-                send_int(collided_list[i] ? 1 : 0);
-                int link_id = 0;
-                if (robot_link_id != null)
+                send_item(itemList[i]);
+                send_int(collidedList[i] ? 1 : 0);
+                int linkId = 0;
+                if (robotLinkId != null)
                 {
-                    link_id = robot_link_id[i];
+                    linkId = robotLinkId[i];
                 }
-                send_int(link_id);
+                send_int(linkId);
             }
             check_status();
         }
@@ -1829,7 +1829,7 @@ namespace RoboDk.API
 
         /// <inheritdoc />
         public Matrix CalibrateReference(Matrix joints,
-            ReferenceCalibrationType method = ReferenceCalibrationType.Frame3P_P1OnX,
+            ReferenceCalibrationType method = ReferenceCalibrationType.Frame3PP1OnX,
             bool useJoints = false, IItem robot = null)
         {
             check_connection();
@@ -1892,8 +1892,8 @@ namespace RoboDk.API
             check_connection();
             send_line("S_AbsAccParam");
             send_item(robot);
-            var r2b = Matrix.Identity4x4();
-            send_pose(r2b);
+            var r2B = Matrix.Identity4X4();
+            send_pose(r2B);
             send_pose(poseBase);
             send_pose(poseTool);
             var ndofs = dhm.Length;
@@ -1924,11 +1924,11 @@ namespace RoboDk.API
         {
             if (tool == null)
             {
-                tool = Matrix.Identity4x4();
+                tool = Matrix.Identity4X4();
             }
             if (baseFrame == null)
             {
-                baseFrame = Matrix.Identity4x4();
+                baseFrame = Matrix.Identity4X4();
             }
             int ndofs = listObj.Count - 1;
             check_connection();
@@ -2061,29 +2061,29 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void SetSelectedItems(List<IItem> item_list)
+        public void SetSelectedItems(List<IItem> itemList)
         {
             RequireBuild(8896);
             check_connection();
             send_line("S_Selection");
-            send_int(item_list.Count);
-            for (int i = 0; i < item_list.Count; i++)
+            send_int(itemList.Count);
+            for (int i = 0; i < itemList.Count; i++)
             {
-                send_item(item_list[i]);
+                send_item(itemList[i]);
             }
             check_status();
         }
 
         /// <inheritdoc />
-        public IItem MergeItems(List<IItem> item_list)
+        public IItem MergeItems(List<IItem> itemList)
         {
             RequireBuild(8896);
             check_connection();
             send_line("MergeItems");
-            send_int(item_list.Count);
-            for (int i = 0; i < item_list.Count; i++)
+            send_int(itemList.Count);
+            for (int i = 0; i < itemList.Count; i++)
             {
-                send_item(item_list[i]);
+                send_item(itemList[i]);
             }
             IItem newitem = rec_item();
             check_status();
@@ -2104,7 +2104,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public void SetInteractiveMode(InteractiveType modeType = InteractiveType.MoveReferences, DisplayRefType defaultRefFlags = DisplayRefType.DEFAULT, List<IItem> customItems = null, List<DisplayRefType> customRefFlags = null)
+        public void SetInteractiveMode(InteractiveType modeType = InteractiveType.MoveReferences, DisplayRefType defaultRefFlags = DisplayRefType.Default, List<IItem> customItems = null, List<DisplayRefType> customRefFlags = null)
         {
             check_connection();
             send_line("S_InteractiveMode");
@@ -2128,7 +2128,7 @@ namespace RoboDk.API
         }
 
         /// <inheritdoc />
-        public IItem GetCursorXYZ(int xCoord = -1, int yCoord = -1, List<double> xyzStation = null)
+        public IItem GetCursorXyz(int xCoord = -1, int yCoord = -1, List<double> xyzStation = null)
         {
             check_connection();
             send_line("Proj2d3d");
@@ -2505,7 +2505,7 @@ namespace RoboDk.API
             // If 'NEWINSTANCE' is a command line parameter, then it must be the first parameter
             if (processStartInfo.Arguments.Contains("NEWINSTANCE"))
             {
-                if (!processStartInfo.Arguments.StartsWith($"{CommandLineOption.SwitchDelimiter}NEWINSTANCE"))
+                if (!processStartInfo.Arguments.StartsWith($"{CommandLineOption._switchDelimiter}NEWINSTANCE"))
                 {
                     throw new RoboDKException("The NEWINSTANCE Parameter must be the first command line parameter.");
                 }
@@ -2726,9 +2726,9 @@ namespace RoboDk.API
         //Receives a byte array
         internal byte[] rec_bytes()
         {
-            int bytes_len = rec_int();
-            var data = new byte[bytes_len];
-            _bufferedSocket.ReceiveData(data, bytes_len);
+            int bytesLen = rec_int();
+            var data = new byte[bytesLen];
+            _bufferedSocket.ReceiveData(data, bytesLen);
             return data;
         }
 

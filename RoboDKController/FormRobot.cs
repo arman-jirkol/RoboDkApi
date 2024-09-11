@@ -563,7 +563,7 @@ namespace SamplePanelRoboDK
 
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
+        public static extern bool MoveWindow(IntPtr hWnd, int x, int y, int nWidth, int nHeight, bool bRepaint);
 
         private void Panel_Resized(object sender, EventArgs e)
         {
@@ -718,9 +718,9 @@ namespace SamplePanelRoboDK
                         break;
                     }
 
-                var move_xyzwpr = new double[6] {0, 0, 0, 0, 0, 0};
-                move_xyzwpr[moveId] = moveStep;
-                var movementPose = Matrix.FromTxyzRxyz(move_xyzwpr);
+                var moveXyzwpr = new double[6] {0, 0, 0, 0, 0, 0};
+                moveXyzwpr[moveId] = moveStep;
+                var movementPose = Matrix.FromTxyzRxyz(moveXyzwpr);
 
                 // the the current position of the robot (as a 4x4 matrix)
                 var robotPose = _robot.Pose();
@@ -740,8 +740,8 @@ namespace SamplePanelRoboDK
                     // Note: Rotation applies from the robot axes.
 
                     var transformationAxes = new Matrix(robotPose);
-                    transformationAxes.setPos(0, 0, 0);
-                    var movementPoseAligned = transformationAxes.inv() * movementPose * transformationAxes;
+                    transformationAxes.SetPos(0, 0, 0);
+                    var movementPoseAligned = transformationAxes.Inv() * movementPose * transformationAxes;
                     newRobotPose = robotPose * movementPoseAligned;
                 }
 
@@ -921,7 +921,7 @@ namespace SamplePanelRoboDK
             if (!Check_ROBOT()) return;
 
 
-            var n_sides = 6;
+            var nSides = 6;
 
             var poseRef = _robot.Pose();
 
@@ -944,17 +944,17 @@ namespace SamplePanelRoboDK
                 _robot.SetRounding(
                     5); // set the rounding instruction (C_DIS & APO_DIS / CNT / ZoneData / Blend Radius / ...)
                 _robot.RunCodeCustom("CallOnStart");
-                for (var i = 0; i <= n_sides; i++)
+                for (var i = 0; i <= nSides; i++)
                 {
-                    var angle = (double) i / n_sides * 2.0 * Math.PI;
+                    var angle = (double) i / nSides * 2.0 * Math.PI;
 
                     // calculate the next position
-                    var pose_i = poseRef * Matrix.rotz(angle) * Matrix.transl(100, 0, 0) * Matrix.rotz(-angle);
+                    var poseI = poseRef * Matrix.Rotz(angle) * Matrix.Transl(100, 0, 0) * Matrix.Rotz(-angle);
 
                     // Add an instruction (comment)
                     _robot.RunCodeCustom($"Moving to point {i}", ProgramRunType.Comment);
-                    var xyzwpr = pose_i.ToXYZRPW(); // read the target as XYZWPR
-                    _robot.MoveL(pose_i);
+                    var xyzwpr = poseI.ToXYZRPW(); // read the target as XYZWPR
+                    _robot.MoveL(poseI);
                 }
 
                 _robot.RunCodeCustom("CallOnStart");
@@ -1057,12 +1057,12 @@ namespace SamplePanelRoboDK
             var station = _rdk.AddStation("Speed Tests");
 
             var robotFile = $"{_rdk.GetParameter("PATH_LIBRARY")}/KUKA-KR-210-R2700.robot";
-            var n_robots = 10;
-            var n_tests = 100;
+            var nRobots = 10;
+            var nTests = 100;
             var robotList = new List<IItem>();
             var jointsList = new List<double[]>();
 
-            for (var i = 0; i < n_robots; i++)
+            for (var i = 0; i < nRobots; i++)
             {
                 var robot = _rdk.AddFile(robotFile);
                 var joints = new double[] {i * 5, -90, 90, 0, 90, 0};
@@ -1074,14 +1074,14 @@ namespace SamplePanelRoboDK
 
             double timeAverageMs = 0;
 
-            for (var t = 0; t < n_tests; t++)
+            for (var t = 0; t < nTests; t++)
             {
                 var t1 = DateTime.Now;
 
                 // Bulk calculation (new): you can provide a list of robots: 2.5 ms for 10 robots on avg
-                var poseSolutions = _rdk.SolveFK(robotList, jointsList);
-                var jointSolutions = _rdk.SolveIK(robotList, poseSolutions);
-                var jointsSolutions2 = _rdk.SolveIK(robotList, poseSolutions, jointsList);
+                var poseSolutions = _rdk.SolveFk(robotList, jointsList);
+                var jointSolutions = _rdk.SolveIk(robotList, poseSolutions);
+                var jointsSolutions2 = _rdk.SolveIk(robotList, poseSolutions, jointsList);
                 var jnts = _rdk.SolveIK_All(robotList, poseSolutions);
                 var cnfigs = _rdk.JointsConfig(robotList, jointsList);
 
@@ -1101,7 +1101,7 @@ namespace SamplePanelRoboDK
                 Console.WriteLine($@"Forward/inverse kinematics Calculated in (ms){elapsedMs}");
             }
 
-            timeAverageMs /= n_tests;
+            timeAverageMs /= nTests;
             Console.WriteLine($@"=> Average calculation time (ms): {timeAverageMs}");
 
             station.Delete();
@@ -1135,7 +1135,7 @@ namespace SamplePanelRoboDK
             return;*/
 
 
-            _rdk.SetViewPose(_rdk.GetViewPose() * Matrix.rotx(10 * 3.141592 / 180));
+            _rdk.SetViewPose(_rdk.GetViewPose() * Matrix.Rotx(10 * 3.141592 / 180));
             return;
 
             //---------------------------------------------------------
@@ -1218,8 +1218,8 @@ namespace SamplePanelRoboDK
 
             // Remember the information relating to the selected point (XYZ and surface normal).
             // These values are retrieved in Absolute coordinates (with respect to the station).
-            double[] point_xyz = null;
-            double[] point_ijk = null;
+            double[] pointXyz = null;
+            double[] pointIjk = null;
 
             while (true)
             {
@@ -1242,14 +1242,14 @@ namespace SamplePanelRoboDK
                         }
 
                         var value = pointList.GetCol(0).ToDoubles();
-                        point_xyz = new[] {value[0], value[1], value[2]};
+                        pointXyz = new[] {value[0], value[1], value[2]};
                         // invert the IJK values (RoboDK provides the normal coming out of the surface but we usually want the Z axis to go into the object)
-                        point_ijk = new[] {-value[3], -value[4], -value[5]};
+                        pointIjk = new[] {-value[3], -value[4], -value[5]};
                         var objPoseAbs = obj.PoseAbs();
 
                         // Calculate the point in Absolute coordinates (with respect to the station)
-                        point_xyz = objPoseAbs * point_xyz;
-                        point_ijk = objPoseAbs.Rot3x3() * point_ijk;
+                        pointXyz = objPoseAbs * pointXyz;
+                        pointIjk = objPoseAbs.Rot3X3() * pointIjk;
                         break;
                     }
                 }
@@ -1264,23 +1264,23 @@ namespace SamplePanelRoboDK
 
             // Calculate the robot pose for the selected target and use the tool Y axis as a reference
             // (we try to get the pose that has the Y axis as close as possible as the current robot position)
-            var pose_surface_abs = Matrix.xyzijk_2_pose(point_xyz, point_ijk, robotPoseAbs.VY());
+            var poseSurfaceAbs = Matrix.xyzijk_2_pose(pointXyz, pointIjk, robotPoseAbs.Vy());
 
-            if (!pose_surface_abs.IsHomogeneous())
+            if (!poseSurfaceAbs.IsHomogeneous())
             {
                 Console.WriteLine(@"Something went wrong");
                 return;
             }
 
             // calculate the pose of the target (relative to the reference frame)
-            var pose_surface_rel = refPoseAbs.inv() * pose_surface_abs;
+            var poseSurfaceRel = refPoseAbs.Inv() * poseSurfaceAbs;
 
             // add a target and update the pose
-            var target_new = _rdk.AddTarget("T1", robotRef, _robot);
-            target_new.SetAsCartesianTarget();
-            target_new.SetJoints(_robot
+            var targetNew = _rdk.AddTarget("T1", robotRef, _robot);
+            targetNew.SetAsCartesianTarget();
+            targetNew.SetJoints(_robot
                 .Joints()); // this is only important if we want to remember the current configuration
-            target_new.SetPose(pose_surface_rel);
+            targetNew.SetPose(poseSurfaceRel);
 
 
             /*RoboDK.Item frame = RDK.getItem("FrameTest");
@@ -1319,7 +1319,7 @@ namespace SamplePanelRoboDK
         private void Setup_Notification_Icon()
         {
             // Create the NotifyIcon.
-            var ProcessTaskBar = new NotifyIcon();
+            var processTaskBar = new NotifyIcon();
 
             // setup context menu
             var components = new Container();
@@ -1339,16 +1339,16 @@ namespace SamplePanelRoboDK
             optionUnlock.Text = @"Unlock RoboDK Station";
             optionUnlock.Click += RoboDK_Unlock;
             //
-            ProcessTaskBar.ContextMenu = contextMenu;
+            processTaskBar.ContextMenu = contextMenu;
 
             // The Text property sets the text that will be displayed,
             // in a tooltip, when the mouse hovers over the systray icon.
-            ProcessTaskBar.Icon = Resources.IconRoboDK;
-            ProcessTaskBar.Text = @"RoboDK";
-            ProcessTaskBar.Visible = true;
+            processTaskBar.Icon = Resources.IconRoboDK;
+            processTaskBar.Text = @"RoboDK";
+            processTaskBar.Visible = true;
 
             // Handle the DoubleClick event to activate the form.
-            ProcessTaskBar.DoubleClick += Show_RoboDK;
+            processTaskBar.DoubleClick += Show_RoboDK;
         }
 
         private void Show_RoboDK(object sender, EventArgs e)
