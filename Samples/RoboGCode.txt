@@ -1,0 +1,5 @@
+G00 X1800 Y-300 Z650; Move to starting position (absolute)
+G03 X1400 Y100 R285
+G01 X1800 
+G02 X1400 Y-300 R500
+G01 Z700
