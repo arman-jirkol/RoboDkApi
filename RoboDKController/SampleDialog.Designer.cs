@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
 			this.pnlControl = new System.Windows.Forms.Panel();
+			this.btnImportGCode = new System.Windows.Forms.Button();
+			this.txtPositionCurveB = new System.Windows.Forms.TextBox();
+			this.txtJointCurveB = new System.Windows.Forms.TextBox();
 			this.btnReadPositionCurve = new System.Windows.Forms.Button();
 			this.txtPositionCurveA = new System.Windows.Forms.TextBox();
 			this.btnMovePositionCurve = new System.Windows.Forms.Button();
@@ -53,14 +56,13 @@
 			this.txtJoints = new System.Windows.Forms.TextBox();
 			this.btnMoveJoint = new System.Windows.Forms.Button();
 			this.pnlRDK = new System.Windows.Forms.Panel();
-			this.txtJointCurveB = new System.Windows.Forms.TextBox();
-			this.txtPositionCurveB = new System.Windows.Forms.TextBox();
 			this.pnlControl.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pnlControl
 			// 
 			this.pnlControl.BackColor = System.Drawing.Color.Black;
+			this.pnlControl.Controls.Add(this.btnImportGCode);
 			this.pnlControl.Controls.Add(this.txtPositionCurveB);
 			this.pnlControl.Controls.Add(this.txtJointCurveB);
 			this.pnlControl.Controls.Add(this.btnReadPositionCurve);
@@ -91,6 +93,35 @@
 			this.pnlControl.Name = "pnlControl";
 			this.pnlControl.Size = new System.Drawing.Size(1443, 151);
 			this.pnlControl.TabIndex = 0;
+			// 
+			// btnImportGCode
+			// 
+			this.btnImportGCode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnImportGCode.Location = new System.Drawing.Point(1303, 86);
+			this.btnImportGCode.Name = "btnImportGCode";
+			this.btnImportGCode.Size = new System.Drawing.Size(128, 23);
+			this.btnImportGCode.TabIndex = 32;
+			this.btnImportGCode.Text = "Import G-Code";
+			this.btnImportGCode.UseVisualStyleBackColor = true;
+			this.btnImportGCode.Click += new System.EventHandler(this.btnImportGCode_Click);
+			// 
+			// txtPositionCurveB
+			// 
+			this.txtPositionCurveB.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.txtPositionCurveB.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.txtPositionCurveB.Location = new System.Drawing.Point(552, 117);
+			this.txtPositionCurveB.Name = "txtPositionCurveB";
+			this.txtPositionCurveB.Size = new System.Drawing.Size(351, 29);
+			this.txtPositionCurveB.TabIndex = 31;
+			// 
+			// txtJointCurveB
+			// 
+			this.txtJointCurveB.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.txtJointCurveB.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.txtJointCurveB.Location = new System.Drawing.Point(12, 117);
+			this.txtJointCurveB.Name = "txtJointCurveB";
+			this.txtJointCurveB.Size = new System.Drawing.Size(351, 29);
+			this.txtJointCurveB.TabIndex = 30;
 			// 
 			// btnReadPositionCurve
 			// 
@@ -331,24 +362,6 @@
 			this.pnlRDK.Size = new System.Drawing.Size(1443, 524);
 			this.pnlRDK.TabIndex = 0;
 			// 
-			// txtJointCurveB
-			// 
-			this.txtJointCurveB.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.txtJointCurveB.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this.txtJointCurveB.Location = new System.Drawing.Point(12, 117);
-			this.txtJointCurveB.Name = "txtJointCurveB";
-			this.txtJointCurveB.Size = new System.Drawing.Size(351, 29);
-			this.txtJointCurveB.TabIndex = 30;
-			// 
-			// txtPositionCurveB
-			// 
-			this.txtPositionCurveB.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.txtPositionCurveB.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this.txtPositionCurveB.Location = new System.Drawing.Point(552, 117);
-			this.txtPositionCurveB.Name = "txtPositionCurveB";
-			this.txtPositionCurveB.Size = new System.Drawing.Size(351, 29);
-			this.txtPositionCurveB.TabIndex = 31;
-			// 
 			// SampleDialog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -394,5 +407,6 @@
 		private System.Windows.Forms.Button btnMoveJointCurve;
 		private System.Windows.Forms.TextBox txtJointCurveB;
 		private System.Windows.Forms.TextBox txtPositionCurveB;
+		private System.Windows.Forms.Button btnImportGCode;
 	}
 }

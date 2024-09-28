@@ -61,14 +61,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RobotMovers\BaseCircularMover.cs" />
+    <Compile Include="RobotMovers\BaseMover.cs" />
+    <Compile Include="RobotMovers\CircularMotionCalculator.cs" />
+    <Compile Include="RobotMovers\ClockwiseCircularMover.cs" />
+    <Compile Include="RobotMovers\CounterclockwiseCircularMover.cs" />
     <Compile Include="FormRobot.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormRobot.Designer.cs">
       <DependentUpon>FormRobot.cs</DependentUpon>
     </Compile>
+    <Compile Include="GCodeInterpreter.cs" />
+    <Compile Include="RobotMovers\IMover.cs" />
+    <Compile Include="RobotMovers\LinearMover.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RobotMovers\RapidMover.cs" />
     <Compile Include="SampleDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,6 +161,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
