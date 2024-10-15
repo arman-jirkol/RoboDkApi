@@ -578,6 +578,49 @@ namespace SamplePanelRoboDK
 				MessageBox.Show(@"File is not a valid G-Code file.");
 		}
 
+		private void RunGCode()
+		{
+			string gcodeFilePath = @"F:\Apps\Kuka\Sample G-Code\2.tap";  // Replace with your actual G-code file path
+
+			// Load the G-code file into RoboDK as a new program associated with the robot
+			IItem gcodeProgram = _rdk.AddFile(gcodeFilePath, _robot);
+
+			if (_robot.Valid() && gcodeProgram.Valid())
+			{
+				// Output the type of the loaded item for debugging
+				Console.WriteLine($"Loaded item name: {gcodeProgram.Name()}");
+
+				// Set the post-processor for KUKA on the G-code program
+				gcodeProgram.SetParam("PostProcessor", "kuka_krc2"); // Ensure this matches your KUKA post-processor
+
+				// Attempt to run the loaded G-code program
+				try
+				{
+					gcodeProgram.RunProgram();
+
+					// Wait for the simulation to finish
+					gcodeProgram.WaitFinished();
+
+					Console.WriteLine("G-code simulation completed successfully!");
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"Error running the program: {ex.Message}");
+				}
+			}
+			else
+			{
+				if (!_robot.Valid())
+				{
+					Console.WriteLine("Invalid or missing robot.");
+				}
+				if (!gcodeProgram.Valid())
+				{
+					Console.WriteLine("Failed to load the G-code.");
+				}
+			}
+		}
+
 		private bool VerifyGCode(string gCode)
 		{
 			if(gCode == null) return false;
